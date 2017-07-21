@@ -1,0 +1,7 @@
+{
+    "name": "Default Theme",
+    "description": "The default theme. You can totally have multiple themes enabled, but don't expect it to look good.",
+    "css": [
+        "default.css",
+    ],
+}

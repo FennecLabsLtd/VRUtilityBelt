@@ -1,0 +1,11 @@
+{
+    "name": "UB Options Overlay",
+    "description": "Options Overlay for VR Utility Belt",
+    "key": "vrub_options", // Use something that won't collide with other overlays.
+    "entrypoint": "index.html",
+    "flags": {
+        "vr_keyboard", // Inputs bring up SteamVR Keyboard
+        "stt" // Speech to Text (maybe)
+    },
+    "type": "dashboard", // Dashboard, Independent, Toolbelt (maybe)
+}
