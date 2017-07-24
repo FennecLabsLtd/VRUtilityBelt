@@ -1,8 +1,8 @@
 {
-    "name": "UB Options Overlay",
-    "description": "Options Overlay for VR Utility Belt",
-    "key": "vrub_options", /* Use something that won't collide with other overlays. */
-    "entrypoint": "index.html",
+    "name": "Google",
+    "description": "Sometimes you just want to browse Google.",
+    "key": "vrub_google", /* Use something that won't collide with other overlays. */
+    "entrypoint": "https://google.com",
     "flags": [
         "vr_keyboard", /* Inputs bring up SteamVR Keyboard */
         "stt", /* Speech to Text (maybe) */
@@ -11,5 +11,5 @@
     "width": 1024,
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */
-    "debug": true,
+    "debug": false,
 }

@@ -4,10 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Overlay
+namespace VRUtilityBelt.Addons.Thermes
 {
-    interface IOverlay
+    public interface ITheme
     {
-        void Destroy();
     }
 }

@@ -1,8 +1,10 @@
 ﻿{
 	"name": "Utility Belt Core",
+    "key": "vrub_core",
     "description": "Core 'addon' for VR Utility Belt, you probably shouldn't disable this.",
 	"overlays": [
-		"options"
+		"options",
+        "google"
 	],
 	"themes": [
 		"default"
