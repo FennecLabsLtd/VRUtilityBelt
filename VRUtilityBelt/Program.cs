@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using VRUtilityBelt.Addons;
 using VRUtilityBelt.Addons.Overlays;
+using VRUtilityBelt.Steam;
 using VRUtilityBelt.UI;
 
 namespace VRUtilityBelt
@@ -19,8 +20,17 @@ namespace VRUtilityBelt
         [STAThread]
         static void Main()
         {
+            Application.ApplicationExit += Application_ApplicationExit;
+
+            SteamManager.Init();
+
             AddonManager manager = new AddonManager();
             manager.StartAsync();
+        }
+
+        private static void Application_ApplicationExit(object sender, EventArgs e)
+        {
+            SteamManager.Shutdown();
         }
     }
 }
