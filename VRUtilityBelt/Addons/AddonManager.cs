@@ -103,6 +103,11 @@ namespace VRUtilityBelt.Addons
             }
         }
 
+        public void GetWorkshopAddons()
+        {
+            
+        }
+
         private void PreUpdate(object sender, EventArgs e)
         {
             if(SteamManager.Initialised)

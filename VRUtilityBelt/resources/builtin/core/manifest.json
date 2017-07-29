@@ -12,4 +12,12 @@
 	"plugins": [
 		"stub"
 	],
+    
+    /* This isn't a workshop item, it's just for demonstration purposes */
+    "workshop": [
+        "title": "Utility Belt Core",
+        "type": [ "overlay" ],
+        "tags": [ "utility" ],
+        "ignore": [ ".git", ".scss", "gulpfile.json" ],
+    ],
 }
