@@ -64,7 +64,6 @@ namespace VRUtilityBelt.Addons
             SteamVR_WebKit.SteamVR_WebKit.PostUpdateCallback += PostUpdate;
             SteamVR_WebKit.SteamVR_WebKit.PostDrawCallback += PostDraw;
 
-            // TODO: Handle OpenVR not opening.
             SteamVR_WebKit.SteamVR_WebKit.Init(new CefSharp.CefSettings()
             {
                 CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\VRUtilityBelt\\BrowserCache",
