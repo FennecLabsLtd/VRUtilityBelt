@@ -54,7 +54,7 @@ namespace VRUtilityBelt.Addons
         public static Addon Parse(string folder, string keyPrefix = "builtin")
         {
             Addon newAddon = new Addon();
-            newAddon._keyPrefix = keyPrefix; // TODO: Prefix Workshop ID if not builtin/custom
+            newAddon._keyPrefix = keyPrefix;
             newAddon._path = folder;
             newAddon.ProcessManifest();
 

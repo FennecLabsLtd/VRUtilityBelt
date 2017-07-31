@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 using VRUtilityBelt.Steam;
+using Steamworks;
 
 namespace VRUtilityBelt.Addons
 {
@@ -71,6 +72,8 @@ namespace VRUtilityBelt.Addons
 
             CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\Cookies", false);
 
+            RegisterCallbacks();
+
             PopulateAddons();
         }
         private void SteamVR_WebKit_LogEvent(string line)
@@ -95,6 +98,7 @@ namespace VRUtilityBelt.Addons
                     foreach (string folder in Directory.EnumerateDirectories(path.Value))
                     {
                         Addon newAddon = Addon.Parse(folder, path.Key);
+                        _addons.Add(newAddon.Key, newAddon);
                     }
                 } else
                 {
@@ -105,7 +109,38 @@ namespace VRUtilityBelt.Addons
 
         public void GetWorkshopAddons()
         {
-            
+            Dictionary<PublishedFileId_t, string> paths = Steam.Workshop.GetSubscribedItems();
+
+            foreach(KeyValuePair<PublishedFileId_t,string> path in paths)
+            {
+                if(Directory.Exists(path.Value))
+                {
+                    Addon newAddon = Addon.Parse(path.Value, path.Key.m_PublishedFileId.ToString());
+                    _addons.Add(path.Key.m_PublishedFileId.ToString() + "_" + newAddon.Key, newAddon);
+                }
+            }
+        }
+
+        void RegisterCallbacks()
+        {
+            Workshop.ItemInstalled += Workshop_ItemInstalled;
+            Workshop.FileSubscribed += Workshop_FileSubscribed;
+            Workshop.FileUnsubscribed += Workshop_FileUnsubscribed;
+        }
+
+        private void Workshop_FileUnsubscribed(RemoteStoragePublishedFileUnsubscribed_t args)
+        {
+            // TODO: Handle unsubbed item
+        }
+
+        private void Workshop_FileSubscribed(RemoteStoragePublishedFileSubscribed_t args)
+        {
+            // TODO: Handle subbed item
+        }
+
+        private void Workshop_ItemInstalled(ItemInstalled_t args)
+        {
+            // TODO: Handle installed item
         }
 
         private void PreUpdate(object sender, EventArgs e)

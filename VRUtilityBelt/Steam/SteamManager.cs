@@ -10,11 +10,12 @@ namespace VRUtilityBelt.Steam
     public class SteamManager
     {
         public static bool Initialised { get; set; }
+        public static readonly AppId_t AppID = (AppId_t)645370;
         public static bool Init()
         {
             try
             {
-                if (SteamAPI.RestartAppIfNecessary((AppId_t)645370))
+                if (SteamAPI.RestartAppIfNecessary(AppID))
                 {
                     Environment.Exit(0);
                 }
@@ -29,6 +30,8 @@ namespace VRUtilityBelt.Steam
             {
                 SteamClient.SetWarningMessageHook(SteamAPIDebugTextHook);
             }
+
+            Workshop.RegisterCallbacks();
 
             return Initialised;
         }
