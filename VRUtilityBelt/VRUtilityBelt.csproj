@@ -77,6 +77,13 @@
     <Compile Include="Steam\SteamManager.cs" />
     <Compile Include="Steam\Workshop.cs" />
     <Compile Include="UI\VRUBApplicationContext.cs" />
+    <Compile Include="UI\Workshop\WorkshoppableAddon.cs" />
+    <Compile Include="UI\Workshop\WorkshopUploader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UI\Workshop\WorkshopUploader.Designer.cs">
+      <DependentUpon>WorkshopUploader.cs</DependentUpon>
+    </Compile>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -87,6 +94,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="UI\Workshop\WorkshopUploader.resx">
+      <DependentUpon>WorkshopUploader.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="OpenTK.dll.config" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">

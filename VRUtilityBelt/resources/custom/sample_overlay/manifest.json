@@ -1,0 +1,11 @@
+{
+	"name": "Sample Overlay",
+    "key": "sample_overlay",
+    "description": "A sample overlay to demonstrate workshop configuration.",
+	"overlays": [
+	],
+	"themes": [
+	],
+	"plugins": [
+	],
+}

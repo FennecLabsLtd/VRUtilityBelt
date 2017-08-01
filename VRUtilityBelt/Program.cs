@@ -13,7 +13,6 @@ namespace VRUtilityBelt
 {
     static class Program
     {
-        static Thread addonManagerThread;
         /// <summary>
         /// The main entry point for the application.
         /// </summary>
@@ -24,8 +23,17 @@ namespace VRUtilityBelt
 
             SteamManager.Init();
 
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            UI.Workshop.WorkshopUploader uploader = new UI.Workshop.WorkshopUploader();
+            uploader.Show();
+
             AddonManager manager = new AddonManager();
             manager.StartAsync();
+
+            VRUBApplicationContext context = new VRUBApplicationContext();
+            Application.Run(context);
         }
 
         private static void Application_ApplicationExit(object sender, EventArgs e)

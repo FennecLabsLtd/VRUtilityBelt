@@ -76,7 +76,13 @@ namespace VRUtilityBelt.Addons
                 throw new FileNotFoundException("Cannot locate manifest.json in " + _path);
             }
 
-            JsonConvert.PopulateObject(File.ReadAllText(ManifestPath), this);
+            try
+            {
+                JsonConvert.PopulateObject(File.ReadAllText(ManifestPath), this);
+            } catch(Exception e)
+            {
+                Console.WriteLine("[JSON] Failed to parse Addon Manifest at " + ManifestPath + ": " + e.Message);
+            }
         }
 
         void SetupFileWatchers()
