@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using CefSharp.OffScreen;
+using VRUtilityBelt.JsInterop;
 
 namespace VRUtilityBelt.Addons.Overlays
 {
@@ -53,6 +54,8 @@ namespace VRUtilityBelt.Addons.Overlays
 
         public AssetsContainer Assets { get; set; }
 
+        public WebKitOverlay Overlay { get { return _wkOverlay; } }
+
         public BasicOverlay(Addon addon)
         {
             _addon = addon;
@@ -61,9 +64,11 @@ namespace VRUtilityBelt.Addons.Overlays
         public void Setup(string path, string keyPrefix = "builtin")
         {
             ParseManifest(path);
-            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.Key + "." + Key, Name, Type);
+            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.DerivedKey + "." + Key, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
+
+            _wkOverlay.EnableKeyboard = HasFlag("vr_keyboard");
 
             if(Type == OverlayType.Dashboard || Type == OverlayType.Both)
                 _wkOverlay.DashboardOverlay.Width = MeterWidth;
@@ -75,7 +80,9 @@ namespace VRUtilityBelt.Addons.Overlays
 
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
-            
+            if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
+
+            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("SteamAuth", SteamAuth.GetInstance());
         }
 
         void ParseManifest(string path)

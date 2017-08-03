@@ -6,7 +6,8 @@
     "flags": [
         "vr_keyboard", /* Inputs bring up SteamVR Keyboard */
         "stt", /* Speech to Text (maybe) */
-        "toolbelt" /* Can be put on the 'toolbelt' (coming soon) */
+        "toolbelt", /* Can be put on the 'toolbelt' (coming soon) */
+        "pstore" /* Persistent Storage API */
     ],
     "width": 1024,
     "height": 768,

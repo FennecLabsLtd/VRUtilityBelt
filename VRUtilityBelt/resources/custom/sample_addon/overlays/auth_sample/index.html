@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Auth Test</title>
+</head>
+
+<body>
+    <span id="auth">Checking Authentication...</span>
+    
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+        var AuthSessionTicketCallback = function(result) {
+            console.log(result);
+        }
+        
+        console.log(SteamAuth.getAuthSessionTicket());
+    </script>
+</body>

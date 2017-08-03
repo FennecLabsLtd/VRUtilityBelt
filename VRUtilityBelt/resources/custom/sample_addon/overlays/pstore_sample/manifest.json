@@ -1,0 +1,13 @@
+{
+    "name": "PersistentStore Example",
+    "description": "Demonstrates storing things in the persistent and temporary data store.",
+    "key": "vrub_example_pstore", /* Use something that won't collide with other overlays. */
+    "entrypoint": "index.html",
+    "flags": [
+        "pstore",
+    ],
+    "width": 1024,
+    "height": 768,
+    "type": "dashboard", /* Dashboard, Independent (Floating) */
+    "debug": true,
+}

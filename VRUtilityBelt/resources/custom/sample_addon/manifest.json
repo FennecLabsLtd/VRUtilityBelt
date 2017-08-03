@@ -1,8 +1,10 @@
 {
-	"name": "Sample Overlay",
-    "key": "sample_overlay",
+	"name": "Sample Addon",
+    "key": "sample_addon",
     "description": "A sample overlay to demonstrate workshop configuration.",
 	"overlays": [
+        "auth_sample",
+        "pstore_sample",
 	],
 	"themes": [
 	],

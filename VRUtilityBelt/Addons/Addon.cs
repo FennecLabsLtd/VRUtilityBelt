@@ -46,6 +46,16 @@ namespace VRUtilityBelt.Addons
 
         private String ManifestPath { get { return _path + "\\manifest.json"; } }
 
+        public string DerivedKey
+        {
+            get
+            {
+                return _keyPrefix + "_" + Key;
+            }
+        }
+
+        public Dictionary<string, object> Interops { get; set; } = new Dictionary<string, object>();
+
         string _path;
         string _keyPrefix = "builtin";
 

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+    <title>Auth Test</title>
+</head>
+
+<body>
+    <div id="old">Loading Old...</div>
+    <div id="new">Loading New...</div>
+    
+    <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
+    
+    <script type="text/javascript">
+        $("#old").text("Old: " + PersistentStore.get("test-value"));
+        
+        var date = (new Date()).toString();
+        
+        $("#new").text("New: " + date);
+        PersistentStore.set("test-value", date);
+    </script>
+</body>

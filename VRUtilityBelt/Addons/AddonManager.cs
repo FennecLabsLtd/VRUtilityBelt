@@ -98,6 +98,12 @@ namespace VRUtilityBelt.Addons
                     foreach (string folder in Directory.EnumerateDirectories(path.Value))
                     {
                         Addon newAddon = Addon.Parse(folder, path.Key);
+
+                        if(_addons.ContainsKey(newAddon.Key))
+                        {
+                            newAddon.Key = newAddon.Key + Path.GetDirectoryName(path.Value);
+                        }
+
                         _addons.Add(newAddon.Key, newAddon);
                     }
                 } else
