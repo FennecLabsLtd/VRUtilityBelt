@@ -98,7 +98,7 @@ namespace VRUtilityBelt.Addons.Overlays
 
             if (!Uri.TryCreate(EntryPoint, UriKind.Absolute, out result))
             {
-                Console.WriteLine("EntryPoint for " + Key + " is not a valid URL, trying file path instead.");
+                Console.WriteLine("[ADDON] EntryPoint for " + Key + " is not a valid URL, trying file path instead.");
 
                 if(!Path.IsPathRooted(EntryPoint))
                 {

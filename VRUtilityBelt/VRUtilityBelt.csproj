@@ -86,7 +86,7 @@
     <Compile Include="UI\Workshop\WorkshopUploader.Designer.cs">
       <DependentUpon>WorkshopUploader.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\ConsoleHelper.cs" />
+    <Compile Include="Utility\LogHelper.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>

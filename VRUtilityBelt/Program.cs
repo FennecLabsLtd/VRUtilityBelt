@@ -21,11 +21,9 @@ namespace VRUtilityBelt
         [STAThread]
         static void Main()
         {
+            LogHelper.SetupLogfile("output.log");
             Console.WriteLine("[DEBUG] Command Line Args: " + string.Join(" ", Environment.GetCommandLineArgs()));
             Application.ApplicationExit += Application_ApplicationExit;
-
-            if (Environment.GetCommandLineArgs().Contains("-indev"))
-                ConsoleHelper.ShowConsoleWindow();
 
             SteamManager.Init();
 
@@ -46,6 +44,7 @@ namespace VRUtilityBelt
 
         public static void Quit()
         {
+            LogHelper.CloseHandle();
             SteamManager.Shutdown();
             _addonManager.Stop();
 

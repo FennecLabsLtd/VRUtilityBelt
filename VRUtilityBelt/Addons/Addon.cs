@@ -68,7 +68,7 @@ namespace VRUtilityBelt.Addons
             newAddon._path = folder;
             newAddon.ProcessManifest();
 
-            Console.WriteLine("Found Addon: " + newAddon.Key + " - " + newAddon.Name);
+            Console.WriteLine("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
 
             newAddon.SetupOverlays();
             newAddon.SetupThemes();

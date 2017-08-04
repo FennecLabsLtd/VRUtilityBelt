@@ -17,8 +17,6 @@ namespace VRUtilityBelt.Addons
         private bool _isRunning;
         private readonly object _isRunningLock = new object();
 
-        private bool _stopping = false;
-
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
 
         Dictionary<string, string> searchPaths = new Dictionary<string, string>() {
