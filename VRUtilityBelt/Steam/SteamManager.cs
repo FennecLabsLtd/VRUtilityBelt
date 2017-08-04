@@ -51,6 +51,8 @@ namespace VRUtilityBelt.Steam
         {
             if (Initialised)
                 SteamAPI.Shutdown();
+
+            Initialised = false;
         }
     }
 }

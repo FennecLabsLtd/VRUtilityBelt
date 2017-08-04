@@ -17,6 +17,8 @@ namespace VRUtilityBelt.Addons
         private bool _isRunning;
         private readonly object _isRunningLock = new object();
 
+        private bool _stopping = false;
+
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
 
         Dictionary<string, string> searchPaths = new Dictionary<string, string>() {
@@ -70,6 +72,9 @@ namespace VRUtilityBelt.Addons
                 CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\VRUtilityBelt\\BrowserCache",
             });
 
+            if (!_isRunning)
+                return;
+
             CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\Cookies", false);
 
             RegisterCallbacks();
@@ -83,10 +88,11 @@ namespace VRUtilityBelt.Addons
 
         public void Run()
         {
+            if (!_isRunning)
+                return;
+
             if (!SteamVR_WebKit.SteamVR_WebKit.Initialised)
                 Init();
-
-            SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
 
         public void PopulateAddons()
