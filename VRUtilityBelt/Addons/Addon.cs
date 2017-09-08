@@ -44,7 +44,7 @@ namespace VRUtilityBelt.Addons
         [JsonIgnore]
         public List<IPlugin> Plugins { get; set; }
 
-        private String ManifestPath { get { return _path + "\\manifest.json"; } }
+        private String ManifestPath { get { return BasePath + "\\manifest.json"; } }
 
         public string DerivedKey
         {
@@ -56,7 +56,7 @@ namespace VRUtilityBelt.Addons
 
         public Dictionary<string, object> Interops { get; set; } = new Dictionary<string, object>();
 
-        string _path;
+        public string BasePath { get; set; }
         string _keyPrefix = "builtin";
 
 #endregion
@@ -65,7 +65,7 @@ namespace VRUtilityBelt.Addons
         {
             Addon newAddon = new Addon();
             newAddon._keyPrefix = keyPrefix;
-            newAddon._path = folder;
+            newAddon.BasePath = folder;
             newAddon.ProcessManifest();
 
             Console.WriteLine("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
@@ -83,7 +83,7 @@ namespace VRUtilityBelt.Addons
         {
             if(!File.Exists(ManifestPath))
             {
-                throw new FileNotFoundException("Cannot locate manifest.json in " + _path);
+                throw new FileNotFoundException("Cannot locate manifest.json in " + BasePath);
             }
 
             try
@@ -97,7 +97,7 @@ namespace VRUtilityBelt.Addons
 
         void SetupFileWatchers()
         {
-            _folderWatcher = new FileSystemWatcher(_path);
+            _folderWatcher = new FileSystemWatcher(BasePath);
             _folderWatcher.IncludeSubdirectories = true;
 
             _folderWatcher.Changed += _folderWatcher_Updated;
@@ -112,7 +112,7 @@ namespace VRUtilityBelt.Addons
             foreach(string key in OverlayKeys)
             {
                 BasicOverlay newOverlay = new BasicOverlay(this);
-                newOverlay.Setup(_path + "\\overlays\\" + key);
+                newOverlay.Setup(BasePath + "\\overlays\\" + key);
 
                 Overlays.Add(newOverlay);
             }
@@ -130,7 +130,7 @@ namespace VRUtilityBelt.Addons
 
         private void _folderWatcher_Updated(object sender, FileSystemEventArgs e)
         {
-            if(Directory.Exists(_path))
+            if(Directory.Exists(BasePath))
                 Refresh();
         }
 

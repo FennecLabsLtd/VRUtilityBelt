@@ -9,6 +9,9 @@ using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
 using VRUtilityBelt.Steam;
 using Steamworks;
+using CefSharp;
+using VRUtilityBelt.Addons.Overlays;
+using CefSharp.Internals;
 
 namespace VRUtilityBelt.Addons
 {
@@ -65,10 +68,33 @@ namespace VRUtilityBelt.Addons
             SteamVR_WebKit.SteamVR_WebKit.PostUpdateCallback += PostUpdate;
             SteamVR_WebKit.SteamVR_WebKit.PostDrawCallback += PostDraw;
 
-            SteamVR_WebKit.SteamVR_WebKit.Init(new CefSharp.CefSettings()
+            CefSettings cefSettings = new CefSettings()
             {
                 CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\VRUtilityBelt\\BrowserCache",
+
+            };
+
+            cefSettings.RegisterScheme(new CefCustomScheme
+            {
+                SchemeName = OverlaySchemeHandlerFactory.SchemeName,
+                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(),
+                IsSecure = true,
+                IsLocal = false,
+                IsStandard = false,
+                IsCorsEnabled = false,
+                IsDisplayIsolated = false,
             });
+
+            cefSettings.CommandLineArgsDisabled = false;
+
+            cefSettings.CefCommandLineArgs.Add("custom-scheme", "addon|F|F|F|T|F"); 
+
+            SteamVR_WebKit.SteamVR_WebKit.Init(cefSettings);
+
+            if(!Cef.IsInitialized)
+            {
+                SteamVR_WebKit.SteamVR_WebKit.Log("Failed to Init Cef!");
+            }
 
             if (!_isRunning)
                 return;
@@ -82,6 +108,7 @@ namespace VRUtilityBelt.Addons
         private void SteamVR_WebKit_LogEvent(string line)
         {
             Console.WriteLine("[WEBKIT]: " + line);
+            System.Diagnostics.Debug.WriteLine("[WEBKIT]: " + line);
         }
 
         public void Run()

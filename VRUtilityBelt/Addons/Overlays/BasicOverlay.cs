@@ -8,6 +8,8 @@ using System.Threading.Tasks;
 using System.IO;
 using CefSharp.OffScreen;
 using VRUtilityBelt.JsInterop;
+using VRUtilityBelt.Addons.Data;
+using CefSharp;
 
 namespace VRUtilityBelt.Addons.Overlays
 {
@@ -15,7 +17,11 @@ namespace VRUtilityBelt.Addons.Overlays
     {
         WebKitOverlay _wkOverlay;
 
+        public static Dictionary<IBrowser, Addon> BrowserAddonMap = new Dictionary<IBrowser, Addon>();
+
         Addon _addon;
+
+        string BasePath;
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -47,6 +53,9 @@ namespace VRUtilityBelt.Addons.Overlays
         [JsonProperty("debug")]
         public bool DebugMode { get; set; } = false;
 
+        [JsonProperty("inject")]
+        public InjectableFiles Inject { get; set; }
+
         public class AssetsContainer
         {
             public List<string> SASS { get; set; }
@@ -63,6 +72,7 @@ namespace VRUtilityBelt.Addons.Overlays
 
         public void Setup(string path, string keyPrefix = "builtin")
         {
+            BasePath = path;
             ParseManifest(path);
             _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.DerivedKey + "." + Key, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
@@ -78,11 +88,61 @@ namespace VRUtilityBelt.Addons.Overlays
             _wkOverlay.StartBrowser();
         }
 
+        private void Browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
+        {
+            if(!e.IsLoading && e.Browser.HasDocument)
+            {
+                InsertInjectableFiles();
+            }
+        }
+
+        void InsertInjectableFiles()
+        {
+            if(Inject != null)
+            {
+                if(Inject.CSS != null)
+                {
+                    foreach (string CSSFile in Inject.CSS) {
+                        _wkOverlay.TryExecAsyncJS(@"
+                            var insertCss = document.createElement('link');
+                            insertCss.rel = 'stylesheet';
+                            insertCss.href = '" + TranslatePath(CSSFile, BasePath).Replace("\\", "/")  + @"';
+                            document.head.appendChild(insertCss);
+                        ");
+                    }
+                }
+
+                if (Inject.JS != null)
+                {
+                    foreach (string JSFile in Inject.JS)
+                    {
+                        _wkOverlay.TryExecAsyncJS(@"
+                            var insertJs = document.createElement('script');
+                            insertJs.src = '" + TranslatePath(JSFile, BasePath).Replace("\\", "/") + @"';
+                            document.head.appendChild(insertJs);
+                        ");
+                    }
+                }
+            }
+        }
+
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
             if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
 
             if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("SteamAuth", SteamAuth.GetInstance());
+        }
+
+        string TranslatePath(string path, string root)
+        {
+            Uri result;
+            if(!Uri.TryCreate(path, UriKind.Absolute, out result))
+            {
+                if (!Path.IsPathRooted(path))
+                    path = "addon://" + path;
+            }
+
+            return path;
         }
 
         void ParseManifest(string path)
@@ -94,27 +154,25 @@ namespace VRUtilityBelt.Addons.Overlays
 
             JsonConvert.PopulateObject(File.ReadAllText(path + "\\manifest.json"), this);
 
-            Uri result;
-
-            if (!Uri.TryCreate(EntryPoint, UriKind.Absolute, out result))
-            {
-                Console.WriteLine("[ADDON] EntryPoint for " + Key + " is not a valid URL, trying file path instead.");
-
-                if(!Path.IsPathRooted(EntryPoint))
-                {
-                    EntryPoint = "file://" + Path.GetFullPath(path + "\\" + EntryPoint);
-                }
-            }
+            EntryPoint = TranslatePath(EntryPoint, path);
 
             Console.WriteLine("EntryPoint for " + Key + ":" + EntryPoint);
         }
 
         private void _wkOverlay_BrowserReady(object sender, EventArgs e)
         {
-            if(DebugMode)
+            _wkOverlay.Browser.LoadError += Browser_LoadError;
+            BrowserAddonMap.Add(_wkOverlay.Browser.GetBrowser(), _addon);
+            _wkOverlay.Browser.LoadingStateChanged += Browser_LoadingStateChanged;
+            if (DebugMode)
             {
                 ((ChromiumWebBrowser)sender).GetBrowser().GetHost().ShowDevTools();
             }
+        }
+
+        private void Browser_LoadError(object sender, LoadErrorEventArgs e)
+        {
+            SteamVR_WebKit.SteamVR_WebKit.Log("Load Error on " + _addon.DerivedKey + "." + Key + ": (" + e.ErrorCode + ") " + e.ErrorText);
         }
 
         public bool Validate()
