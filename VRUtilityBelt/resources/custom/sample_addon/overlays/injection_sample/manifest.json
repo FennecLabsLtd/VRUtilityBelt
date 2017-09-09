@@ -1,0 +1,20 @@
+{
+    "name": "Injection Example",
+    "description": "Demonstrates JS and CSS Injection on the Google homepage",
+    "key": "vrub_example_injection", /* Use something that won't collide with other overlays. */
+    "entrypoint": "chrome://version",
+    "flags": [
+    ],
+    "inject": {
+        "js": [
+            "example.js",
+        ],
+        "css": [
+            "example.css",
+        ],
+    },
+    "width": 1024,
+    "height": 768,
+    "type": "dashboard", /* Dashboard, Independent (Floating) */
+    "debug": true,
+}
