@@ -12,6 +12,7 @@ using Steamworks;
 using CefSharp;
 using VRUtilityBelt.Addons.Overlays;
 using CefSharp.Internals;
+using CefSharp.OffScreen;
 
 namespace VRUtilityBelt.Addons
 {
@@ -39,7 +40,9 @@ namespace VRUtilityBelt.Addons
                 _isRunning = true;
             }
 
-            new Thread(Run).Start();
+            Thread addonThread = new Thread(Run);
+            addonThread.Name = "Addon Manager";
+            addonThread.Start();
         }
 
         public void Stop()
@@ -71,23 +74,18 @@ namespace VRUtilityBelt.Addons
             CefSettings cefSettings = new CefSettings()
             {
                 CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\VRUtilityBelt\\BrowserCache",
-
             };
 
-            cefSettings.RegisterScheme(new CefCustomScheme
+            cefSettings.RegisterScheme(new CefCustomScheme()
             {
                 SchemeName = OverlaySchemeHandlerFactory.SchemeName,
-                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(),
+                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(null),
                 IsSecure = true,
                 IsLocal = false,
                 IsStandard = false,
                 IsCorsEnabled = false,
                 IsDisplayIsolated = false,
             });
-
-            cefSettings.CommandLineArgsDisabled = false;
-
-            cefSettings.CefCommandLineArgs.Add("custom-scheme", "addon|F|F|F|T|F"); 
 
             SteamVR_WebKit.SteamVR_WebKit.Init(cefSettings);
 
@@ -104,6 +102,8 @@ namespace VRUtilityBelt.Addons
             RegisterCallbacks();
 
             PopulateAddons();
+
+            SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
         private void SteamVR_WebKit_LogEvent(string line)
         {

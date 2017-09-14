@@ -10,14 +10,13 @@ using CefSharp.OffScreen;
 using VRUtilityBelt.JsInterop;
 using VRUtilityBelt.Addons.Data;
 using CefSharp;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.Addons.Overlays
 {
     class BasicOverlay : IOverlay
     {
         WebKitOverlay _wkOverlay;
-
-        public static Dictionary<IBrowser, Addon> BrowserAddonMap = new Dictionary<IBrowser, Addon>();
 
         Addon _addon;
 
@@ -78,6 +77,12 @@ namespace VRUtilityBelt.Addons.Overlays
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
 
+            _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
+            {
+                SchemeName = "addon",
+                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(_addon),
+            });
+
             _wkOverlay.EnableKeyboard = HasFlag("vr_keyboard");
 
             if(Type == OverlayType.Dashboard || Type == OverlayType.Both)
@@ -103,12 +108,18 @@ namespace VRUtilityBelt.Addons.Overlays
                 if(Inject.CSS != null)
                 {
                     foreach (string CSSFile in Inject.CSS) {
-                        _wkOverlay.TryExecAsyncJS(@"
+                        if (CSSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
+                        {
+                            _wkOverlay.TryExecAsyncJS(@"
                             var insertCss = document.createElement('link');
                             insertCss.rel = 'stylesheet';
-                            insertCss.href = '" + TranslatePath(CSSFile, BasePath).Replace("\\", "/")  + @"';
+                            insertCss.href = '" + TranslatePath(CSSFile, _addon.BasePath).Replace("\\", "/") + @"';
                             document.head.appendChild(insertCss);
                         ");
+                        } else
+                        {
+                            Console.WriteLine("[OVERLAY] Not injecting " + CSSFile + " as it is not in the addon path");
+                        }
                     }
                 }
 
@@ -116,11 +127,17 @@ namespace VRUtilityBelt.Addons.Overlays
                 {
                     foreach (string JSFile in Inject.JS)
                     {
-                        _wkOverlay.TryExecAsyncJS(@"
+                        if (JSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
+                        {
+                            _wkOverlay.TryExecAsyncJS(@"
                             var insertJs = document.createElement('script');
-                            insertJs.src = '" + TranslatePath(JSFile, BasePath).Replace("\\", "/") + @"';
+                            insertJs.src = '" + TranslatePath(JSFile, _addon.BasePath).Replace("\\", "/") + @"';
                             document.head.appendChild(insertJs);
                         ");
+                        } else
+                        {
+                            Console.WriteLine("[OVERLAY] Not injecting " + JSFile + " as it is not in the addon path");
+                        }
                     }
                 }
             }
@@ -162,7 +179,6 @@ namespace VRUtilityBelt.Addons.Overlays
         private void _wkOverlay_BrowserReady(object sender, EventArgs e)
         {
             _wkOverlay.Browser.LoadError += Browser_LoadError;
-            BrowserAddonMap.Add(_wkOverlay.Browser.GetBrowser(), _addon);
             _wkOverlay.Browser.LoadingStateChanged += Browser_LoadingStateChanged;
             if (DebugMode)
             {

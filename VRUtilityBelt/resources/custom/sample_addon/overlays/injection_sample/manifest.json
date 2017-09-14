@@ -2,15 +2,15 @@
     "name": "Injection Example",
     "description": "Demonstrates JS and CSS Injection on the Google homepage",
     "key": "vrub_example_injection", /* Use something that won't collide with other overlays. */
-    "entrypoint": "chrome://version",
+    "entrypoint": "https://google.com",
     "flags": [
     ],
     "inject": {
         "js": [
-            "example.js",
+            "overlays/injection_sample/example.js",
         ],
         "css": [
-            "example.css",
+            "overlays/injection_sample/example.css",
         ],
     },
     "width": 1024,
