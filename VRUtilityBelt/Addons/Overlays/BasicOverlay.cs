@@ -118,7 +118,7 @@ namespace VRUtilityBelt.Addons.Overlays
                         ");
                         } else
                         {
-                            Console.WriteLine("[OVERLAY] Not injecting " + CSSFile + " as it is not in the addon path");
+                            Logger.Warning("[OVERLAY] Not injecting " + CSSFile + " as it is not in the addon path");
                         }
                     }
                 }
@@ -136,7 +136,7 @@ namespace VRUtilityBelt.Addons.Overlays
                         ");
                         } else
                         {
-                            Console.WriteLine("[OVERLAY] Not injecting " + JSFile + " as it is not in the addon path");
+                            Logger.Warning("[OVERLAY] Not injecting " + JSFile + " as it is not in the addon path");
                         }
                     }
                 }
@@ -147,7 +147,7 @@ namespace VRUtilityBelt.Addons.Overlays
         {
             if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
 
-            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("SteamAuth", SteamAuth.GetInstance());
+            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("SteamAuth", new SteamAuth());
         }
 
         string TranslatePath(string path, string root)
@@ -173,7 +173,7 @@ namespace VRUtilityBelt.Addons.Overlays
 
             EntryPoint = TranslatePath(EntryPoint, path);
 
-            Console.WriteLine("EntryPoint for " + Key + ":" + EntryPoint);
+            Logger.Debug("[OVERLAY] EntryPoint for " + Key + ":" + EntryPoint);
         }
 
         private void _wkOverlay_BrowserReady(object sender, EventArgs e)

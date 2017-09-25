@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VRUtilityBelt.Addons.Overlays;
 using VRUtilityBelt.Addons.Plugins;
 using VRUtilityBelt.Addons.Thermes;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.Addons
 {
@@ -68,7 +69,7 @@ namespace VRUtilityBelt.Addons
             newAddon.BasePath = folder;
             newAddon.ProcessManifest();
 
-            Console.WriteLine("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
+            Logger.Info("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
 
             newAddon.SetupOverlays();
             newAddon.SetupThemes();
@@ -91,7 +92,7 @@ namespace VRUtilityBelt.Addons
                 JsonConvert.PopulateObject(File.ReadAllText(ManifestPath), this);
             } catch(Exception e)
             {
-                Console.WriteLine("[JSON] Failed to parse Addon Manifest at " + ManifestPath + ": " + e.Message);
+                Logger.Warning("[JSON] Failed to parse Addon Manifest at " + ManifestPath + ": " + e.Message);
             }
         }
 

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.Steam
 {
@@ -38,7 +39,7 @@ namespace VRUtilityBelt.Steam
 
         private static void SteamAPIDebugTextHook(int severity, StringBuilder text)
         {
-            Console.WriteLine("Steam API Error: " + text);
+            Logger.Error("Steam API Error: " + text);
         }
 
         public static void RunCallbacks()

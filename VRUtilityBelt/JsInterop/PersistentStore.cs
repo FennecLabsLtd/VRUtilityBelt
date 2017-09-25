@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.JsInterop
 {
@@ -76,7 +77,7 @@ namespace VRUtilityBelt.JsInterop
                 File.WriteAllText(GetFilePath(), JsonConvert.SerializeObject(_persistentStore));
             } catch(Exception e)
             {
-                Console.WriteLine("[PSTORE] Failed to write to store file at " + GetFilePath() + ": " + e.Message);
+                Logger.Error("[PSTORE] Failed to write to store file at " + GetFilePath() + ": " + e.Message);
             }
         }
 
@@ -89,7 +90,7 @@ namespace VRUtilityBelt.JsInterop
                     _persistentStore = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(GetFilePath()));
                 } catch(Exception e)
                 {
-                    Console.WriteLine("[PSTORE] Failed to read store file at " + GetFilePath() + ": " + e.Message);
+                    Logger.Error("[PSTORE] Failed to read store file at " + GetFilePath() + ": " + e.Message);
                     _persistentStore = new Dictionary<string, object>();
                 }
             }

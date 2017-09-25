@@ -69,7 +69,7 @@ namespace VRUtilityBelt.Addons.Overlays
             var resourceHandler = ResourceHandler.FromStream(stream);
             resourceHandler.StatusCode = (int)code;
 
-            Console.WriteLine("[OVERLAY] Load Error for addon:// scheme: " + error);
+            Logger.Error("[OVERLAY] Load Error for addon:// scheme: " + error);
 
             return resourceHandler;
         }

@@ -9,6 +9,12 @@ namespace VRUtilityBelt.Utility
 {
     static class PathUtilities
     {
+        internal class PathConstants {
+            public readonly string BaseCookiePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\Cookies";
+        };
+
+        public static PathConstants Constants;
+
         public static bool IsInFolder(string basePath, string filePath)
         {
             return filePath.StartsWith(basePath, StringComparison.OrdinalIgnoreCase) && File.Exists(filePath);

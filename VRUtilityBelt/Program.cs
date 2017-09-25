@@ -21,8 +21,8 @@ namespace VRUtilityBelt
         [STAThread]
         static void Main()
         {
-            LogHelper.SetupLogfile("output.log");
-            Console.WriteLine("[DEBUG] Command Line Args: " + string.Join(" ", Environment.GetCommandLineArgs()));
+            Logger.SetupLogfile("output.log");
+            Logger.Info("[DEBUG] Command Line Args: " + string.Join(" ", Environment.GetCommandLineArgs()));
             Application.ApplicationExit += Application_ApplicationExit;
 
             SteamManager.Init();
@@ -44,7 +44,7 @@ namespace VRUtilityBelt
 
         public static void Quit()
         {
-            LogHelper.CloseHandle();
+            Logger.CloseHandle();
             SteamManager.Shutdown();
             _addonManager.Stop();
 

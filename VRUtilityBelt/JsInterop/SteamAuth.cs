@@ -5,28 +5,18 @@ using System.Text;
 using System.Threading.Tasks;
 using Steamworks;
 using System.Windows.Forms;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.JsInterop
 {
     public class SteamAuth
     {
-        public static SteamAuth Instance;
-
         Callback<GetAuthSessionTicketResponse_t> AuthSessionTicketCallback;
         HAuthTicket _ticketHandle;
         byte[] _ticketBytes;
 
-        public static SteamAuth GetInstance()
-        {
-            if (Instance == null)
-                Instance = new SteamAuth();
-
-            return Instance;
-        }
-
         public SteamAuth()
         {
-            Instance = this;
             AuthSessionTicketCallback = Callback<GetAuthSessionTicketResponse_t>.Create(OnAuthSessionTicket);
             Application.ApplicationExit += Application_ApplicationExit;
         }
@@ -51,7 +41,7 @@ namespace VRUtilityBelt.JsInterop
 
         void OnAuthSessionTicket(GetAuthSessionTicketResponse_t response)
         {
-            Console.WriteLine("Got OnAuthSessionTicket: " + response.m_eResult.ToString());
+            Logger.Trace("Got OnAuthSessionTicket: " + response.m_eResult.ToString());
         }
     }
 }

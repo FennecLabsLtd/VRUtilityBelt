@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VRUtilityBelt.Steam;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.UI.Workshop
 {
@@ -141,14 +142,14 @@ namespace VRUtilityBelt.UI.Workshop
         {
             SetAsSubmitting();
 
-            Console.WriteLine("[WORKSHOP] Submitting Item");
+            Logger.Info("[WORKSHOP] Submitting Item");
 
             OnCreatedItemResult.Set(SteamUGC.CreateItem(SteamManager.AppID, EWorkshopFileType.k_EWorkshopFileTypeCommunity));
         }
 
         void CreatedItemCallback(CreateItemResult_t args, bool failure)
         {
-            Console.WriteLine("[WORKSHOP] Got callback for creating item");
+            Logger.Trace("[WORKSHOP] Got callback for creating item");
             switch(args.m_eResult)
             {
                 case EResult.k_EResultOK:
@@ -174,7 +175,7 @@ namespace VRUtilityBelt.UI.Workshop
 
             File.WriteAllText(_selectedAddon.Path + "\\workshop.json", JsonConvert.SerializeObject(_selectedAddon, Formatting.Indented));
 
-            Console.WriteLine("[WORKSHOP] Created Item with File ID " + _selectedAddon.FileId);
+            Logger.Info("[WORKSHOP] Created Item with File ID " + _selectedAddon.FileId);
 
             UpdateItem();
         }
@@ -182,7 +183,7 @@ namespace VRUtilityBelt.UI.Workshop
         void UpdateItem()
         {
             SetAsSubmitting();
-            Console.WriteLine("[WORKSHOP] Updating Data for " + _selectedAddon.FileId);
+            Logger.Info("[WORKSHOP] Updating Data for " + _selectedAddon.FileId);
             UGCUpdateHandle_t handle = SteamUGC.StartItemUpdate(SteamManager.AppID, new PublishedFileId_t(_selectedAddon.FileId));
             SteamUGC.SetItemTitle(handle, _selectedAddon.Title);
 
@@ -203,7 +204,7 @@ namespace VRUtilityBelt.UI.Workshop
 
         void SubmittedItemCallback(SubmitItemUpdateResult_t args, bool failure)
         {
-            Console.WriteLine("[WORKSHOP] Got callback for updating item");
+            Logger.Trace("[WORKSHOP] Got callback for updating item");
             switch(args.m_eResult)
             {
                 case EResult.k_EResultOK:

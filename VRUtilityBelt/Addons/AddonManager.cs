@@ -13,6 +13,7 @@ using CefSharp;
 using VRUtilityBelt.Addons.Overlays;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
+using VRUtilityBelt.Utility;
 
 namespace VRUtilityBelt.Addons
 {
@@ -87,6 +88,9 @@ namespace VRUtilityBelt.Addons
                 IsDisplayIsolated = false,
             });
 
+            // Will experiment with this at some point.
+            //cefSettings.CefCommandLineArgs.Add("touch-events", "1");
+
             SteamVR_WebKit.SteamVR_WebKit.Init(cefSettings);
 
             if(!Cef.IsInitialized)
@@ -97,7 +101,7 @@ namespace VRUtilityBelt.Addons
             if (!_isRunning)
                 return;
 
-            CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\Cookies", false);
+            CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(PathUtilities.Constants.BaseCookiePath, false);
 
             RegisterCallbacks();
 
@@ -107,8 +111,7 @@ namespace VRUtilityBelt.Addons
         }
         private void SteamVR_WebKit_LogEvent(string line)
         {
-            Console.WriteLine("[WEBKIT]: " + line);
-            System.Diagnostics.Debug.WriteLine("[WEBKIT]: " + line);
+            Logger.Info(line);
         }
 
         public void Run()

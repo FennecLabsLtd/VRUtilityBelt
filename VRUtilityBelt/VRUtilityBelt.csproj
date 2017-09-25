@@ -74,6 +74,7 @@
     <Compile Include="Addons\Overlays\IOverlay.cs" />
     <Compile Include="Addons\Overlays\BasicOverlay.cs" />
     <Compile Include="Addons\Overlays\OverlaySchemeHandlerFactory.cs" />
+    <Compile Include="Addons\PermissionManager.cs" />
     <Compile Include="Addons\Plugins\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />
     <Compile Include="JsInterop\PersistentStore.cs" />
@@ -90,7 +91,8 @@
     <Compile Include="UI\Workshop\WorkshopUploader.Designer.cs">
       <DependentUpon>WorkshopUploader.cs</DependentUpon>
     </Compile>
-    <Compile Include="Utility\LogHelper.cs" />
+    <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Utility\OpenVRTools.cs" />
     <Compile Include="Utility\PathUtilities.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
