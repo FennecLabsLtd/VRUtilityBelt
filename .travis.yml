@@ -1,3 +1,5 @@
 language: csharp
 solution: VRUtilityBelt.sln
 script: xbuild /property:Configuration=Release /property:Platform=x64 VRUtilityBelt.sln
+notifications:
+  email: false
