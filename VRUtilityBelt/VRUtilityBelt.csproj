@@ -77,6 +77,8 @@
     <Compile Include="Addons\Plugins\PluginContainer.cs" />
     <Compile Include="API\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />
+    <Compile Include="Bridge\Attributes\DoNotBridge.cs" />
+    <Compile Include="Bridge\Attributes\MethodName.cs" />
     <Compile Include="JsInterop\SteamAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
