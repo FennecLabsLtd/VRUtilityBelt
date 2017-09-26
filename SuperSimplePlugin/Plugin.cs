@@ -8,37 +8,33 @@ using VRUB.Addons;
 using VRUB.Addons.Overlays;
 using VRUB.Utility;
 
-namespace PersistentStore
+namespace SuperSimplePlugin
 {
     public class Plugin : VRUB.API.IPlugin
     {
-        Dictionary<Addon, PersistenceContainer> _containers;
         public override void OnLoad(AddonManager manager)
         {
-            _containers = new Dictionary<Addon, PersistenceContainer>();
+            Logger.Info("SUPER SIMPLE OnLoad Fired");
         }
 
         public override void OnRegister(Addon parentAddon, Overlay overlay)
         {
-            base.OnRegister(parentAddon, overlay);
+            Logger.Info("SUPER SIMPLE OnRegister Fired for " + parentAddon.Name + " and " + overlay.Name);
         }
 
         public override void OnBrowserPreInit(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            if (!_containers.ContainsKey(parentAddon))
-                _containers.Add(parentAddon, new PersistenceContainer(parentAddon.DerivedKey));
-
-            browser.RegisterJsObject("VRUB_Plugins_PersistentStore", _containers[parentAddon], new CefSharp.BindingOptions() { CamelCaseJavascriptNames = false, Binder = overlay.Binder });
+            Logger.Info("SUPER SIMPLE OnBrowserPreInit Fired for " + parentAddon.Name);
         }
 
         public override void OnBrowserReady(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-
+            Logger.Info("SUPER SIMPLE OnBrowserReady Fired for " + parentAddon.Name);
         }
 
         public override void OnBrowserNavigation(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            overlay.InjectJsFile("addon://plugins/PersistentStore/persistent_storage.js");
+            Logger.Info("SUPER SIMPLE OnBrowserNavigation Fired for " + parentAddon.Name);
         }
     }
 }

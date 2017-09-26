@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace VRUB.Addons.Data
 {
-    class InjectableFiles
+    public class InjectableFiles
     {
         [JsonProperty("js")]
         public List<string> JS = null;

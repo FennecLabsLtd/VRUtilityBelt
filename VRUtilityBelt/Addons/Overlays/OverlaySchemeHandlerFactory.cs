@@ -16,7 +16,7 @@ namespace VRUB.Addons.Overlays
         public const string SchemeName = "addon";
 
         Addon Addon { get; set; }
-        BasicOverlay Overlay { get; set; }
+        Overlay InternalOverlay { get; set; }
 
         public OverlaySchemeHandlerFactory(Addon owner)
         {

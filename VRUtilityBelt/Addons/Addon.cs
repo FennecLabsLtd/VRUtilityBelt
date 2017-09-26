@@ -9,12 +9,15 @@ using VRUB.Addons.Overlays;
 using VRUB.Addons.Thermes;
 using VRUB.API;
 using VRUB.Utility;
+using VRUB.Addons.Plugins;
 
 namespace VRUB.Addons
 {
     public class Addon
     {
         FileSystemWatcher _folderWatcher;
+
+        bool _pluginsEnabled = false;
 
         #region Datums
 
@@ -31,7 +34,7 @@ namespace VRUB.Addons
         public List<string> OverlayKeys { get; set; }
 
         [JsonIgnore]
-        public List<IOverlay> Overlays { get; set; }
+        public List<Overlay> Overlays { get; set; }
 
         [JsonProperty("themes")]
         public List<string> ThemeKeys { get; set; }
@@ -43,7 +46,7 @@ namespace VRUB.Addons
         public List<string> PluginKeys { get; set; }
 
         [JsonIgnore]
-        public List<IPlugin> Plugins { get; set; }
+        public List<PluginContainer> Plugins { get; set; }
 
         private String ManifestPath { get { return BasePath + "\\manifest.json"; } }
 
@@ -71,6 +74,9 @@ namespace VRUB.Addons
 
             Logger.Info("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
 
+            if (keyPrefix == "builtin")
+                newAddon._pluginsEnabled = true;
+
             newAddon.SetupOverlays();
             newAddon.SetupThemes();
             newAddon.SetupPlugins();
@@ -78,6 +84,22 @@ namespace VRUB.Addons
             newAddon.SetupFileWatchers();
 
             return newAddon;
+        }
+
+        public void Start()
+        {
+            foreach(Overlay o in Overlays)
+            {
+                o.Start();
+            }
+        }
+
+        public void RegisterPlugins()
+        {
+            foreach(Overlay o in Overlays)
+            {
+                o.RegisterPlugins();
+            }
         }
 
         void ProcessManifest()
@@ -108,11 +130,11 @@ namespace VRUB.Addons
 
         void SetupOverlays()
         {
-            Overlays = new List<IOverlay>();
+            Overlays = new List<Overlay>();
 
             foreach(string key in OverlayKeys)
             {
-                BasicOverlay newOverlay = new BasicOverlay(this);
+                Overlay newOverlay = new Overlay(this);
                 newOverlay.Setup(BasePath + "\\overlays\\" + key);
 
                 Overlays.Add(newOverlay);
@@ -126,7 +148,18 @@ namespace VRUB.Addons
 
         void SetupPlugins()
         {
-            // Coming... eventually.
+            Plugins = new List<PluginContainer>();
+
+            if (!_pluginsEnabled)
+                return;
+
+            foreach(string key in PluginKeys)
+            {
+                PluginContainer newPlugin = new PluginContainer(this, key);
+                newPlugin.Setup(BasePath + "\\plugins\\" + key);
+
+                Plugins.Add(newPlugin);
+            }
         }
 
         private void _folderWatcher_Updated(object sender, FileSystemEventArgs e)

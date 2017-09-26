@@ -7,9 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VRUB.Utility;
 
-namespace VRUB.JsInterop
+namespace PersistentStore
 {
-    public class PersistentStore
+    public class PersistenceContainer
     {
         public static readonly string StorePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\PersistentStore");
 
@@ -17,27 +17,28 @@ namespace VRUB.JsInterop
         Dictionary<string, object> _temporaryStore = new Dictionary<string, object>();
         Dictionary<string, object> _persistentStore = new Dictionary<string, object>();
 
-        public PersistentStore(string addonKey)
+        public PersistenceContainer(string addonKey)
         {
             _key = addonKey;
             Load();
         }
 
-        public void Set(string key, object value, bool temporary = false)
+        public void Set(string key, string value, bool temporary = false)
         {
-            if(temporary)
+            if (temporary)
             {
-                _temporaryStore[key] = value;
-            } else
+                _temporaryStore[key] = JsonConvert.DeserializeObject(value);
+            }
+            else
             {
-                _persistentStore[key] = value;
+                _persistentStore[key] = JsonConvert.DeserializeObject(value);
                 Save();
             }
         }
 
-        public object Get(string key, bool temporary = false)
+        public string Get(string key, bool temporary = false)
         {
-            return (temporary ? _temporaryStore : _persistentStore).ContainsKey(key) ? (temporary ? _temporaryStore : _persistentStore)[key] : null;
+            return (temporary ? _temporaryStore : _persistentStore).ContainsKey(key) ? JsonConvert.SerializeObject((temporary ? _temporaryStore : _persistentStore)[key]) : null;
         }
 
         public void Clear(string key, bool temporary = false)
@@ -62,14 +63,14 @@ namespace VRUB.JsInterop
             }
         }
 
-        public Dictionary<string, object> GetAll(bool temporary = false)
+        public string GetAll(bool temporary = false)
         {
-            return temporary ? _temporaryStore : _persistentStore;
+            return JsonConvert.SerializeObject(temporary ? _temporaryStore : _persistentStore);
         }
 
         void Save()
         {
-            if(!Directory.Exists(GetFilePath()))
+            if (!Directory.Exists(GetFilePath()))
             {
                 Directory.CreateDirectory(StorePath);
             }
@@ -77,7 +78,8 @@ namespace VRUB.JsInterop
             try
             {
                 File.WriteAllText(GetFilePath(), JsonConvert.SerializeObject(_persistentStore));
-            } catch(Exception e)
+            }
+            catch (Exception e)
             {
                 Logger.Error("[PSTORE] Failed to write to store file at " + GetFilePath() + ": " + e.Message);
             }
@@ -85,12 +87,13 @@ namespace VRUB.JsInterop
 
         void Load()
         {
-            if(File.Exists(GetFilePath()))
+            if (File.Exists(GetFilePath()))
             {
                 try
                 {
                     _persistentStore = JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(GetFilePath()));
-                } catch(Exception e)
+                }
+                catch (Exception e)
                 {
                     Logger.Error("[PSTORE] Failed to read store file at " + GetFilePath() + ": " + e.Message);
                     _persistentStore = new Dictionary<string, object>();

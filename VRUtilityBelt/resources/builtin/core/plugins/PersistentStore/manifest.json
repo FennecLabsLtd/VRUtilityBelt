@@ -1,0 +1,5 @@
+{
+    "name": "Persistent Storage",
+    "description": "Provides persistent and session-based storage to overlays",
+    "dll": "PersistentStore.dll",
+}

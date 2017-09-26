@@ -19,6 +19,7 @@ namespace VRUB.Addons
 {
     public class AddonManager
     {
+        public static AddonManager Instance { get; set; }
         private bool _isRunning;
         private readonly object _isRunningLock = new object();
 
@@ -63,6 +64,7 @@ namespace VRUB.Addons
 
         public void Init()
         {
+            Instance = this;
             SteamVR_WebKit.SteamVR_WebKit.FPS = 30;
             SteamVR_WebKit.SteamVR_WebKit.LogEvent += SteamVR_WebKit_LogEvent;
 
@@ -144,6 +146,12 @@ namespace VRUB.Addons
                 {
                     Directory.CreateDirectory(path.Value);
                 }
+            }
+
+            foreach(Addon a in _addons.Values)
+            {
+                a.RegisterPlugins();
+                a.Start();
             }
         }
 

@@ -9,7 +9,8 @@
         "toolbelt", /* Can be put on the 'toolbelt' (coming soon) */
     ],
     plugins: [
-        "VRUB.Core.PersistentStore",
+        "vrub_core_PersistentStore",
+        "vrub_core_SuperSimplePlugin",
     ],
     "width": 1024,
     "height": 768,

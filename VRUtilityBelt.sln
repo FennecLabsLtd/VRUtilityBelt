@@ -9,6 +9,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Plugins", "Plugins", "{CA4C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PersistentStore", "PersistentStore\PersistentStore.csproj", "{5D418C07-3403-4EA1-BE49-5D68D124A805}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SuperSimplePlugin", "SuperSimplePlugin\SuperSimplePlugin.csproj", "{C0602084-2394-4AFA-9624-3C2E11BABEAB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,17 +27,26 @@ Global
 		{4BC5FB6F-7C3A-43ED-830F-A1E697089225}.Release|x64.Build.0 = Release|x64
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|x64.Build.0 = Debug|Any CPU
+		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|x64.ActiveCfg = Debug|x64
+		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Debug|x64.Build.0 = Debug|x64
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Release|x64.ActiveCfg = Release|Any CPU
 		{5D418C07-3403-4EA1-BE49-5D68D124A805}.Release|x64.Build.0 = Release|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Debug|x64.ActiveCfg = Debug|x64
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Debug|x64.Build.0 = Debug|x64
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Release|x64.ActiveCfg = Release|Any CPU
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{5D418C07-3403-4EA1-BE49-5D68D124A805} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
+		{C0602084-2394-4AFA-9624-3C2E11BABEAB} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
 	EndGlobalSection
 EndGlobal

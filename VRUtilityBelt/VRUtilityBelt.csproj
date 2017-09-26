@@ -69,15 +69,14 @@
   <ItemGroup>
     <Compile Include="Addons\Addon.cs" />
     <Compile Include="Addons\AddonManager.cs" />
-    <Compile Include="Addons\Data\GlobalStore.cs" />
+    <Compile Include="Addons\Plugins\PluginManager.cs" />
     <Compile Include="Addons\Data\InjectableFiles.cs" />
-    <Compile Include="Addons\Overlays\IOverlay.cs" />
-    <Compile Include="Addons\Overlays\BasicOverlay.cs" />
+    <Compile Include="Addons\Overlays\Overlay.cs" />
     <Compile Include="Addons\Overlays\OverlaySchemeHandlerFactory.cs" />
     <Compile Include="Addons\PermissionManager.cs" />
+    <Compile Include="Addons\Plugins\PluginContainer.cs" />
     <Compile Include="API\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />
-    <Compile Include="JsInterop\PersistentStore.cs" />
     <Compile Include="JsInterop\SteamAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

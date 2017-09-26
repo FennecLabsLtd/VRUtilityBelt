@@ -11,10 +11,12 @@ using VRUB.JsInterop;
 using VRUB.Addons.Data;
 using CefSharp;
 using VRUB.Utility;
+using VRUB.Addons.Plugins;
+using CefSharp.ModelBinding;
 
 namespace VRUB.Addons.Overlays
 {
-    class BasicOverlay : IOverlay
+    public class Overlay
     {
         WebKitOverlay _wkOverlay;
 
@@ -55,6 +57,14 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("inject")]
         public InjectableFiles Inject { get; set; }
 
+        [JsonProperty("plugins")]
+        public List<string> Plugins { get; set; } = new List<string>();
+        
+        [JsonIgnore]
+        public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
+
+        public IBinder Binder { get { return new DefaultBinder(new DefaultFieldNameConverter()); } }
+
         public class AssetsContainer
         {
             public List<string> SASS { get; set; }
@@ -62,9 +72,9 @@ namespace VRUB.Addons.Overlays
 
         public AssetsContainer Assets { get; set; }
 
-        public WebKitOverlay Overlay { get { return _wkOverlay; } }
+        public WebKitOverlay InternalOverlay { get { return _wkOverlay; } }
 
-        public BasicOverlay(Addon addon)
+        public Overlay(Addon addon)
         {
             _addon = addon;
         }
@@ -73,6 +83,7 @@ namespace VRUB.Addons.Overlays
         {
             BasePath = path;
             ParseManifest(path);
+
             _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.DerivedKey + "." + Key, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
@@ -90,7 +101,10 @@ namespace VRUB.Addons.Overlays
                 _wkOverlay.DashboardOverlay.Width = MeterWidth;
             else
                 _wkOverlay.InGameOverlay.Width = MeterWidth;
+        }
 
+        public void Start()
+        {
             _wkOverlay.StartBrowser();
         }
 
@@ -99,6 +113,11 @@ namespace VRUB.Addons.Overlays
             if(!e.IsLoading && e.Browser.HasDocument)
             {
                 InsertInjectableFiles();
+
+                foreach (PluginContainer p in RegisteredPlugins)
+                {
+                    p.LoadedPlugin.OnBrowserNavigation(_addon, this, _wkOverlay.Browser);
+                }
             }
         }
 
@@ -109,18 +128,7 @@ namespace VRUB.Addons.Overlays
                 if(Inject.CSS != null)
                 {
                     foreach (string CSSFile in Inject.CSS) {
-                        if (CSSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
-                        {
-                            _wkOverlay.TryExecAsyncJS(@"
-                            var insertCss = document.createElement('link');
-                            insertCss.rel = 'stylesheet';
-                            insertCss.href = '" + TranslatePath(CSSFile, _addon.BasePath).Replace("\\", "/") + @"';
-                            document.head.appendChild(insertCss);
-                        ");
-                        } else
-                        {
-                            Logger.Warning("[OVERLAY] Not injecting " + CSSFile + " as it is not in the addon path");
-                        }
+                        InjectCssFile(CSSFile);
                     }
                 }
 
@@ -128,25 +136,51 @@ namespace VRUB.Addons.Overlays
                 {
                     foreach (string JSFile in Inject.JS)
                     {
-                        if (JSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
-                        {
-                            _wkOverlay.TryExecAsyncJS(@"
-                            var insertJs = document.createElement('script');
-                            insertJs.src = '" + TranslatePath(JSFile, _addon.BasePath).Replace("\\", "/") + @"';
-                            document.head.appendChild(insertJs);
-                        ");
-                        } else
-                        {
-                            Logger.Warning("[OVERLAY] Not injecting " + JSFile + " as it is not in the addon path");
-                        }
+                        InjectJsFile(JSFile);
                     }
                 }
             }
         }
 
+        public void InjectCssFile(string CSSFile)
+        {
+            if (CSSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
+            {
+                _wkOverlay.TryExecAsyncJS(@"
+                            var insertCss = document.createElement('link');
+                            insertCss.rel = 'stylesheet';
+                            insertCss.href = '" + TranslatePath(CSSFile, _addon.BasePath).Replace("\\", "/") + @"';
+                            document.head.appendChild(insertCss);
+                        ");
+            }
+            else
+            {
+                Logger.Warning("[OVERLAY] Not injecting " + CSSFile + " as it is not in the addon path");
+            }
+        }
+
+        public void InjectJsFile(string JSFile)
+        {
+            if (JSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
+            {
+                _wkOverlay.TryExecAsyncJS(@"
+                            var insertJs = document.createElement('script');
+                            insertJs.src = '" + TranslatePath(JSFile, _addon.BasePath).Replace("\\", "/") + @"';
+                            document.head.appendChild(insertJs);
+                        ");
+            }
+            else
+            {
+                Logger.Warning("[OVERLAY] Not injecting " + JSFile + " as it is not in the addon path");
+            }
+        }
+
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
-            if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
+            foreach (PluginContainer p in RegisteredPlugins)
+            {
+                p.LoadedPlugin.OnBrowserPreInit(_addon, this, _wkOverlay.Browser);
+            }
 
             if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_SteamAuth", new SteamAuth());
         }
@@ -177,10 +211,32 @@ namespace VRUB.Addons.Overlays
             Logger.Debug("[OVERLAY] EntryPoint for " + Key + ":" + EntryPoint);
         }
 
+        public void RegisterPlugins()
+        {
+            RegisteredPlugins = new List<PluginContainer>();
+
+            List<PluginContainer> plugins = PluginManager.FetchPlugins(Plugins.ToArray());
+
+            foreach(PluginContainer p in plugins)
+            {
+                if (p.LoadedPlugin != null)
+                {
+                    RegisteredPlugins.Add(p);
+                    p.LoadedPlugin.OnRegister(_addon, this);
+                }
+            }
+        }
+
         private void _wkOverlay_BrowserReady(object sender, EventArgs e)
         {
             _wkOverlay.Browser.LoadError += Browser_LoadError;
             _wkOverlay.Browser.LoadingStateChanged += Browser_LoadingStateChanged;
+
+            foreach(PluginContainer p in RegisteredPlugins)
+            {
+                p.LoadedPlugin.OnBrowserReady(_addon, this, _wkOverlay.Browser);
+            }
+
             if (DebugMode)
             {
                 ((ChromiumWebBrowser)sender).GetBrowser().GetHost().ShowDevTools();
@@ -219,12 +275,18 @@ namespace VRUB.Addons.Overlays
 
         public void Draw()
         {
-
+            foreach (PluginContainer p in RegisteredPlugins)
+            {
+                p.LoadedPlugin.Draw(_addon, this);
+            }
         }
 
         public void Update()
         {
-
+            foreach (PluginContainer p in RegisteredPlugins)
+            {
+                p.LoadedPlugin.Update(_addon, this);
+            }
         }
     }
 }

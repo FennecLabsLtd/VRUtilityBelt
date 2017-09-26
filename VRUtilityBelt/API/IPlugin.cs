@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using VRUB.Addons;
+using VRUB.Addons.Overlays;
 
 namespace VRUB.API
 {
@@ -20,10 +21,11 @@ namespace VRUB.API
         }
 
         /// <summary>
-        /// Called for each addon that uses it
+        /// Called for each overlay that uses this plugin
         /// </summary>
-        /// <param name="parentAddon">The calling addon that this plugin is being registered to</param>
-        public virtual void OnRegister(Addon parentAddon)
+        /// <param name="parentAddon">The addon that that this plugin is being registered to (may happen multiple times, as plugins register to overlays directly)</param>
+        /// <param name="overlay">The overlay that that this plugin is being registered to</param>
+        public virtual void OnRegister(Addon parentAddon, Overlay overlay)
         {
 
         }
@@ -31,8 +33,10 @@ namespace VRUB.API
         /// <summary>
         /// Called after Browser object creation, but before it starts. Registration of interopation JS objects is usually done here.
         /// </summary>
+        /// <param name="parentAddon"></param>
+        /// <param name="overlay"></param>
         /// <param name="browser"></param>
-        public virtual void OnBrowserPreInit(ChromiumWebBrowser browser)
+        public virtual void OnBrowserPreInit(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
             
         }
@@ -40,8 +44,10 @@ namespace VRUB.API
         /// <summary>
         /// Called after Browser has initialised, but it may not have loaded the page yet.
         /// </summary>
+        /// <param name="parentAddon"></param>
+        /// <param name="overlay"></param>
         /// <param name="browser"></param>
-        public virtual void OnBrowserReady(ChromiumWebBrowser browser)
+        public virtual void OnBrowserReady(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
 
         }
@@ -49,8 +55,10 @@ namespace VRUB.API
         /// <summary>
         /// Called when the Browser navigates to a new page.
         /// </summary>
+        /// <param name="parentAddon"></param>
+        /// <param name="overlay"></param>
         /// <param name="browser"></param>
-        public virtual void OnBrowserNavigation(ChromiumWebBrowser browser)
+        public virtual void OnBrowserNavigation(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
 
         }
@@ -58,11 +66,15 @@ namespace VRUB.API
         /// <summary>
         /// Update is called every frame, use it sparingly - it won't block the browsers but will block rendering to OpenVR
         /// </summary>
-        public virtual void Update() { }
+        /// <param name="parentAddon"></param>
+        /// <param name="overlay"></param>
+        public virtual void Update(Addon parentAddon, Overlay overlay) { }
 
         /// <summary>
         /// Draw is called every frame, use it sparingly - it won't block the browser but will block rendering to OpenVR
         /// </summary>
-        public virtual void Draw() { }
+        /// <param name="parentAddon"></param>
+        /// <param name="overlay"></param>
+        public virtual void Draw(Addon parentAddon, Overlay overlay) { }
     }
 }

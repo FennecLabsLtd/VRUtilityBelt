@@ -1,0 +1,5 @@
+{
+    "name": "Super Simple Plugin",
+    "description": "Stupidly simple plugin to test the event firing works.",
+    "dll": "SuperSimplePlugin.dll",
+}

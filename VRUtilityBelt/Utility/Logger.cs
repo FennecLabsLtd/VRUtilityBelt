@@ -11,7 +11,7 @@ using System.Windows.Forms;
 
 namespace VRUB.Utility
 {
-    class Logger
+    public class Logger
     {
         static FileStream _fileStream;
         static StreamWriter _streamWriter;
