@@ -5,9 +5,9 @@ using System.Text;
 using System.Threading.Tasks;
 using Steamworks;
 using System.Windows.Forms;
-using VRUtilityBelt.Utility;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.JsInterop
+namespace VRUB.JsInterop
 {
     public class SteamAuth
     {

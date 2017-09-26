@@ -9,7 +9,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace VRUtilityBelt.Utility
+namespace VRUB.Utility
 {
     class Logger
     {
@@ -30,6 +30,7 @@ namespace VRUtilityBelt.Utility
         public static void Log(LogLevel level, string message)
         {
             Console.WriteLine("[{0}|{1}|{2}] {3}", DateTime.Now.ToLongTimeString(), Thread.CurrentThread.ManagedThreadId, level, message);
+            System.Diagnostics.Debug.WriteLine("[{0}|{1}|{2}] {3}", DateTime.Now.ToLongTimeString(), Thread.CurrentThread.ManagedThreadId, level, message);
         }
 
         public static void Trace(string message)

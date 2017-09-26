@@ -1,4 +1,4 @@
-﻿namespace VRUtilityBelt.UI.Workshop
+﻿namespace VRUB.UI.Workshop
 {
     partial class WorkshopUploader
     {

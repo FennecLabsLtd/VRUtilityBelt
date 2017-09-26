@@ -7,15 +7,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenTK.Graphics.OpenGL;
 using System.Runtime.InteropServices;
-using VRUtilityBelt.Steam;
+using VRUB.Steam;
 using Steamworks;
 using CefSharp;
-using VRUtilityBelt.Addons.Overlays;
+using VRUB.Addons.Overlays;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
-using VRUtilityBelt.Utility;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.Addons
+namespace VRUB.Addons
 {
     public class AddonManager
     {
@@ -74,7 +74,7 @@ namespace VRUtilityBelt.Addons
 
             CefSettings cefSettings = new CefSettings()
             {
-                CachePath = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData) + "\\VRUtilityBelt\\BrowserCache",
+                CachePath = PathUtilities.Constants.BaseCachePath,
             };
 
             cefSettings.RegisterScheme(new CefCustomScheme()

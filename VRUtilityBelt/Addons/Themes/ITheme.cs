@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Addons.Thermes
+namespace VRUB.Addons.Thermes
 {
     public interface ITheme
     {

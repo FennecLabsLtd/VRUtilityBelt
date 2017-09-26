@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Valve.VR;
 
-namespace VRUtilityBelt.Utility
+namespace VRUB.Utility
 {
     public class OpenVRTools
     {

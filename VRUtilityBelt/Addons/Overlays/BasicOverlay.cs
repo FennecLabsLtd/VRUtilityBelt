@@ -7,12 +7,12 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using CefSharp.OffScreen;
-using VRUtilityBelt.JsInterop;
-using VRUtilityBelt.Addons.Data;
+using VRUB.JsInterop;
+using VRUB.Addons.Data;
 using CefSharp;
-using VRUtilityBelt.Utility;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.Addons.Overlays
+namespace VRUB.Addons.Overlays
 {
     class BasicOverlay : IOverlay
     {
@@ -76,6 +76,7 @@ namespace VRUtilityBelt.Addons.Overlays
             _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.DerivedKey + "." + Key, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
+            _wkOverlay.CachePath = Path.Combine(PathUtilities.Constants.BaseCachePath, _addon.DerivedKey);
 
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
             {
@@ -145,9 +146,9 @@ namespace VRUtilityBelt.Addons.Overlays
 
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
-            if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
+            if (HasFlag("pstore")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_PersistentStore", _addon.Interops.ContainsKey("PersistentStore") ? _addon.Interops["PersistentStore"] : _addon.Interops["PersistentStore"] = new JsInterop.PersistentStore(_addon.DerivedKey));
 
-            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("SteamAuth", new SteamAuth());
+            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_SteamAuth", new SteamAuth());
         }
 
         string TranslatePath(string path, string root)

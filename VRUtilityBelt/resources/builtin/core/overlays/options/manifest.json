@@ -7,7 +7,9 @@
         "vr_keyboard", /* Inputs bring up SteamVR Keyboard */
         "stt", /* Speech to Text (maybe) */
         "toolbelt", /* Can be put on the 'toolbelt' (coming soon) */
-        "pstore" /* Persistent Storage API */
+    ],
+    plugins: [
+        "VRUB.Core.PersistentStore",
     ],
     "width": 1024,
     "height": 768,

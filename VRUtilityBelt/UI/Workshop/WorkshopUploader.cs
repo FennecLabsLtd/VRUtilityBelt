@@ -10,10 +10,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VRUtilityBelt.Steam;
-using VRUtilityBelt.Utility;
+using VRUB.Steam;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.UI.Workshop
+namespace VRUB.UI.Workshop
 {
     public partial class WorkshopUploader : Form
     {

@@ -4,9 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VRUtilityBelt.Utility;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.Steam
+namespace VRUB.Steam
 {
     public class SteamManager
     {

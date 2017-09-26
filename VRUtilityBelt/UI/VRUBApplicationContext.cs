@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VRUtilityBelt.Properties;
+using VRUB.Properties;
 
-namespace VRUtilityBelt.UI
+namespace VRUB.UI
 {
     class VRUBApplicationContext : ApplicationContext
     {

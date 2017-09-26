@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Steam
+namespace VRUB.Steam
 {
     class Workshop
     {

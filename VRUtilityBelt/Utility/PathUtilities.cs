@@ -5,15 +5,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Utility
+namespace VRUB.Utility
 {
     static class PathUtilities
     {
-        internal class PathConstants {
-            public readonly string BaseCookiePath = Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\Cookies";
-        };
+        internal class Constants {
+            public static readonly string BaseCookiePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\Cookies");
+            public static readonly string BaseCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VRUtilityBelt\\BrowserCache");
 
-        public static PathConstants Constants;
+            public static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\Config");
+        };
 
         public static bool IsInFolder(string basePath, string filePath)
         {

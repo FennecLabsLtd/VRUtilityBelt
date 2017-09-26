@@ -3,7 +3,7 @@
     "key": "vrub_core",
     "description": "Core 'addon' for VR Utility Belt, you probably shouldn't disable this.",
 	"overlays": [
-		"options",
+		"options"
 	],
 	"themes": [
 		"default"

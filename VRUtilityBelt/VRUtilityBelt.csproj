@@ -75,7 +75,7 @@
     <Compile Include="Addons\Overlays\BasicOverlay.cs" />
     <Compile Include="Addons\Overlays\OverlaySchemeHandlerFactory.cs" />
     <Compile Include="Addons\PermissionManager.cs" />
-    <Compile Include="Addons\Plugins\IPlugin.cs" />
+    <Compile Include="API\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />
     <Compile Include="JsInterop\PersistentStore.cs" />
     <Compile Include="JsInterop\SteamAuth.cs" />
@@ -91,6 +91,7 @@
     <Compile Include="UI\Workshop\WorkshopUploader.Designer.cs">
       <DependentUpon>WorkshopUploader.cs</DependentUpon>
     </Compile>
+    <Compile Include="Utility\ConfigUtility.cs" />
     <Compile Include="Utility\Logger.cs" />
     <Compile Include="Utility\OpenVRTools.cs" />
     <Compile Include="Utility\PathUtilities.cs" />
@@ -130,7 +131,6 @@
     <Content Include="openvr_api.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <None Include="resources\Icon.ico" />
     <Content Include="steam_api64.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -138,9 +138,7 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="resources\builtin\core\overlays\options\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">if not exist "$(TargetDir)addons" mkdir "$(TargetDir)addons"

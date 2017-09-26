@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Addons.Data
+namespace VRUB.Addons.Data
 {
     class InjectableFiles
     {

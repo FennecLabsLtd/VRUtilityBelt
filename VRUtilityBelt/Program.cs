@@ -4,13 +4,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using VRUtilityBelt.Addons;
-using VRUtilityBelt.Addons.Overlays;
-using VRUtilityBelt.Steam;
-using VRUtilityBelt.UI;
-using VRUtilityBelt.Utility;
+using VRUB.Addons;
+using VRUB.Addons.Overlays;
+using VRUB.Steam;
+using VRUB.UI;
+using VRUB.Utility;
 
-namespace VRUtilityBelt
+namespace VRUB
 {
     static class Program
     {

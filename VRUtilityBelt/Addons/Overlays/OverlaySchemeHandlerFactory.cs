@@ -6,10 +6,10 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
-using VRUtilityBelt.Addons.Data;
-using VRUtilityBelt.Utility;
+using VRUB.Addons.Data;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.Addons.Overlays
+namespace VRUB.Addons.Overlays
 {
     class OverlaySchemeHandlerFactory : ISchemeHandlerFactory
     {

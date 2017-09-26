@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace VRUtilityBelt.Properties {
+namespace VRUB.Properties {
     using System;
     
     

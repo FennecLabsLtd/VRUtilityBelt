@@ -5,12 +5,12 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VRUtilityBelt.Addons.Overlays;
-using VRUtilityBelt.Addons.Plugins;
-using VRUtilityBelt.Addons.Thermes;
-using VRUtilityBelt.Utility;
+using VRUB.Addons.Overlays;
+using VRUB.Addons.Thermes;
+using VRUB.API;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.Addons
+namespace VRUB.Addons
 {
     public class Addon
     {

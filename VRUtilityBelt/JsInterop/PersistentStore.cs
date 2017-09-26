@@ -5,19 +5,21 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using VRUtilityBelt.Utility;
+using VRUB.Utility;
 
-namespace VRUtilityBelt.JsInterop
+namespace VRUB.JsInterop
 {
     public class PersistentStore
     {
+        public static readonly string StorePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\PersistentStore");
+
         string _key;
         Dictionary<string, object> _temporaryStore = new Dictionary<string, object>();
         Dictionary<string, object> _persistentStore = new Dictionary<string, object>();
 
-        public PersistentStore(string overlayKey)
+        public PersistentStore(string addonKey)
         {
-            _key = overlayKey;
+            _key = addonKey;
             Load();
         }
 
@@ -69,7 +71,7 @@ namespace VRUtilityBelt.JsInterop
         {
             if(!Directory.Exists(GetFilePath()))
             {
-                Directory.CreateDirectory(GetFolderPath());
+                Directory.CreateDirectory(StorePath);
             }
 
             try
@@ -101,12 +103,7 @@ namespace VRUtilityBelt.JsInterop
 
         string GetFilePath()
         {
-            return GetFolderPath() + _key + ".json";
-        }
-
-        string GetFolderPath()
-        {
-            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData) + "\\VRUtilityBelt\\PersistentStore\\";
+            return Path.Combine(StorePath, _key + ".json");
         }
     }
 }

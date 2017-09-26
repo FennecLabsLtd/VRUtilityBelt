@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRUB.Addons;
 
-namespace VRUtilityBelt.Addons.Plugins
+namespace VRUB.API
 {
     public class IPlugin
     {
