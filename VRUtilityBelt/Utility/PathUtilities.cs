@@ -14,6 +14,10 @@ namespace VRUB.Utility
             public static readonly string BaseCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VRUtilityBelt\\BrowserCache");
 
             public static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\Config");
+
+            public static readonly string GlobalResourcesPath = Path.Combine(Environment.CurrentDirectory, "static");
+
+            public static readonly string AddonPath = Path.Combine(Environment.CurrentDirectory, "addons");
         };
 
         public static bool IsInFolder(string basePath, string filePath)

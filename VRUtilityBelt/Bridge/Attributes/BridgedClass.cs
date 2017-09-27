@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace VRUtilityBelt.Bridge.Attributes
 {
-    class DoNotBridge : Attribute
+    class BridgedClass : Attribute
     {
     }
 }

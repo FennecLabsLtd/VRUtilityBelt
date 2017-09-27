@@ -13,6 +13,7 @@ using CefSharp;
 using VRUB.Utility;
 using VRUB.Addons.Plugins;
 using CefSharp.ModelBinding;
+using VRUtilityBelt.Bridge;
 
 namespace VRUB.Addons.Overlays
 {
@@ -74,8 +75,11 @@ namespace VRUB.Addons.Overlays
 
         public WebKitOverlay InternalOverlay { get { return _wkOverlay; } }
 
+        public BridgeHandler Bridge { get; set; }
+
         public Overlay(Addon addon)
         {
+            Bridge = new BridgeHandler(this);
             _addon = addon;
         }
 
@@ -92,7 +96,13 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
             {
                 SchemeName = "addon",
-                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(_addon),
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("addon", _addon.BasePath),
+            });
+
+            _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
+            {
+                SchemeName = "vrub",
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
             });
 
             _wkOverlay.EnableKeyboard = HasFlag("vr_keyboard");
@@ -140,11 +150,13 @@ namespace VRUB.Addons.Overlays
                     }
                 }
             }
+
+            InjectJsFile("vrub://VRUB.js");
         }
 
         public void InjectCssFile(string CSSFile)
         {
-            if (CSSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
+            if (CSSFile.StartsWith("addon://") || CSSFile.StartsWith("vrub://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
             {
                 _wkOverlay.TryExecAsyncJS(@"
                             var insertCss = document.createElement('link');
@@ -161,7 +173,7 @@ namespace VRUB.Addons.Overlays
 
         public void InjectJsFile(string JSFile)
         {
-            if (JSFile.StartsWith("addon://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
+            if (JSFile.StartsWith("addon://") || JSFile.StartsWith("vrub://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
             {
                 _wkOverlay.TryExecAsyncJS(@"
                             var insertJs = document.createElement('script');
@@ -177,12 +189,14 @@ namespace VRUB.Addons.Overlays
 
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
+            _wkOverlay.Browser.RegisterAsyncJsObject("VRUB_Interop_Bridge", Bridge, new BindingOptions() { CamelCaseJavascriptNames = false, Binder = Binder });
+
             foreach (PluginContainer p in RegisteredPlugins)
             {
                 p.LoadedPlugin.OnBrowserPreInit(_addon, this, _wkOverlay.Browser);
             }
 
-            if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_SteamAuth", new SteamAuth());
+            //if (HasFlag("steamauth")) _wkOverlay.Browser.RegisterJsObject("VRUB_Plugins_SteamAuth", new SteamAuth());
         }
 
         string TranslatePath(string path, string root)
@@ -191,7 +205,7 @@ namespace VRUB.Addons.Overlays
             if(!Uri.TryCreate(path, UriKind.Absolute, out result))
             {
                 if (!Path.IsPathRooted(path))
-                    path = "addon://" + path;
+                    path = "addon://overlays/" + Key + "/" + path;
             }
 
             return path;

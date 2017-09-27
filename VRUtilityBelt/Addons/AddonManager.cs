@@ -26,8 +26,8 @@ namespace VRUB.Addons
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
 
         Dictionary<string, string> searchPaths = new Dictionary<string, string>() {
-            { "builtin", Environment.CurrentDirectory + "\\addons\\builtin" },
-            { "custom", Environment.CurrentDirectory + "\\addons\\custom" },
+            { "builtin", Path.Combine(PathUtilities.Constants.AddonPath + "\\builtin") },
+            { "custom", Path.Combine(PathUtilities.Constants.AddonPath + "\\custom") },
         };
 
         public void StartAsync()
@@ -81,8 +81,19 @@ namespace VRUB.Addons
 
             cefSettings.RegisterScheme(new CefCustomScheme()
             {
-                SchemeName = OverlaySchemeHandlerFactory.SchemeName,
-                SchemeHandlerFactory = new OverlaySchemeHandlerFactory(null),
+                SchemeName = "addon",
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("addon", null),
+                IsSecure = true,
+                IsLocal = false,
+                IsStandard = false,
+                IsCorsEnabled = false,
+                IsDisplayIsolated = false,
+            });
+
+            cefSettings.RegisterScheme(new CefCustomScheme()
+            {
+                SchemeName = "vrub",
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
                 IsSecure = true,
                 IsLocal = false,
                 IsStandard = false,

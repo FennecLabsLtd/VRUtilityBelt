@@ -20,15 +20,16 @@ namespace PersistentStore
 
         public override void OnRegister(Addon parentAddon, Overlay overlay)
         {
+            if (!_containers.ContainsKey(parentAddon))
+                _containers.Add(parentAddon, new PersistenceContainer(parentAddon.DerivedKey));
+
+            overlay.Bridge.RegisterLink("VRUB_Core_PersistentStore", _containers[parentAddon]);
+
             base.OnRegister(parentAddon, overlay);
         }
 
         public override void OnBrowserPreInit(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            if (!_containers.ContainsKey(parentAddon))
-                _containers.Add(parentAddon, new PersistenceContainer(parentAddon.DerivedKey));
-
-            browser.RegisterJsObject("VRUB_Plugins_PersistentStore", _containers[parentAddon], new CefSharp.BindingOptions() { CamelCaseJavascriptNames = false, Binder = overlay.Binder });
         }
 
         public override void OnBrowserReady(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)

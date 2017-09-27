@@ -23,22 +23,22 @@ namespace PersistentStore
             Load();
         }
 
-        public void Set(string key, string value, bool temporary = false)
+        public void Set(string key, object value, bool temporary = false)
         {
             if (temporary)
             {
-                _temporaryStore[key] = JsonConvert.DeserializeObject(value);
+                _temporaryStore[key] = value;
             }
             else
             {
-                _persistentStore[key] = JsonConvert.DeserializeObject(value);
+                _persistentStore[key] = value;
                 Save();
             }
         }
 
-        public string Get(string key, bool temporary = false)
+        public object Fetch(string key, bool temporary = false)
         {
-            return (temporary ? _temporaryStore : _persistentStore).ContainsKey(key) ? JsonConvert.SerializeObject((temporary ? _temporaryStore : _persistentStore)[key]) : null;
+            return (temporary ? _temporaryStore : _persistentStore).ContainsKey(key) ? (temporary ? _temporaryStore : _persistentStore)[key] : null;
         }
 
         public void Clear(string key, bool temporary = false)
@@ -63,9 +63,9 @@ namespace PersistentStore
             }
         }
 
-        public string GetAll(bool temporary = false)
+        public object FetchAll(bool temporary = false)
         {
-            return JsonConvert.SerializeObject(temporary ? _temporaryStore : _persistentStore);
+            return (temporary ? _temporaryStore : _persistentStore);
         }
 
         void Save()

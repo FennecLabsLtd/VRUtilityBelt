@@ -72,13 +72,14 @@
     <Compile Include="Addons\Plugins\PluginManager.cs" />
     <Compile Include="Addons\Data\InjectableFiles.cs" />
     <Compile Include="Addons\Overlays\Overlay.cs" />
-    <Compile Include="Addons\Overlays\OverlaySchemeHandlerFactory.cs" />
+    <Compile Include="Addons\Overlays\RestrictedPathSchemeHandler.cs" />
     <Compile Include="Addons\PermissionManager.cs" />
     <Compile Include="Addons\Plugins\PluginContainer.cs" />
     <Compile Include="API\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />
-    <Compile Include="Bridge\Attributes\DoNotBridge.cs" />
+    <Compile Include="Bridge\Attributes\BridgedClass.cs" />
     <Compile Include="Bridge\Attributes\MethodName.cs" />
+    <Compile Include="Bridge\BridgeHandler.cs" />
     <Compile Include="JsInterop\SteamAuth.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -164,4 +165,11 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)addons" /S /Y</PostBuildEvent>
   <Import Project="..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets" Condition="Exists('..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets')" />
   <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" />
   <Import Project="..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets" Condition="Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets')" />
+  <PropertyGroup>
+    <PostBuildEvent>if not exist "$(TargetDir)addons" mkdir "$(TargetDir)addons"
+xcopy "$(ProjectDir)resources" "$(TargetDir)addons" /S /Y
+
+if not exist "$(TargetDir)static" mkdir "$(TargetDir)static"
+xcopy "$(ProjectDir)static" "$(TargetDir)static" /S /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

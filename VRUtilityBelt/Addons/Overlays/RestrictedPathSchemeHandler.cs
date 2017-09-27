@@ -11,31 +11,33 @@ using VRUB.Utility;
 
 namespace VRUB.Addons.Overlays
 {
-    class OverlaySchemeHandlerFactory : ISchemeHandlerFactory
+    class RestrictedPathSchemeHandler : ISchemeHandlerFactory
     {
-        public const string SchemeName = "addon";
+        string _schemeName;
 
-        Addon Addon { get; set; }
         Overlay InternalOverlay { get; set; }
 
-        public OverlaySchemeHandlerFactory(Addon owner)
+        string _basePath;
+
+        public RestrictedPathSchemeHandler(string scheme, string basePath)
         {
-            Addon = owner;
+            _basePath = basePath;
+            _schemeName = scheme;
         }
 
         public IResourceHandler Create(IBrowser browser, IFrame frame, string schemeName, IRequest request)
         {
-            if(Addon == null)
+            if(_basePath == null)
             {
-                return Error("This browser is not attached to an addon and therefore cannot process addon:// requests", HttpStatusCode.NotImplemented);
+                return Error("This scheme handler has a base path of null and cannot continue processing " + _schemeName + ":// requests", HttpStatusCode.NotImplemented);
             }
 
-            if (SchemeName != null && !schemeName.Equals(SchemeName, StringComparison.OrdinalIgnoreCase))
+            if (_schemeName != null && !schemeName.Equals(_schemeName, StringComparison.OrdinalIgnoreCase))
             {
-                return Error(string.Format("SchemeName {0} does not match the expected SchemeName of {1}.", schemeName, SchemeName), HttpStatusCode.NotFound);
+                return Error(string.Format("SchemeName {0} does not match the expected SchemeName of {1}.", schemeName, _schemeName), HttpStatusCode.NotFound);
             }
 
-            SteamVR_WebKit.SteamVR_WebKit.Log("Got request with addon:// scheme: " + request.Url); 
+            SteamVR_WebKit.SteamVR_WebKit.Log("Got request with " + _schemeName + ":// scheme: " + request.Url); 
 
             Uri uri = new Uri(request.Url);
 
@@ -45,14 +47,14 @@ namespace VRUB.Addons.Overlays
                 return Error("Empty Path", HttpStatusCode.NotFound);
 
 
-            string filePath = PathUtilities.GetTruePath(Addon.BasePath, absolutePath);
+            string filePath = PathUtilities.GetTruePath(_basePath, absolutePath);
              
             if(filePath.EndsWith("/") || filePath.EndsWith("\\"))
             {
                 filePath = filePath.Substring(0, filePath.Length - 1);
             }
 
-            if (PathUtilities.IsInFolder(Addon.BasePath, filePath))
+            if (PathUtilities.IsInFolder(_basePath, filePath))
             {
                 string ext = Path.GetExtension(filePath);
                 string mime = ResourceHandler.GetMimeType(ext);
