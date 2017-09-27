@@ -76,7 +76,7 @@ namespace VRUB.Addons
 
             CefSettings cefSettings = new CefSettings()
             {
-                CachePath = PathUtilities.Constants.BaseCachePath,
+                CachePath = PathUtilities.Constants.GlobalCachePath,
             };
 
             cefSettings.RegisterScheme(new CefCustomScheme()
@@ -114,7 +114,7 @@ namespace VRUB.Addons
             if (!_isRunning)
                 return;
 
-            CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(PathUtilities.Constants.BaseCookiePath, false);
+            CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(PathUtilities.Constants.GlobalCookiePath, false);
 
             RegisterCallbacks();
 

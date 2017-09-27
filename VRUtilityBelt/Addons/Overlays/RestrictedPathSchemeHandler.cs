@@ -37,7 +37,7 @@ namespace VRUB.Addons.Overlays
                 return Error(string.Format("SchemeName {0} does not match the expected SchemeName of {1}.", schemeName, _schemeName), HttpStatusCode.NotFound);
             }
 
-            SteamVR_WebKit.SteamVR_WebKit.Log("Got request with " + _schemeName + ":// scheme: " + request.Url); 
+            Logger.Trace("Got request with " + _schemeName + ":// scheme: " + request.Url); 
 
             Uri uri = new Uri(request.Url);
 

@@ -10,10 +10,12 @@ namespace VRUB.Utility
     static class PathUtilities
     {
         internal class Constants {
-            public static readonly string BaseCookiePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\Cookies");
-            public static readonly string BaseCachePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VRUtilityBelt\\BrowserCache");
+            public static readonly string BaseRoamingPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt");
+            public static readonly string BaseLocalAppDataPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "VRUtilityBelt");
+            public static readonly string GlobalCookiePath = Path.Combine(BaseRoamingPath, "Global\\Cookies");
+            public static readonly string GlobalCachePath = Path.Combine(BaseLocalAppDataPath, "Global\\Cache");
 
-            public static readonly string ConfigPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "VRUtilityBelt\\Config");
+            public static readonly string ConfigPath = Path.Combine(BaseRoamingPath, "Config");
 
             public static readonly string GlobalResourcesPath = Path.Combine(Environment.CurrentDirectory, "static");
 

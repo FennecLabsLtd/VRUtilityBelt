@@ -14,6 +14,7 @@ using VRUB.Utility;
 using VRUB.Addons.Plugins;
 using CefSharp.ModelBinding;
 using VRUtilityBelt.Bridge;
+using VRUtilityBelt.Addons.Overlays;
 
 namespace VRUB.Addons.Overlays
 {
@@ -46,20 +47,23 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("height")]
         public int Height { get; set; } = 768;
 
-        [JsonProperty("flags")]
-        public List<string> Flags { get; set; }
-
         [JsonProperty("meters")]
         public float MeterWidth { get; set; } = 2f;
 
         [JsonProperty("debug")]
         public bool DebugMode { get; set; } = false;
 
+        [JsonProperty("keyboard")]
+        public bool EnableKeyboard { get; set; }
+
         [JsonProperty("inject")]
         public InjectableFiles Inject { get; set; }
 
         [JsonProperty("plugins")]
         public List<string> Plugins { get; set; } = new List<string>();
+
+        [JsonProperty("persist_session_cookies")]
+        public bool PersistSessionCookies { get; set; }
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -77,6 +81,14 @@ namespace VRUB.Addons.Overlays
 
         public BridgeHandler Bridge { get; set; }
 
+        public string DerivedKey
+        {
+            get
+            {
+                return _addon.DerivedKey + "." + Key;
+            }
+        }
+
         public Overlay(Addon addon)
         {
             Bridge = new BridgeHandler(this);
@@ -88,10 +100,11 @@ namespace VRUB.Addons.Overlays
             BasePath = path;
             ParseManifest(path);
 
-            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + _addon.DerivedKey + "." + Key, Name, Type);
+            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + DerivedKey, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
-            _wkOverlay.CachePath = Path.Combine(PathUtilities.Constants.BaseCachePath, _addon.DerivedKey);
+            _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
+            _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
 
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
             {
@@ -105,7 +118,7 @@ namespace VRUB.Addons.Overlays
                 SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
             });
 
-            _wkOverlay.EnableKeyboard = HasFlag("vr_keyboard");
+            _wkOverlay.EnableKeyboard = EnableKeyboard;
 
             if(Type == OverlayType.Dashboard || Type == OverlayType.Both)
                 _wkOverlay.DashboardOverlay.Width = MeterWidth;
@@ -282,11 +295,6 @@ namespace VRUB.Addons.Overlays
                 _wkOverlay.DestroyInGameOverlay();
         }
 
-        public bool HasFlag(string flag)
-        {
-            return Flags != null && Flags.Contains(flag);
-        }
-
         public void Draw()
         {
             foreach (PluginContainer p in RegisteredPlugins)
@@ -301,6 +309,16 @@ namespace VRUB.Addons.Overlays
             {
                 p.LoadedPlugin.Update(_addon, this);
             }
+        }
+
+        public string GetCloudStoragePath()
+        {
+            return Path.Combine(PathUtilities.Constants.BaseRoamingPath, "Addons\\" + _addon.DerivedKey);
+        }
+
+        public string GetLocalStoragePath()
+        {
+            return Path.Combine(PathUtilities.Constants.BaseLocalAppDataPath, "Addons\\" + _addon.DerivedKey);
         }
     }
 }

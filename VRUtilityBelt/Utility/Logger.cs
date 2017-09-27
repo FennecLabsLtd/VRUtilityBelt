@@ -72,7 +72,7 @@ namespace VRUB.Utility
             string path = folder + filename;
             try
             {
-                _fileStream = new FileStream(path, FileMode.OpenOrCreate, FileAccess.Write);
+                _fileStream = new FileStream(path, FileMode.Append, FileAccess.Write);
                 _streamWriter = new StreamWriter(_fileStream);
             } catch(Exception e)
             {
