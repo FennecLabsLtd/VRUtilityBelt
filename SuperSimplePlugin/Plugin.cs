@@ -12,7 +12,7 @@ namespace SuperSimplePlugin
 {
     public class Plugin : VRUB.API.IPlugin
     {
-        public override void OnLoad(AddonManager manager)
+        public override void OnLoad(AddonManager manager, Addon owner)
         {
             Logger.Info("SUPER SIMPLE OnLoad Fired");
         }

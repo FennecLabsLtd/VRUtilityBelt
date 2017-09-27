@@ -93,7 +93,7 @@ namespace VRUB.Addons.Plugins
 
             if (_loadedPlugin != null)
             {
-                _loadedPlugin.OnLoad(AddonManager.Instance);
+                _loadedPlugin.OnLoad(AddonManager.Instance, _addon);
             }
         }
     }

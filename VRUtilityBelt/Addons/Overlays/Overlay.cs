@@ -118,6 +118,12 @@ namespace VRUB.Addons.Overlays
                 SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
             });
 
+            _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
+            {
+                SchemeName = "plugin",
+                SchemeHandlerFactory = new PluginSchemeHandler(),
+            });
+
             _wkOverlay.EnableKeyboard = EnableKeyboard;
 
             if(Type == OverlayType.Dashboard || Type == OverlayType.Both)
@@ -169,7 +175,7 @@ namespace VRUB.Addons.Overlays
 
         public void InjectCssFile(string CSSFile)
         {
-            if (CSSFile.StartsWith("addon://") || CSSFile.StartsWith("vrub://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
+            if (CSSFile.StartsWith("addon://") || CSSFile.StartsWith("vrub://") || CSSFile.StartsWith("plugin://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, CSSFile)))
             {
                 _wkOverlay.TryExecAsyncJS(@"
                             var insertCss = document.createElement('link');
@@ -186,7 +192,7 @@ namespace VRUB.Addons.Overlays
 
         public void InjectJsFile(string JSFile)
         {
-            if (JSFile.StartsWith("addon://") || JSFile.StartsWith("vrub://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
+            if (JSFile.StartsWith("addon://") || JSFile.StartsWith("vrub://") || JSFile.StartsWith("plugin://") || PathUtilities.IsInFolder(_addon.BasePath, PathUtilities.GetTruePath(_addon.BasePath, JSFile)))
             {
                 _wkOverlay.TryExecAsyncJS(@"
                             var insertJs = document.createElement('script');

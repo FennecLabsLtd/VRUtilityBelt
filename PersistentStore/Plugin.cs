@@ -13,9 +13,11 @@ namespace PersistentStore
     public class Plugin : VRUB.API.IPlugin
     {
         Dictionary<Addon, PersistenceContainer> _containers;
-        public override void OnLoad(AddonManager manager)
+        Addon _owner;
+        public override void OnLoad(AddonManager manager, Addon owner)
         {
             _containers = new Dictionary<Addon, PersistenceContainer>();
+            _owner = owner;
         }
 
         public override void OnRegister(Addon parentAddon, Overlay overlay)
@@ -39,7 +41,7 @@ namespace PersistentStore
 
         public override void OnBrowserNavigation(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            overlay.InjectJsFile("addon://plugins/PersistentStore/persistent_storage.js");
+            overlay.InjectJsFile("plugin://" + _owner.Key + "_PersistentStore/persistent_storage.js");
         }
     }
 }

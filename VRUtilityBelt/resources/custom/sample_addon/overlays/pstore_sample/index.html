@@ -12,11 +12,11 @@
     <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     
     <script type="text/javascript">
-        $("#old").text("Old: " + PersistentStore.get("test-value"));
+        $("#old").text("Old: " + VRUB.Plugins.PersistentStore.Get("test-value"));
         
         var date = (new Date()).toString();
         
         $("#new").text("New: " + date);
-        PersistentStore.set("test-value", date);
+        VRUB.Plugins.PersistentStore.Set("test-value", date);
     </script>
 </body>

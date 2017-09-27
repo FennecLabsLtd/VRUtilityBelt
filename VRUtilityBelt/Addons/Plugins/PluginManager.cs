@@ -11,10 +11,12 @@ namespace VRUB.Addons.Plugins
 {
     public class PluginManager
     {
-        public static Dictionary<string, PluginContainer> _plugins = new Dictionary<string, PluginContainer>();
+        static Dictionary<string, PluginContainer> _plugins = new Dictionary<string, PluginContainer>();
+
+        public static Dictionary<string, PluginContainer> Plugins { get { return _plugins; } }
 
         public static void RegisterPlugin(string key, PluginContainer pluginContainer) {
-            _plugins[key] = pluginContainer;
+            _plugins[key.ToLower()] = pluginContainer;
             Logger.Debug("[PLUGIN] Registered Plugin: " + key);
         }
 
@@ -22,10 +24,12 @@ namespace VRUB.Addons.Plugins
         {
             List<PluginContainer> fetched = new List<PluginContainer>();
 
-            foreach(KeyValuePair<string,PluginContainer> plugin in _plugins)
+            foreach (string key in pluginKeys)
             {
-                if (pluginKeys.Contains(plugin.Key))
-                    fetched.Add(plugin.Value);
+                if (_plugins.ContainsKey(key.ToLower()))
+                    fetched.Add(_plugins[key.ToLower()]);
+                else
+                    Logger.Debug("[PLUGIN] Failed to locate plugin: " + key);
             }
 
             return fetched;

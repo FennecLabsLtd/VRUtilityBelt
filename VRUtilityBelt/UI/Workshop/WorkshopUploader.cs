@@ -124,6 +124,9 @@ namespace VRUB.UI.Workshop
         {
             if(btnSubmit.Enabled && _selectedAddon != null)
             {
+                if (_selectedAddon.Type.Contains("plugin") || _selectedAddon.Type.Contains("theme"))
+                    MessageBox.Show("Only overlays are supported on the workshop currently, plugins are coming soon.", "Whoops!");
+
                 if (_selectedAddon.FileId > 0)
                     UpdateItem();
                 else

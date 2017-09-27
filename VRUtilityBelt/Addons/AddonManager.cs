@@ -14,6 +14,7 @@ using VRUB.Addons.Overlays;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
 using VRUB.Utility;
+using VRUtilityBelt.Addons.Overlays;
 
 namespace VRUB.Addons
 {
@@ -94,6 +95,17 @@ namespace VRUB.Addons
             {
                 SchemeName = "vrub",
                 SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
+                IsSecure = true,
+                IsLocal = false,
+                IsStandard = false,
+                IsCorsEnabled = false,
+                IsDisplayIsolated = false,
+            });
+
+            cefSettings.RegisterScheme(new CefCustomScheme()
+            {
+                SchemeName = "plugin",
+                SchemeHandlerFactory = new PluginSchemeHandler(),
                 IsSecure = true,
                 IsLocal = false,
                 IsStandard = false,

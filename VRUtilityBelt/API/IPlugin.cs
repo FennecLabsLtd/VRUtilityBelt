@@ -15,7 +15,8 @@ namespace VRUB.API
         /// OnLoad is called once when the DLL is loaded, not per-addon that uses it.
         /// </summary>
         /// <param name="manager">Instance of AddonManager used to manage all addons</param>
-        public virtual void OnLoad(AddonManager manager)
+        /// <param name="owner">Owner of this plugin.</param>
+        public virtual void OnLoad(AddonManager manager, Addon owner)
         {
 
         }

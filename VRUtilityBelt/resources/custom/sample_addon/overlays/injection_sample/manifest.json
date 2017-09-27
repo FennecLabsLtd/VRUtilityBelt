@@ -3,8 +3,6 @@
     "description": "Demonstrates JS and CSS Injection on the Google homepage",
     "key": "vrub_example_injection", /* Use something that won't collide with other overlays. */
     "entrypoint": "https://google.com",
-    "flags": [
-    ],
     "inject": {
         "js": [
             "overlays/injection_sample/example.js",
@@ -17,4 +15,5 @@
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */
     "debug": true,
+    "keyboard": true,
 }

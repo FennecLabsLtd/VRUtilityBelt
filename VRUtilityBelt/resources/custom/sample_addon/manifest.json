@@ -7,8 +7,6 @@
         "pstore_sample",
         //"injection_sample",
 	],
-	"themes": [
-	],
 	"plugins": [
 	],
 }
