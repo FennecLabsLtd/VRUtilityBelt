@@ -26,8 +26,6 @@ namespace PersistentStore
                 _containers.Add(parentAddon, new PersistenceContainer(parentAddon.DerivedKey));
 
             overlay.Bridge.RegisterLink("VRUB_Core_PersistentStore", _containers[parentAddon]);
-
-            base.OnRegister(parentAddon, overlay);
         }
 
         public override void OnBrowserPreInit(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)

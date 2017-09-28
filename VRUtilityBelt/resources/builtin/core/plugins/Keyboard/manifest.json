@@ -1,0 +1,5 @@
+{
+    "name": "OpenVR Keyboard",
+    "description": "Provides access to various OpenVR Keyboard Methods",
+    "dll": "Keyboard.dll",
+}

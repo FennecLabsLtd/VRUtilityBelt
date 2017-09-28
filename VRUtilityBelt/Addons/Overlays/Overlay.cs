@@ -326,5 +326,13 @@ namespace VRUB.Addons.Overlays
         {
             return Path.Combine(PathUtilities.Constants.BaseLocalAppDataPath, "Addons\\" + _addon.DerivedKey);
         }
+
+        public void ShowKeyboard(bool toggle = true, string value = "")
+        {
+            if (toggle)
+                InternalOverlay.ShowKeyboard(value);
+            else
+                InternalOverlay.HideKeyboard();
+        }
     }
 }
