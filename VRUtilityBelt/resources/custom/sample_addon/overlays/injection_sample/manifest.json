@@ -11,6 +11,9 @@
             "overlays/injection_sample/example.css",
         ],
     },
+    "plugins": [
+        "vrub_core_keyboard",
+    ],
     "width": 1024,
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */

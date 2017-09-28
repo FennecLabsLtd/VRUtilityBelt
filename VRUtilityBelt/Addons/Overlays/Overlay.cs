@@ -230,7 +230,7 @@ namespace VRUB.Addons.Overlays
             if(!Uri.TryCreate(path, UriKind.Absolute, out result))
             {
                 if (!Path.IsPathRooted(path))
-                    path = "addon://overlays/" + Key + "/" + path;
+                    path = "addon://" + path;
             }
 
             return path;

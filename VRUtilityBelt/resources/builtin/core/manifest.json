@@ -11,5 +11,6 @@
 	"plugins": [
 		"PersistentStore",
         "SuperSimplePlugin",
+        "Keyboard",
 	],
 }

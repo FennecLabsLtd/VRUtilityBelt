@@ -26,7 +26,7 @@ namespace Keyboard
 
         public override void OnBrowserNavigation(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            overlay.InjectJsFile("plugin://" + _owner.Key + "_PersistentStore/persistent_storage.js");
+            overlay.InjectJsFile("plugin://" + _owner.Key + "_Keyboard/keyboard.js");
         }
     }
 }
