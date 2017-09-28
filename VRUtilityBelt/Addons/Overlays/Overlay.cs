@@ -56,6 +56,9 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("keyboard")]
         public bool EnableKeyboard { get; set; }
 
+        [JsonProperty("mouse")]
+        public bool EnableMouseInput { get; set; }
+
         [JsonProperty("inject")]
         public InjectableFiles Inject { get; set; }
 
@@ -105,6 +108,9 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
+
+            if (Type == OverlayType.InGame || Type == OverlayType.Both)
+                _wkOverlay.EnableNonDashboardInput = EnableMouseInput;
 
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
             {
