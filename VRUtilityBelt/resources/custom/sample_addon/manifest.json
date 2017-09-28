@@ -5,7 +5,7 @@
 	"overlays": [
         //"auth_sample",
         "pstore_sample",
-        //"injection_sample",
+        "injection_sample",
 	],
 	"plugins": [
 	],
