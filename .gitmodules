@@ -1,0 +1,3 @@
+[submodule "DesktopDuplication"]
+	path = DesktopDuplication
+	url = git@github.com:FennecLabsLtd/desktop-duplication-net.git

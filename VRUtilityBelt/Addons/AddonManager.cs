@@ -15,6 +15,7 @@ using CefSharp.Internals;
 using CefSharp.OffScreen;
 using VRUB.Utility;
 using VRUtilityBelt.Addons.Overlays;
+using VRUtilityBelt.Desktop;
 
 namespace VRUB.Addons
 {
@@ -23,6 +24,8 @@ namespace VRUB.Addons
         public static AddonManager Instance { get; set; }
         private bool _isRunning;
         private readonly object _isRunningLock = new object();
+
+        DesktopMirrorManager _displayMirrorManager;
 
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
 
@@ -132,6 +135,9 @@ namespace VRUB.Addons
 
             PopulateAddons();
 
+            //_displayMirrorManager = new DesktopMirrorManager();
+            //_displayMirrorManager.SetupMirrors();
+
             SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
         private void SteamVR_WebKit_LogEvent(string line)
@@ -226,10 +232,14 @@ namespace VRUB.Addons
 
         private void PostUpdate(object sender, EventArgs e)
         {
+            if(_displayMirrorManager != null)
+                _displayMirrorManager.Update();
         }
 
         private void PostDraw(object sender, EventArgs e)
         {
+            if(_displayMirrorManager != null)
+                _displayMirrorManager.Draw();
         }
     }
 }
