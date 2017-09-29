@@ -4,5 +4,5 @@
     "type": [ "overlay" ],
     "tags": [ "utility" ],
     "ignore": [ ".git", ".scss", "gulpfile.json" ],
-    "preview_image": "preview_image.png"
+    "preview_image": "preview_image.jpg"
 }

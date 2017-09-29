@@ -10,7 +10,21 @@ Welcome to VR Utility Belt's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+.. toctree::
+   :maxdepth: 3
+   :caption: Addons
+   
+   addons/getting_started
+   addons/overlays
+   addons/plugins
+   
+.. toctree::
+   :maxdepth: 3
+   :caption: Javascript SDK
+   
+   js/introduction
+   js/bridge
+   js/events
 
 Indices and tables
 ==================
