@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using VRUB.Addons.Plugins;
 using VRUB.Utility;
 
-namespace VRUtilityBelt.Addons.Overlays
+namespace VRUB.Addons.Overlays
 {
     class PluginSchemeHandler : ISchemeHandlerFactory
     {

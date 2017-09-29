@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUtilityBelt.Bridge.Attributes
+namespace VRUB.Bridge.Attributes
 {
     class MethodName : Attribute
     {

@@ -14,8 +14,8 @@ using VRUB.Addons.Overlays;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
 using VRUB.Utility;
-using VRUtilityBelt.Addons.Overlays;
-using VRUtilityBelt.Desktop;
+using VRUB.Addons.Overlays;
+using VRUB.Desktop;
 
 namespace VRUB.Addons
 {
@@ -134,6 +134,7 @@ namespace VRUB.Addons
             RegisterCallbacks();
 
             PopulateAddons();
+            Permissions.PermissionManager.Load();
 
             //_displayMirrorManager = new DesktopMirrorManager();
             //_displayMirrorManager.SetupMirrors();
@@ -196,6 +197,11 @@ namespace VRUB.Addons
                     _addons.Add(path.Key.m_PublishedFileId.ToString() + "_" + newAddon.Key, newAddon);
                 }
             }
+        }
+
+        public Addon GetAddon(string key)
+        {
+            return _addons.ContainsKey(key) ? _addons[key] : null;
         }
 
         void RegisterCallbacks()

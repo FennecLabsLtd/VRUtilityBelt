@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using TCD.System.TouchInjection;
 
-namespace VRUtilityBelt.Desktop
+namespace VRUB.Desktop
 {
     class DesktopMirrorManager
     {

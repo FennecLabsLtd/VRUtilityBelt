@@ -74,6 +74,8 @@ namespace VRUB.Addons
 
             Logger.Info("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
 
+            newAddon.Interops.Add("permissions", new Permissions.PermissionInterop(newAddon));
+
             if (keyPrefix == "builtin")
                 newAddon._pluginsEnabled = true;
 
@@ -177,6 +179,15 @@ namespace VRUB.Addons
         {
             if(_folderWatcher != null)
                 _folderWatcher.Dispose();
+        }
+
+        public void FireAtOverlays(string eventName, object value)
+        {
+            foreach(Overlay o in Overlays)
+            {
+                if (o.Bridge != null)
+                    o.Bridge.FireEvent(eventName, value);
+            }
         }
     }
 }

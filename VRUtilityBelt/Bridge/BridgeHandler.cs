@@ -7,8 +7,9 @@ using System.Text;
 using System.Threading.Tasks;
 using VRUB.Addons.Overlays;
 using VRUB.Utility;
+using VRUB.Addons.Permissions;
 
-namespace VRUtilityBelt.Bridge
+namespace VRUB.Bridge
 {
     public class BridgeHandler
     {
@@ -68,29 +69,33 @@ namespace VRUtilityBelt.Bridge
             {
                 MethodInfo method = type.GetMethod(methodName, System.Reflection.BindingFlags.Instance |  BindingFlags.Public);
 
-
-
                 try
                 {
                     ReturnPromise(promiseUUID, method.Invoke(link, args));
                     return true;
+                } catch(PermissionException e)
+                {
+                    Logger.Debug("[BRIDGE] Permission Check failed for " + methodName + " on " + objectName);
+                    Error("Permission Check Failure: " + objectName + "::" + methodName);
+                    RejectPromise(promiseUUID, new { type = e.GetType(), error = e.Message });
+                    return false;
                 } catch(Exception e)
                 {
                     Logger.Error("[BRIDGE] Failed to call method " + methodName + " on " + objectName + ": " + e.Message);
                     Error(objectName + "::" + methodName + ": " + e.Message);
-                    ReturnPromise(promiseUUID, false);
+                    RejectPromise(promiseUUID, new { type = e.GetType(), error = e.Message });
                     return false;
                 }
             } catch(Exception e)
             {
                 Logger.Error("[BRIDGE] Failed to find method " + methodName + " on " + objectName + ": " + e.Message);
                 Error(objectName + "::" + methodName + ": " + e.Message);
-                ReturnPromise(promiseUUID, false);
+                RejectPromise(promiseUUID, new { type = e.GetType(), error = e.Message });
                 return false;
             }
         }
 
-        public async void Call (string objectName, string methodName, string promiseUUID, string arguments)
+        public async void Call(string objectName, string methodName, string promiseUUID, string arguments)
         {
             await Task.Run(() =>
             {
@@ -101,6 +106,11 @@ namespace VRUtilityBelt.Bridge
         void ReturnPromise(string UUID, object response)
         {
             FireEvent("promise-" + UUID, response);
+        }
+
+        void RejectPromise(string UUID, object response)
+        {
+            FireEvent("promise-fail-" + UUID, response);
         }
 
         void Error(string message)

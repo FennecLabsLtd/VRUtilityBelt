@@ -1,5 +1,6 @@
 function VRUBPromise(uuid) {
     this._thens = [];
+    this._rejects = [];
     
     var promise = this;
     
@@ -9,11 +10,25 @@ function VRUBPromise(uuid) {
         }
         
         VRUB.Events.Clear("promise-" + uuid);
+        VRUB.Events.Clear("promise-fail-" + uuid);
+    });
+    
+    VRUB.Events.Subscribe("promise-fail-" + uuid, function(response) {
+        for(i = 0; i < promise._rejects.length; i++) {
+            promise._rejects[i](response);
+        }
+        
+        VRUB.Events.Clear("promise-fail-" + uuid);
+        VRUB.Events.Clear("promise-" + uuid);
     });
     
     this.then = function(callback) {
         this._thens.push(callback);
-    }
+    };
+    
+    this.reject = function(callback) {
+        this._rejects.push(callback);
+    };
 };
 
 function VRUBInstantiator() {
@@ -58,6 +73,7 @@ function VRUBInstantiator() {
         CallSync: function(objectName, methodName) {
             var promiseUUID = root.GenerateUUID();
             var promise = new VRUBPromise(promiseUUID);
+            
             VRUB_Interop_Bridge.CallSync(objectName, methodName, promiseUUID, JSON.stringify(Array.from(arguments).slice(2)));
                 
             return promise;
@@ -73,6 +89,16 @@ function VRUBInstantiator() {
         return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
+    };
+    
+    this.Permissions = {
+        Check: function(permissionKey) {
+            return root.Interop.Call("VRUB_Core_PermissionManager", "HasPermission", permissionKey);
+        },
+        
+        Request: function(permissionKey, reason) {
+            return root.Interop.Call("VRUB_Core_PermissionManager", "RequestPermission", permissionKey, reason);
+        }
     };
     
     return this;

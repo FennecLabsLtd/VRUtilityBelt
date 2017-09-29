@@ -13,8 +13,8 @@ using CefSharp;
 using VRUB.Utility;
 using VRUB.Addons.Plugins;
 using CefSharp.ModelBinding;
-using VRUtilityBelt.Bridge;
-using VRUtilityBelt.Addons.Overlays;
+using VRUB.Bridge;
+using VRUB.Addons.Overlays;
 
 namespace VRUB.Addons.Overlays
 {
@@ -95,6 +95,7 @@ namespace VRUB.Addons.Overlays
         public Overlay(Addon addon)
         {
             Bridge = new BridgeHandler(this);
+            Bridge.RegisterLink("VRUB_Core_PermissionManager", addon.Interops["permissions"]);
             _addon = addon;
         }
 
@@ -108,6 +109,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
+            
 
             if (Type == OverlayType.InGame || Type == OverlayType.Both)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;

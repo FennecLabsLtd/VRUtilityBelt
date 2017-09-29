@@ -14,7 +14,7 @@ using System.Drawing;
 using System.Runtime.InteropServices;
 using TCD.System.TouchInjection;
 
-namespace VRUtilityBelt.Desktop
+namespace VRUB.Desktop
 {
     class DesktopMirror
     {

@@ -17,6 +17,6 @@
     "width": 1024,
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */
-    "debug": true,
+    "debug": false,
     "keyboard": true,
 }

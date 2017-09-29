@@ -8,7 +8,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{4BC5FB6F-7C3A-43ED-830F-A1E697089225}</ProjectGuid>
     <OutputType>WinExe</OutputType>
-    <RootNamespace>VRUtilityBelt</RootNamespace>
+    <RootNamespace>VRUB</RootNamespace>
     <AssemblyName>VRUtilityBelt</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
@@ -74,11 +74,13 @@
     <Compile Include="Addons\AddonManager.cs" />
     <Compile Include="Addons\Overlays\OverlayRequestContextHandler.cs" />
     <Compile Include="Addons\Overlays\PluginSchemeHandler.cs" />
+    <Compile Include="Addons\Permissions\PermissionException.cs" />
+    <Compile Include="Addons\Permissions\PermissionInterop.cs" />
     <Compile Include="Addons\Plugins\PluginManager.cs" />
     <Compile Include="Addons\Data\InjectableFiles.cs" />
     <Compile Include="Addons\Overlays\Overlay.cs" />
     <Compile Include="Addons\Overlays\RestrictedPathSchemeHandler.cs" />
-    <Compile Include="Addons\PermissionManager.cs" />
+    <Compile Include="Addons\Permissions\PermissionManager.cs" />
     <Compile Include="Addons\Plugins\PluginContainer.cs" />
     <Compile Include="API\IPlugin.cs" />
     <Compile Include="Addons\Themes\ITheme.cs" />

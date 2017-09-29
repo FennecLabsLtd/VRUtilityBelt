@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUB.Bridge.Attributes
+namespace VRUB.Addons.Permissions
 {
-    class BridgedClass : Attribute
+    class PermissionException : Exception
     {
     }
 }
