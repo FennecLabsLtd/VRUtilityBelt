@@ -3,6 +3,10 @@
     "key": "vrub_test",
     "description": "Suite of tests for different VRUB features.",
 	"overlays": [
-		"steam"
+		"steam",
+        "utilities",
 	],
+    "permissions": {
+        "vrub.core.persistent_store": "To test Persistence features.",
+    },
 }

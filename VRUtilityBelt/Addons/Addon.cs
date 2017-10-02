@@ -45,6 +45,9 @@ namespace VRUB.Addons
         [JsonProperty("plugins")]
         public List<string> PluginKeys { get; set; } = new List<string>();
 
+        [JsonProperty("permissions")]
+        public Dictionary<string, string> Permissions { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
         [JsonIgnore]
         public List<PluginContainer> Plugins { get; set; }
 
@@ -162,6 +165,14 @@ namespace VRUB.Addons
 
                 Plugins.Add(newPlugin);
             }
+        }
+
+        public string GetPermissionReasoning(string permissionKey)
+        {
+            if (Permissions.ContainsKey(permissionKey))
+                return Permissions[permissionKey];
+            else
+                return null;
         }
 
         private void _folderWatcher_Updated(object sender, FileSystemEventArgs e)

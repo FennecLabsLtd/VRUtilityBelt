@@ -1,4 +1,4 @@
-var VRUB_Keyboard = {
+VRUB.Plugins.Keyboard = {
     Show: function(value) {
         return VRUB.Interop.Call("VRUB_Core_Keyboard", "Show", value ? value : "");
     },

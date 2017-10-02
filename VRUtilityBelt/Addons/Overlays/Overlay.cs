@@ -67,6 +67,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("persist_session_cookies")]
         public bool PersistSessionCookies { get; set; }
+
+        [JsonProperty("mouse_delta_tolerance")]
+        public int MouseDeltaTolerance { get; set; } = 20;
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -83,6 +86,8 @@ namespace VRUB.Addons.Overlays
         public WebKitOverlay InternalOverlay { get { return _wkOverlay; } }
 
         public BridgeHandler Bridge { get; set; }
+
+        public Addon Addon { get { return _addon; } }
 
         public string DerivedKey
         {
@@ -112,6 +117,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
+            _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
 
             if (Type == OverlayType.InGame || Type == OverlayType.Both)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;
@@ -219,6 +225,7 @@ namespace VRUB.Addons.Overlays
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
             _wkOverlay.Browser.RequestHandler = new PassThroughRequestHandler(this);
+            _wkOverlay.Browser.DragHandler = new OverlayDragHandler(this);
             _wkOverlay.Browser.RegisterAsyncJsObject("VRUB_Interop_Bridge", Bridge, new BindingOptions() { CamelCaseJavascriptNames = false, Binder = Binder });
 
             foreach (PluginContainer p in RegisteredPlugins)

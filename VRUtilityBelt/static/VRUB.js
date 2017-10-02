@@ -24,10 +24,12 @@ function VRUBPromise(uuid) {
     
     this.then = function(callback) {
         this._thens.push(callback);
+        return this;
     };
     
     this.reject = function(callback) {
         this._rejects.push(callback);
+        return this;
     };
 };
 
@@ -91,15 +93,7 @@ function VRUBInstantiator() {
         );
     };
     
-    this.Permissions = {
-        Check: function(permissionKey) {
-            return root.Interop.Call("VRUB_Core_PermissionManager", "HasPermission", permissionKey);
-        },
-        
-        Request: function(permissionKey, reason) {
-            return root.Interop.Call("VRUB_Core_PermissionManager", "RequestPermission", permissionKey, reason);
-        }
-    };
+    this.Plugins = {};
     
     return this;
 };

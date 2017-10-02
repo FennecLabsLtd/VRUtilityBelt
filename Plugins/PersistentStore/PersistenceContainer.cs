@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRUB.Addons.Permissions;
 using VRUB.Utility;
 
 namespace PersistentStore
@@ -23,6 +24,7 @@ namespace PersistentStore
             Load();
         }
 
+        [RequiresPermission("vrub.core.persistent_store", "use the persistent storage system")]
         public void Set(string key, object value, bool temporary = false)
         {
             if (temporary)
@@ -36,11 +38,13 @@ namespace PersistentStore
             }
         }
 
+        [RequiresPermission("vrub.core.persistent_store", "use the persistent storage system")]
         public object Fetch(string key, bool temporary = false)
         {
             return (temporary ? _temporaryStore : _persistentStore).ContainsKey(key) ? (temporary ? _temporaryStore : _persistentStore)[key] : null;
         }
 
+        [RequiresPermission("vrub.core.persistent_store", "use the persistent storage system")]
         public void Clear(string key, bool temporary = false)
         {
             if (temporary && _temporaryStore.ContainsKey(key))
@@ -52,6 +56,7 @@ namespace PersistentStore
             }
         }
 
+        [RequiresPermission("vrub.core.persistent_store", "use the persistent storage system")]
         public void ClearAll(bool temporary = false)
         {
             if (temporary)
@@ -63,6 +68,7 @@ namespace PersistentStore
             }
         }
 
+        [RequiresPermission("vrub.core.persistent_store", "use the persistent storage system")]
         public object FetchAll(bool temporary = false)
         {
             return (temporary ? _temporaryStore : _persistentStore);

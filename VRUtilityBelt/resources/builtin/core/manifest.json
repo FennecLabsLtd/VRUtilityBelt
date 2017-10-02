@@ -12,5 +12,6 @@
 		"PersistentStore",
         "SuperSimplePlugin",
         "Keyboard",
+        "Haptics",
 	],
 }

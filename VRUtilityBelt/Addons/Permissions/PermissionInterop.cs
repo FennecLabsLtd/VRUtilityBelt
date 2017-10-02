@@ -19,9 +19,9 @@ namespace VRUB.Addons.Permissions
             return PermissionManager.HasPermission(_addon.DerivedKey, key);
         }
 
-        public void RequestPermission(string key, string reason)
+        public void RequestPermission(string key, string verb, string reason)
         {
-            PermissionManager.CheckPermissionAndPrompt(_addon.DerivedKey, key, reason, null);
+            PermissionManager.CheckPermissionAndPrompt(_addon, key, verb, null);
         }
     }
 }

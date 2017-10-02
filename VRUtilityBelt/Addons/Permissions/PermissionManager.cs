@@ -33,14 +33,16 @@ namespace VRUB.Addons.Permissions
             declinedPermissions = decoded.DeclinedPermissions;
         }
 
-        public static void CheckPermissionAndPrompt(string addonKey, string permissionKey, string reason, Action<bool> OnResult = null)
+        public static void CheckPermissionAndPrompt(Addon addon, string permissionKey, string verb, Action<bool> OnResult = null)
         {
+            string addonKey = addon.DerivedKey;
+
             if(HasPermission(addonKey, permissionKey))
             {
                 OnResult?.Invoke(true);
             } else if(!DeclinedPermission(addonKey, permissionKey))
             {
-                OpenVRTools.ShowAsyncModal(addonKey + " is requesting permission to use '" + permissionKey + "'\n\nProvided reason: \"" + reason + "\"", "Permission Request", "Accept", "Decline", "Ask Later", null, (response) =>
+                OpenVRTools.ShowAsyncModal(addon.Name + " is requesting permission to " + verb  + "\n\nProvided reason: \"" +  addon.GetPermissionReasoning(permissionKey) + "\"", "Permission Request", "Accept", "Decline", "Ask Later", null, (response) =>
                 {
                     switch(response)
                     {

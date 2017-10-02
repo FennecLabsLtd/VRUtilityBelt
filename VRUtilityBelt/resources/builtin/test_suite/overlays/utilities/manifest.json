@@ -1,0 +1,16 @@
+{
+    "name": "Utility Tests",
+    "description": "Various tests for core utilities of VRUB",
+    "key": "vrub_test_utilities", /* Use something that won't collide with other overlays. */
+    "entrypoint": "addon://overlays/utilities/index.html",
+    "keyboard": true,
+    "plugins": [
+        "vrub_core_PersistentStore",
+        "vrub_core_Keyboard",
+        "vrub_core_Haptics",
+    ],
+    "width": 1024,
+    "height": 768,
+    "type": "dashboard", /* Dashboard, Independent (Floating) */
+    "debug": true,
+}

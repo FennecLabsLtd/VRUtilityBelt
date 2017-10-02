@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using VRUB.Addons.Overlays;
 using VRUB.Utility;
 using VRUB.Addons.Permissions;
+using System.Runtime.CompilerServices;
 
 namespace VRUB.Bridge
 {
@@ -71,7 +72,7 @@ namespace VRUB.Bridge
 
                 try
                 {
-                    ReturnPromise(promiseUUID, method.Invoke(link, args));
+                    RunMethod(promiseUUID, method, link, args);
                     return true;
                 } catch(PermissionException e)
                 {
@@ -92,6 +93,33 @@ namespace VRUB.Bridge
                 Error(objectName + "::" + methodName + ": " + e.Message);
                 RejectPromise(promiseUUID, new { type = e.GetType(), error = e.Message });
                 return false;
+            }
+        }
+
+        void RunMethod(string promiseUUID, MethodInfo method, object link, object[] args)
+        {
+            RequiresPermissionAttribute requiresPermission = method.GetCustomAttribute<RequiresPermissionAttribute>();
+
+            if(requiresPermission == null)
+            {
+                requiresPermission = method.DeclaringType.GetCustomAttribute<RequiresPermissionAttribute>();
+            }
+
+            if (requiresPermission == null)
+            {
+                ReturnPromise(promiseUUID, method.Invoke(link, args));
+            } else
+            {
+                PermissionManager.CheckPermissionAndPrompt(_overlay.Addon, requiresPermission.PermissionKey, requiresPermission.Verb, (result) =>
+                {
+                    if(result)
+                    {
+                        ReturnPromise(promiseUUID, method.Invoke(link, args));
+                    } else
+                    {
+                        RejectPromise(promiseUUID, new { type = "permission_declined", error = "Permission " + requiresPermission.PermissionKey + " was declined by the user" });
+                    }
+                });
             }
         }
 

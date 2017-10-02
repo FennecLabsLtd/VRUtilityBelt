@@ -1,4 +1,4 @@
-var PersistentStorage = {
+VRUB.Plugins.PersistentStore = {
     Set: function(key, value, temp) {
         return VRUB.Interop.Call("VRUB_Core_PersistentStore", "Set", key, value, temp);
     },

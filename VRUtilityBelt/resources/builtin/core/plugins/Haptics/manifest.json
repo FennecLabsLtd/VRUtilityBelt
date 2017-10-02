@@ -1,0 +1,5 @@
+{
+    "name": "OpenVR Haptics",
+    "description": "Provides access to the OpenVR Haptics (vibration) functions",
+    "dll": "Haptics.dll",
+}

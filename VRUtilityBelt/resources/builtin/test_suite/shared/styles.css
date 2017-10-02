@@ -13,3 +13,43 @@
 .game img:hover {
     border: 5px solid blue;
 }
+
+#button-list {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+#button-list h1, #button-list h2, #button-list h3, #button-list h4, #button-list h5, #button-list h6 {
+    width: 100%;
+}
+
+#button-list a {
+    display: block;
+    margin: 10px;
+    padding: 15px;
+    font-size: 1.8em;
+}
+
+body {
+    background: linear-gradient(to left, #0E0E0E, #0D233A);
+    color: #3AA4D3;
+    font-family: sans-serif;
+    padding: 30px 50px;
+}
+
+h1,h2,h3,h4,h5 {
+    color: #3AA4D3
+}
+
+.button {
+    background: linear-gradient(to bottom, #163353, #0E2440);
+    color: #3AA4D3;
+    text-decoration: none;
+    text-align: center;
+}
+
+.button:hover {
+    background: linear-gradient(to bottom, #25728D, #163553)
+}
