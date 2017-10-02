@@ -104,6 +104,9 @@ namespace VRUB.Addons.Overlays
             BasePath = path;
             ParseManifest(path);
 
+            if (!Environment.GetCommandLineArgs().Contains("-debug"))
+                DebugMode = false;
+
             _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + DerivedKey, Name, Type);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
