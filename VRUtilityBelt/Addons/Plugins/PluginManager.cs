@@ -20,6 +20,12 @@ namespace VRUB.Addons.Plugins
             Logger.Debug("[PLUGIN] Registered Plugin: " + key);
         }
 
+        public static void DeregisterPlugin(string key)
+        {
+            _plugins.Remove(key.ToLower());
+            Logger.Debug("[PLUGIN] Deregistered Plugin: " + key);
+        }
+
         public static List<PluginContainer> FetchPlugins(string[] pluginKeys)
         {
             List<PluginContainer> fetched = new List<PluginContainer>();

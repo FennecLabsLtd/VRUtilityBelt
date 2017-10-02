@@ -56,6 +56,11 @@ namespace VRUB.Addons.Plugins
             PluginManager.RegisterPlugin(_addon.Key + "_" + _key, this);
         }
 
+        void DeregisterPlugin()
+        {
+            PluginManager.DeregisterPlugin(_addon.Key + "_" + _key);
+        }
+
         void ParseManifest(string path)
         {
             if (!File.Exists(path + "\\manifest.json"))
@@ -68,6 +73,13 @@ namespace VRUB.Addons.Plugins
 
         void LoadDll()
         {
+            if(!File.Exists(Path.Combine(BasePath, Dll)))
+            {
+                Logger.Error("[PLUGIN] Failed to locate " + Path.Combine(BasePath, Dll));
+                DeregisterPlugin();
+                return;
+            }
+
             Assembly asm = Assembly.LoadFrom(Path.Combine(BasePath, Dll));
 
             try

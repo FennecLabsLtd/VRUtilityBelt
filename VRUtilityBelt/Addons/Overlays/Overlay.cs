@@ -109,7 +109,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
-            
+            _wkOverlay.Browser.RequestHandler = new PassThroughRequestHandler(this);
 
             if (Type == OverlayType.InGame || Type == OverlayType.Both)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;

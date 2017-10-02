@@ -73,6 +73,7 @@
     <Compile Include="Addons\Addon.cs" />
     <Compile Include="Addons\AddonManager.cs" />
     <Compile Include="Addons\Overlays\OverlayRequestContextHandler.cs" />
+    <Compile Include="Addons\Overlays\PassThroughRequestHandler.cs" />
     <Compile Include="Addons\Overlays\PluginSchemeHandler.cs" />
     <Compile Include="Addons\Permissions\PermissionException.cs" />
     <Compile Include="Addons\Permissions\PermissionInterop.cs" />
