@@ -1,0 +1,16 @@
+{
+    "name": "Steam Tests",
+    "description": "Various tests for Steam integrations",
+    "key": "vrub_test_steam", /* Use something that won't collide with other overlays. */
+    "entrypoint": "addon://overlays/steam/index.html",
+    "keyboard": true,
+    "plugins": [
+        "vrub_core_SteamVR_Applications",
+        "vrub_core_SteamVR_Events",
+        "vrub_core_SteamVR_Tracking",
+    ],
+    "width": 1024,
+    "height": 768,
+    "type": "dashboard", /* Dashboard, Independent (Floating) */
+    "debug": true,
+}

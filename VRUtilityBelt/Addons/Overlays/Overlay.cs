@@ -109,7 +109,6 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
-            _wkOverlay.Browser.RequestHandler = new PassThroughRequestHandler(this);
 
             if (Type == OverlayType.InGame || Type == OverlayType.Both)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;
@@ -216,6 +215,7 @@ namespace VRUB.Addons.Overlays
 
         private void _wkOverlay_BrowserPreInit(object sender, EventArgs e)
         {
+            _wkOverlay.Browser.RequestHandler = new PassThroughRequestHandler(this);
             _wkOverlay.Browser.RegisterAsyncJsObject("VRUB_Interop_Bridge", Bridge, new BindingOptions() { CamelCaseJavascriptNames = false, Binder = Binder });
 
             foreach (PluginContainer p in RegisteredPlugins)
@@ -286,6 +286,9 @@ namespace VRUB.Addons.Overlays
 
         private void Browser_LoadError(object sender, LoadErrorEventArgs e)
         {
+            if (e.ErrorCode == CefErrorCode.Aborted) // Don't wanna spam for steam:// links.
+                return;
+
             SteamVR_WebKit.SteamVR_WebKit.Log("Load Error on " + _addon.DerivedKey + "." + Key + ": (" + e.ErrorCode + ") " + e.ErrorText);
         }
 

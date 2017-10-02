@@ -31,19 +31,19 @@ namespace VRUB.Addons
         public String Description { get; set; }
 
         [JsonProperty("overlays")]
-        public List<string> OverlayKeys { get; set; }
+        public List<string> OverlayKeys { get; set; } = new List<string>();
 
         [JsonIgnore]
         public List<Overlay> Overlays { get; set; }
 
         [JsonProperty("themes")]
-        public List<string> ThemeKeys { get; set; }
+        public List<string> ThemeKeys { get; set; } = new List<string>();
 
         [JsonIgnore]
         public List<ITheme> Themes { get; set; }
 
         [JsonProperty("plugins")]
-        public List<string> PluginKeys { get; set; }
+        public List<string> PluginKeys { get; set; } = new List<string>();
 
         [JsonIgnore]
         public List<PluginContainer> Plugins { get; set; }

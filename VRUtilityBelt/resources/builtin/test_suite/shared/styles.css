@@ -1,0 +1,15 @@
+#game-list {
+    
+}
+
+.game {
+    border: 5px transparent;
+}
+
+.game a {
+    display: inline-block;
+}
+
+.game img:hover {
+    border: 5px solid blue;
+}

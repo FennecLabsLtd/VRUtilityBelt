@@ -1,0 +1,8 @@
+﻿{
+	"name": "VRUB Test Suite",
+    "key": "vrub_test",
+    "description": "Suite of tests for different VRUB features.",
+	"overlays": [
+		"steam"
+	],
+}
