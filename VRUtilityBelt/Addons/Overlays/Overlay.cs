@@ -42,13 +42,13 @@ namespace VRUB.Addons.Overlays
         public OverlayType Type { get; set; } = OverlayType.Dashboard;
 
         [JsonProperty("width")]
-        public int Width { get; set; } = 1024;
+        public int Width { get; set; } = 1200;
 
         [JsonProperty("height")]
-        public int Height { get; set; } = 768;
+        public int Height { get; set; } = 800;
 
         [JsonProperty("meters")]
-        public float MeterWidth { get; set; } = 2f;
+        public float MeterWidth { get; set; } = 2.5f;
 
         [JsonProperty("debug")]
         public bool DebugMode { get; set; } = false;

@@ -54,6 +54,9 @@ namespace VRUB.Addons
         [JsonProperty("permissions")]
         public Dictionary<string, string> Permissions { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
+        [JsonProperty("default_to_disabled")]
+        public bool DefaultToDisabled = false;
+
         [JsonIgnore]
         public AddonSource Source
         {
@@ -275,7 +278,7 @@ namespace VRUB.Addons
                 _enabled = ConfigUtility.Get("addons." + DerivedKey) == "1";
             } catch(KeyNotFoundException)
             {
-                ConfigUtility.Set("addons." + DerivedKey, "1");
+                ConfigUtility.Set("addons." + DerivedKey, DefaultToDisabled ? "0" : "1");
                 _enabled = true;
             }
         }

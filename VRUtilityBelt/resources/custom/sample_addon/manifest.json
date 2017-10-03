@@ -9,4 +9,5 @@
 	],
 	"plugins": [
 	],
+    "default_to_disabled": true,
 }

@@ -3,6 +3,9 @@
     "description": "Options Overlay for VR Utility Belt",
     "key": "vrub_core_options", /* Use something that won't collide with other overlays. */
     "entrypoint": "addon://overlays/options/index.html",
+    "width": 1200,
+    "height": 800,
+    "meters": 2.5,
     "keyboard": true,
     "plugins": [
         "vrub_core_AddonManagement",

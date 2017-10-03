@@ -135,6 +135,8 @@ namespace VRUB.Addons
             RegisterCallbacks();
 
             PopulateAddons();
+            GetWorkshopAddons();
+            SetupPluginsAndStart();
             Permissions.PermissionManager.Load();
 
             //_displayMirrorManager = new DesktopMirrorManager();
@@ -178,12 +180,6 @@ namespace VRUB.Addons
                     Directory.CreateDirectory(path.Value);
                 }
             }
-
-            foreach(Addon a in _addons.Values)
-            {
-                a.RegisterPlugins();
-                a.Start();
-            }
         }
 
         public void GetWorkshopAddons()
@@ -195,8 +191,20 @@ namespace VRUB.Addons
                 if(Directory.Exists(path.Value))
                 {
                     Addon newAddon = Addon.Parse(path.Value, path.Key.m_PublishedFileId.ToString());
+                    Logger.Info("[WORKSHOP] Found Addon: " + newAddon.Name + ", Workshop ID " + path.Key.m_PublishedFileId.ToString());
                     _addons.Add(newAddon.DerivedKey, newAddon);
                 }
+            }
+
+
+        }
+
+        public void SetupPluginsAndStart()
+        {
+            foreach (Addon a in _addons.Values)
+            {
+                a.RegisterPlugins();
+                a.Start();
             }
         }
 

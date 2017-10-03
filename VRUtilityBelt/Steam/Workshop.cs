@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using VRUB.Utility;
 
 namespace VRUB.Steam
 {
@@ -48,12 +49,12 @@ namespace VRUB.Steam
 
             uint numSubbed = SteamUGC.GetNumSubscribedItems();
 
-            PublishedFileId_t[] fileIds = null;
+            PublishedFileId_t[] fileIds = new PublishedFileId_t[numSubbed];
 
             SteamUGC.GetSubscribedItems(fileIds, numSubbed);
 
             ulong itemSize = 0;
-            uint folderSize = 0, updatedTimestamp = 0;
+            uint updatedTimestamp = 0;
             string folderPath = null;
 
             Dictionary<PublishedFileId_t, string> paths = new Dictionary<PublishedFileId_t, string>();
@@ -62,9 +63,14 @@ namespace VRUB.Steam
             {
                 foreach (PublishedFileId_t fileId in fileIds)
                 {
-                    SteamUGC.GetItemInstallInfo(fileId, out itemSize, out folderPath, folderSize, out updatedTimestamp);
+                    EItemState state = (EItemState)SteamUGC.GetItemState(fileId);
 
-                    paths.Add(fileId, folderPath);
+                    if ((state & EItemState.k_EItemStateInstalled) != 0) {
+                        if (SteamUGC.GetItemInstallInfo(fileId, out itemSize, out folderPath, 1024, out updatedTimestamp))
+                            paths.Add(fileId, folderPath);
+                    } else {
+                        Logger.Debug("[WORKSHOP] State for Workshop Item " + fileId.m_PublishedFileId.ToString() + ": " + state.ToString());
+                    }
                 }
             }
 
