@@ -37,7 +37,7 @@ namespace VRUB.Addons.Permissions
         {
             string addonKey = addon.DerivedKey;
 
-            if(HasPermission(addonKey, permissionKey))
+            if(addon.SudoAccess || HasPermission(addonKey, permissionKey))
             {
                 OnResult?.Invoke(true);
             } else if(!DeclinedPermission(addonKey, permissionKey))

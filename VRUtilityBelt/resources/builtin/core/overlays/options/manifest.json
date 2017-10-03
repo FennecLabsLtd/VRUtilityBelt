@@ -5,10 +5,11 @@
     "entrypoint": "addon://overlays/options/index.html",
     "keyboard": true,
     "plugins": [
-        "vrub_core_PersistentStore",
+        "vrub_core_AddonManagement",
     ],
     "width": 1024,
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */
-    "debug": false,
+    "debug": true,
+    "thumbnail": "icon.jpg",
 }

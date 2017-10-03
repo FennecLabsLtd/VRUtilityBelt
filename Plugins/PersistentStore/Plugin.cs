@@ -23,7 +23,14 @@ namespace PersistentStore
         public override void OnRegister(Addon parentAddon, Overlay overlay)
         {
             if (!_containers.ContainsKey(parentAddon))
+            {
                 _containers.Add(parentAddon, new PersistenceContainer(parentAddon.DerivedKey));
+
+                parentAddon.Disabled += (o, e) =>
+                {
+                    _containers.Remove(_owner);
+                };
+            }
 
             overlay.Bridge.RegisterLink("VRUB_Core_PersistentStore", _containers[parentAddon]);
         }

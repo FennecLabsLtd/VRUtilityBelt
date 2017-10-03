@@ -2,6 +2,7 @@
 	"name": "Utility Belt Core",
     "key": "vrub_core",
     "description": "Core 'addon' for VR Utility Belt, you probably shouldn't disable this.",
+    "author": "VR Utility Belt Team",
 	"overlays": [
 		"options"
 	],
@@ -13,5 +14,7 @@
         "SuperSimplePlugin",
         "Keyboard",
         "Haptics",
+        "AddonManagement",
 	],
+    "sudo": true,
 }

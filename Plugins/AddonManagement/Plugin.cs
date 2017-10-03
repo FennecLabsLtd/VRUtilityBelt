@@ -9,7 +9,7 @@ using VRUB.Addons.Overlays;
 using VRUB.API;
 using VRUB.Bridge;
 
-namespace Haptics
+namespace AddonManagement
 {
     public class Plugin : IPlugin
     {
@@ -19,12 +19,12 @@ namespace Haptics
         {
             _owner = owner;
 
-            BridgeHandler.RegisterGlobalLink("VRUB_Core_Haptics", HapticAPI.Instance);
+            BridgeHandler.RegisterGlobalLink("VRUB_Core_AddonManagement", AddonManagementAPI.Instance);
         }
 
         public override void OnBrowserNavigation(Addon parentAddon, Overlay overlay, ChromiumWebBrowser browser)
         {
-            overlay.InjectJsFile("plugin://" + _owner.Key + "_Haptics/haptics.js");
+            overlay.InjectJsFile("plugin://" + _owner.Key + "_AddonManagement/AddonManagement.js");
         }
     }
 }

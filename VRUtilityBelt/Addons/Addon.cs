@@ -10,6 +10,7 @@ using VRUB.Addons.Thermes;
 using VRUB.API;
 using VRUB.Utility;
 using VRUB.Addons.Plugins;
+using VRUB.Addons.Data;
 
 namespace VRUB.Addons
 {
@@ -18,6 +19,8 @@ namespace VRUB.Addons
         FileSystemWatcher _folderWatcher;
 
         bool _pluginsEnabled = false;
+
+        public event EventHandler Disabled;
 
         #region Datums
 
@@ -29,6 +32,9 @@ namespace VRUB.Addons
 
         [JsonProperty("description")]
         public String Description { get; set; }
+
+        [JsonProperty("author")]
+        public String Author { get; set; }
 
         [JsonProperty("overlays")]
         public List<string> OverlayKeys { get; set; } = new List<string>();
@@ -49,9 +55,65 @@ namespace VRUB.Addons
         public Dictionary<string, string> Permissions { get; set; } = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
         [JsonIgnore]
+        public AddonSource Source
+        {
+            get
+            {
+                if (_keyPrefix == "builtin")
+                    return AddonSource.BuiltIn;
+                else if (_keyPrefix == "custom")
+                    return AddonSource.Custom;
+                else
+                    return AddonSource.Workshop;
+            }
+        }
+
+        /// <summary>
+        /// Not _real_ sudo, just access to everything without needing permissions granted. Only available to built-in overlays.
+        /// </summary>
+        [JsonProperty("sudo")]
+        public bool SudoAccess { get; set; } = false;
+
+        [JsonIgnore]
         public List<PluginContainer> Plugins { get; set; }
 
         private String ManifestPath { get { return BasePath + "\\manifest.json"; } }
+
+        public bool Enabled
+        {
+            get
+            {
+                try
+                {
+                    return _enabled;
+                }
+                catch
+                {
+                    return false;
+                }
+            }
+
+            set
+            {
+                if (SudoAccess && !value)
+                    Enabled = true;
+
+                ConfigUtility.Set("addons." + DerivedKey, value ? "1" : "0");
+
+                if (!_enabled && value)
+                    OnEnabled(_hasBeenEnabledAtSomePoint);
+
+                if (!value && _enabled)
+                {
+                    OnDisabled();
+                }
+
+                _enabled = value;
+
+                if (value)
+                    _hasBeenEnabledAtSomePoint = true;
+            }
+        }
 
         public string DerivedKey
         {
@@ -66,6 +128,10 @@ namespace VRUB.Addons
         public string BasePath { get; set; }
         string _keyPrefix = "builtin";
 
+        bool _hasBeenEnabledAtSomePoint = false;
+        bool _enabled = false;
+        bool _pendingDestructionTick = false;
+
 #endregion
 
         public static Addon Parse(string folder, string keyPrefix = "builtin")
@@ -75,20 +141,55 @@ namespace VRUB.Addons
             newAddon.BasePath = folder;
             newAddon.ProcessManifest();
 
+            if (keyPrefix != "builtin")
+                newAddon.SudoAccess = false;
+
             Logger.Info("[ADDON] Found Addon: " + newAddon.Key + " - " + newAddon.Name);
 
             newAddon.Interops.Add("permissions", new Permissions.PermissionInterop(newAddon));
+            newAddon.SetupConfig();
+
 
             if (keyPrefix == "builtin")
                 newAddon._pluginsEnabled = true;
 
-            newAddon.SetupOverlays();
-            newAddon.SetupThemes();
-            newAddon.SetupPlugins();
-
-            newAddon.SetupFileWatchers();
+            if (newAddon.Enabled)
+            {
+                newAddon.OnEnabled(false);
+            }
 
             return newAddon;
+        }
+
+        void OnEnabled(bool softEnable)
+        {
+            SetupOverlays();
+            SetupThemes();
+
+            _hasBeenEnabledAtSomePoint = true;
+
+            if (!softEnable)
+            {
+                SetupPlugins();
+                SetupFileWatchers();
+            } else
+            {
+                Start(); // We do this here because a hard enable does it later on.
+            }
+        }
+
+        void OnDisabled()
+        {
+            FireAtOverlays("Disabled", null);
+
+            foreach(Overlay o in Overlays)
+            {
+                o.Stop();
+            }
+
+            Disabled?.Invoke(this, new EventArgs());
+
+            _pendingDestructionTick = true;
         }
 
         public void Start()
@@ -167,6 +268,18 @@ namespace VRUB.Addons
             }
         }
 
+        void SetupConfig()
+        {
+            try
+            {
+                _enabled = ConfigUtility.Get("addons." + DerivedKey) == "1";
+            } catch(KeyNotFoundException)
+            {
+                ConfigUtility.Set("addons." + DerivedKey, "1");
+                _enabled = true;
+            }
+        }
+
         public string GetPermissionReasoning(string permissionKey)
         {
             if (Permissions.ContainsKey(permissionKey))
@@ -199,6 +312,32 @@ namespace VRUB.Addons
                 if (o.Bridge != null)
                     o.Bridge.FireEvent(eventName, value);
             }
+        }
+
+        public void Update()
+        {
+            if (!_enabled && !_pendingDestructionTick)
+                return;
+
+            foreach(Overlay o in Overlays)
+            {
+                o.Update();
+            }
+
+        }
+
+        public void Draw()
+        {
+            if (!_enabled && !_pendingDestructionTick)
+                return;
+
+            foreach(Overlay o in Overlays)
+            {
+                o.Draw();
+            }
+
+            if (!_enabled)
+                _pendingDestructionTick = false;
         }
     }
 }

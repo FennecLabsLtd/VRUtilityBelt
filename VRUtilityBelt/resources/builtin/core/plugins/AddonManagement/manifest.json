@@ -1,0 +1,5 @@
+{
+    "name": "Addon Management API",
+    "description": "Provides access to retrieving the list of addons and enabling/disabling them",
+    "dll": "AddonManagement.dll",
+}

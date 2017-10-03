@@ -17,6 +17,7 @@ namespace VRUB.Bridge
         Overlay _overlay;
 
         static Dictionary<string, object> GlobalBridgeLinks = new Dictionary<string, object>();
+        static List<BridgeHandler> Instances = new List<BridgeHandler>();
 
         Dictionary<string, object> BridgeLinks = new Dictionary<string, object>();
 
@@ -28,6 +29,7 @@ namespace VRUB.Bridge
         public BridgeHandler(Overlay overlay)
         {
             _overlay = overlay;
+            Instances.Add(this);
         }
 
         public void RegisterLink(string key, object instance)
@@ -35,9 +37,21 @@ namespace VRUB.Bridge
             BridgeLinks[key] = instance;
         }
 
+        public void Deregister()
+        {
+            Instances.Remove(this);
+        }
+
+        public void FireGlobalEvent(string eventName, object payload)
+        {
+            foreach (BridgeHandler b in Instances)
+                b.FireEvent(eventName, payload);
+        }
+
         public void FireEvent(string eventName, object payload)
         {
-            _overlay.InternalOverlay.TryExecAsyncJS("VRUB.Events.Fire('" + eventName + "', " + JsonConvert.SerializeObject(payload) + ")");
+            if(_overlay != null && _overlay.InternalOverlay != null && _overlay.Addon.Enabled)
+                _overlay.InternalOverlay.TryExecAsyncJS("VRUB.Events.Fire('" + eventName + "', " + JsonConvert.SerializeObject(payload) + ")");
         }
 
         public bool CallSync(string objectName, string methodName, string promiseUUID, string arguments)
@@ -107,14 +121,33 @@ namespace VRUB.Bridge
 
             if (requiresPermission == null)
             {
-                ReturnPromise(promiseUUID, method.Invoke(link, args));
+                try
+                {
+                    ReturnPromise(promiseUUID, method.Invoke(link, args));
+                } catch(TargetInvocationException e)
+                {
+                    Error("[BRIDGE] Failed to execute method " + method.Name + ": " + e.InnerException.Message);
+                } catch(Exception e)
+                {
+                    Error("[BRIDGE] Failed to execute method " + method.Name + ": " + e.Message);
+                }
             } else
             {
                 PermissionManager.CheckPermissionAndPrompt(_overlay.Addon, requiresPermission.PermissionKey, requiresPermission.Verb, (result) =>
                 {
                     if(result)
                     {
-                        ReturnPromise(promiseUUID, method.Invoke(link, args));
+                        try
+                        {
+                            ReturnPromise(promiseUUID, method.Invoke(link, args));
+                        }
+                        catch (TargetInvocationException e)
+                        {
+                            Error("[BRIDGE] Failed to execute method " + method.Name + ": " + e.InnerException.Message);
+                        } catch(Exception e)
+                        {
+                            Error("[BRIDGE] Failed to execute method " + method.Name + ": " + e.Message);
+                        }
                     } else
                     {
                         RejectPromise(promiseUUID, new { type = "permission_declined", error = "Permission " + requiresPermission.PermissionKey + " was declined by the user" });

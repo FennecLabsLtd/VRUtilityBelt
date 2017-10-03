@@ -4,9 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace VRUB.Bridge.Attributes
+namespace VRUB.Addons.Data
 {
-    class BridgedClass : Attribute
+    public enum AddonSource
     {
+        BuiltIn,
+        Custom,
+        Workshop
     }
 }

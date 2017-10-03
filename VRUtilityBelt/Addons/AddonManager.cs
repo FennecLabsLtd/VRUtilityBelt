@@ -29,6 +29,8 @@ namespace VRUB.Addons
 
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
 
+        public List<Addon> Addons { get { return _addons.Values.ToList(); } }
+
         Dictionary<string, string> searchPaths = new Dictionary<string, string>() {
             { "builtin", Path.Combine(PathUtilities.Constants.AddonPath + "\\builtin") },
             { "custom", Path.Combine(PathUtilities.Constants.AddonPath + "\\custom") },
@@ -165,12 +167,12 @@ namespace VRUB.Addons
                     {
                         Addon newAddon = Addon.Parse(folder, path.Key);
 
-                        if(_addons.ContainsKey(newAddon.Key))
+                        if(_addons.ContainsKey(newAddon.DerivedKey))
                         {
                             newAddon.Key = newAddon.Key + Path.GetDirectoryName(path.Value);
                         }
 
-                        _addons.Add(newAddon.Key, newAddon);
+                        _addons.Add(newAddon.DerivedKey, newAddon);
                     }
                 } else
                 {
@@ -194,7 +196,7 @@ namespace VRUB.Addons
                 if(Directory.Exists(path.Value))
                 {
                     Addon newAddon = Addon.Parse(path.Value, path.Key.m_PublishedFileId.ToString());
-                    _addons.Add(path.Key.m_PublishedFileId.ToString() + "_" + newAddon.Key, newAddon);
+                    _addons.Add(newAddon.DerivedKey, newAddon);
                 }
             }
         }
@@ -240,12 +242,22 @@ namespace VRUB.Addons
         {
             if(_displayMirrorManager != null)
                 _displayMirrorManager.Update();
+
+            foreach(Addon a in _addons.Values)
+            {
+                a.Update();
+            }
         }
 
         private void PostDraw(object sender, EventArgs e)
         {
             if(_displayMirrorManager != null)
                 _displayMirrorManager.Draw();
+
+            foreach (Addon a in _addons.Values)
+            {
+                a.Draw();
+            }
         }
     }
 }

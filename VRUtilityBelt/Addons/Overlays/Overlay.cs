@@ -70,6 +70,12 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("mouse_delta_tolerance")]
         public int MouseDeltaTolerance { get; set; } = 20;
+
+        [JsonProperty("opacity")]
+        public float Opacity { get; set; } = 0.9f;
+
+        [JsonProperty("thumbnail")]
+        public string Thumbnail { get; set; } = null;
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -88,6 +94,8 @@ namespace VRUB.Addons.Overlays
         public BridgeHandler Bridge { get; set; }
 
         public Addon Addon { get { return _addon; } }
+
+        bool _doDestroy = false;
 
         public string DerivedKey
         {
@@ -118,6 +126,18 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
+
+            if(Thumbnail != null && _wkOverlay.DashboardOverlay != null)
+            {
+                string thumbPath = Path.IsPathRooted(Thumbnail) ? Thumbnail : Path.Combine(path, Thumbnail);
+
+                if (File.Exists(thumbPath))
+                    _wkOverlay.DashboardOverlay.SetThumbnail(thumbPath);
+                else
+                    Logger.Warning("[OVERLAY] Failed to locate thumbnail for " + DerivedKey + ": " + thumbPath);
+            }
+
+            SetOpacity(Opacity);
 
             if (Type == OverlayType.InGame || Type == OverlayType.Both)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;
@@ -153,6 +173,11 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.StartBrowser();
         }
 
+        public void Stop()
+        {
+            _doDestroy = true;
+        }
+
         private void Browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
         {
             if(!e.IsLoading && e.Browser.HasDocument)
@@ -164,6 +189,15 @@ namespace VRUB.Addons.Overlays
                     p.LoadedPlugin.OnBrowserNavigation(_addon, this, _wkOverlay.Browser);
                 }
             }
+        }
+
+        void SetOpacity(float opacity)
+        {
+            if (_wkOverlay.InGameOverlay != null)
+                _wkOverlay.InGameOverlay.Alpha = opacity;
+
+            if (_wkOverlay.DashboardOverlay != null)
+                _wkOverlay.DashboardOverlay.Alpha = opacity;
         }
 
         void InsertInjectableFiles()
@@ -315,11 +349,9 @@ namespace VRUB.Addons.Overlays
 
         public void Destroy()
         {
-            if(Type == OverlayType.Both || Type == OverlayType.Dashboard)
-                _wkOverlay.DestroyDashboardOverlay();
-
-            if (Type == OverlayType.Both || Type == OverlayType.InGame)
-                _wkOverlay.DestroyInGameOverlay();
+            _wkOverlay.Destroy();
+            Bridge.Deregister();
+            _doDestroy = false;
         }
 
         public void Draw()
@@ -336,6 +368,9 @@ namespace VRUB.Addons.Overlays
             {
                 p.LoadedPlugin.Update(_addon, this);
             }
+
+            if (_doDestroy)
+                Destroy();
         }
 
         public string GetCloudStoragePath()
