@@ -14,7 +14,6 @@ using VRUB.Addons.Overlays;
 using CefSharp.Internals;
 using CefSharp.OffScreen;
 using VRUB.Utility;
-using VRUB.Addons.Overlays;
 using VRUB.Desktop;
 
 namespace VRUB.Addons

@@ -76,6 +76,6 @@
   <Import Project="..\..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" />
   <Import Project="..\..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets" Condition="Exists('..\..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y $(TargetDir)$(TargetFileName) $(SolutionDir)VRUtilityBelt\bin\$(PlatformName)\$(ConfigurationName)\addons\builtin\core\plugins\$(ProjectName)\</PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">xcopy /y $(TargetDir)$(TargetFileName) $(SolutionDir)VRUtilityBelt\bin\$(PlatformName)\$(ConfigurationName)\addons\builtin\core\plugins\$(ProjectName)\</PostBuildEvent>
   </PropertyGroup>
 </Project>

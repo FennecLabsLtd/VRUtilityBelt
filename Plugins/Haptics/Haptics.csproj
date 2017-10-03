@@ -37,7 +37,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="SteamVR-WebKit">
-      <HintPath>..\VRUtilityBelt\lib\SteamVR-WebKit.dll</HintPath>
+      <HintPath>$(SolutionDir)\VRUtilityBelt\lib\SteamVR-WebKit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -54,7 +54,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\VRUtilityBelt\VRUtilityBelt.csproj">
+    <ProjectReference Include="$(SolutionDir)\VRUtilityBelt\VRUtilityBelt.csproj">
       <Project>{4bc5fb6f-7c3a-43ed-830f-a1e697089225}</Project>
       <Name>VRUtilityBelt</Name>
     </ProjectReference>
@@ -79,6 +79,6 @@
   <Import Project="..\..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets" Condition="Exists('..\..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" />
   <Import Project="..\..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets" Condition="Exists('..\..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets')" />
   <PropertyGroup>
-    <PostBuildEvent>xcopy /y $(TargetDir)$(TargetFileName) $(SolutionDir)VRUtilityBelt\bin\$(PlatformName)\$(ConfigurationName)\addons\builtin\core\plugins\$(ProjectName)\</PostBuildEvent>
+    <PostBuildEvent Condition="'$(OS)' == 'Windows_NT' ">xcopy /y $(TargetDir)$(TargetFileName) $(SolutionDir)VRUtilityBelt\bin\$(PlatformName)\$(ConfigurationName)\addons\builtin\core\plugins\$(ProjectName)\</PostBuildEvent>
   </PropertyGroup>
 </Project>
