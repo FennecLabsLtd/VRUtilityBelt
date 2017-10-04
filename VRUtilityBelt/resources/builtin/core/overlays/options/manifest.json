@@ -19,7 +19,7 @@
     "render_models": [
         {
             "key": "hat",
-            "model": "models",
+            "model": "models/SantaHat.obj",
             "width": 1024,
             "height": 1024,
             "meters": 0.5,
