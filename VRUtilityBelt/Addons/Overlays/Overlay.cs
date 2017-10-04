@@ -24,7 +24,7 @@ namespace VRUB.Addons.Overlays
 
         Addon _addon;
 
-        string BasePath;
+        public string BasePath { get; set; }
 
         [JsonProperty("name")]
         public string Name { get; set; }
@@ -76,6 +76,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; } = null;
+
+        [JsonProperty("render_models")]
+        public List<OverlayRenderModel> RenderModels { get; set; } = new List<OverlayRenderModel>();
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -127,6 +130,8 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
 
+            SetupRenderModels();
+
             if(Thumbnail != null && _wkOverlay.DashboardOverlay != null)
             {
                 string thumbPath = Path.IsPathRooted(Thumbnail) ? Thumbnail : Path.Combine(path, Thumbnail);
@@ -176,6 +181,14 @@ namespace VRUB.Addons.Overlays
         public void Stop()
         {
             _doDestroy = true;
+        }
+
+        void SetupRenderModels()
+        {
+            foreach(OverlayRenderModel rm in RenderModels)
+            {
+                rm.Setup(this);
+            }
         }
 
         private void Browser_LoadingStateChanged(object sender, CefSharp.LoadingStateChangedEventArgs e)
@@ -352,6 +365,11 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.Destroy();
             Bridge.Deregister();
             _doDestroy = false;
+
+            foreach(OverlayRenderModel rm in RenderModels)
+            {
+                rm.Destroy();
+            }
         }
 
         public void Draw()

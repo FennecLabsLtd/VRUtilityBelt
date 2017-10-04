@@ -15,4 +15,25 @@
     "type": "dashboard", /* Dashboard, Independent (Floating) */
     "debug": true,
     "thumbnail": "icon.jpg",
+    
+    "render_models": [
+        {
+            "key": "hat",
+            "model": "models",
+            "width": 1024,
+            "height": 1024,
+            "meters": 0.5,
+            "position": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0,
+            },
+            "rotation": {
+                "X": 0,
+                "Y": 85,
+                "Z": 0,
+            },
+            "opacity": 1,
+        }
+    ],
 }

@@ -70,6 +70,7 @@ namespace VRUB.Addons
         public void Init()
         {
             Instance = this;
+            SteamVR_WebKit.SteamVR_WebKit.PrefixOverlayType = false;
             SteamVR_WebKit.SteamVR_WebKit.FPS = 30;
             SteamVR_WebKit.SteamVR_WebKit.LogEvent += SteamVR_WebKit_LogEvent;
 

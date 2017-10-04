@@ -74,6 +74,7 @@
     <Compile Include="Addons\AddonManager.cs" />
     <Compile Include="Addons\Data\AddonSource.cs" />
     <Compile Include="Addons\Overlays\OverlayDragHandler.cs" />
+    <Compile Include="Addons\Overlays\OverlayRenderModel.cs" />
     <Compile Include="Addons\Overlays\OverlayRequestContextHandler.cs" />
     <Compile Include="Addons\Overlays\PassThroughRequestHandler.cs" />
     <Compile Include="Addons\Overlays\PluginSchemeHandler.cs" />

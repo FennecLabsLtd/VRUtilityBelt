@@ -1,0 +1,20 @@
+{
+  "thumbnail": "SantaHat.png",
+  "shapes": {
+    "base": {
+      "filename": "./SantaHat.obj",
+      "component_local": {
+        "origin": [
+          0.0,
+          2.0,
+          0.0
+        ],
+        "rotate_xyz": [
+          0.5,
+          0.0,
+          0.0
+        ]
+      }
+    }
+  }
+}
