@@ -243,10 +243,15 @@ namespace VRUB.Addons
 
             foreach(string key in OverlayKeys)
             {
-                Overlay newOverlay = new Overlay(this);
-                newOverlay.Setup(BasePath + "\\overlays\\" + key);
-
-                Overlays.Add(newOverlay);
+                try
+                {
+                    Overlay newOverlay = new Overlay(this);
+                    newOverlay.Setup(BasePath + "\\overlays\\" + key);
+                    Overlays.Add(newOverlay);
+                } catch(Exception e)
+                {
+                    Logger.Fatal("[OVERLAY] Failed to setup " + key + " due to: " + e.Message);
+                }
             }
         }
 

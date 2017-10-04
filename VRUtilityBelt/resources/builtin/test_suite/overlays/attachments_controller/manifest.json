@@ -1,0 +1,30 @@
+{
+    "name": "Attachments Test - Controller",
+    "description": "Tests attachment to a controller",
+    "key": "vrub_test_attachments_controller", /* Use something that won't collide with other overlays. */
+    "entrypoint": "https://google.com",
+    "plugins": [
+
+    ],
+    "attachment": {
+        "type": "LeftController",
+        "position": {
+            "X": 0,
+            "Y": 0.02,
+            "Z": 0.05,
+        },
+        "rotation": {
+            "X": 0,
+            "Y": 0,
+            "Z": 90,
+        },
+    },
+    "width": 1024,
+    "height": 768,
+    "floating_meters": 0.25,
+    "show_as_floating": true,
+    "show_as_dashboard": false,
+    "debug": false,
+    "mouse": true,
+    "keyboard": true,
+}

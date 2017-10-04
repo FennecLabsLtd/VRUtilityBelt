@@ -15,6 +15,8 @@ using VRUB.Addons.Plugins;
 using CefSharp.ModelBinding;
 using VRUB.Bridge;
 using VRUB.Addons.Overlays;
+using Valve.VR;
+using OpenTK;
 
 namespace VRUB.Addons.Overlays
 {
@@ -38,9 +40,6 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("entrypoint")]
         public string EntryPoint { get; set; } = "index.html";
 
-        [JsonProperty("type")]
-        public OverlayType Type { get; set; } = OverlayType.Dashboard;
-
         [JsonProperty("width")]
         public int Width { get; set; } = 1200;
 
@@ -49,6 +48,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("meters")]
         public float MeterWidth { get; set; } = 2.5f;
+
+        [JsonProperty("floating_meters")]
+        public float FloatingMeterWidth { get; set; } = 2.5f;
 
         [JsonProperty("debug")]
         public bool DebugMode { get; set; } = false;
@@ -66,7 +68,7 @@ namespace VRUB.Addons.Overlays
         public List<string> Plugins { get; set; } = new List<string>();
 
         [JsonProperty("persist_session_cookies")]
-        public bool PersistSessionCookies { get; set; }
+        public bool PersistSessionCookies { get; set; } = true;
 
         [JsonProperty("mouse_delta_tolerance")]
         public int MouseDeltaTolerance { get; set; } = 20;
@@ -76,6 +78,18 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("thumbnail")]
         public string Thumbnail { get; set; } = null;
+
+        [JsonProperty("attachment")]
+        public OverlayAttachment OverlayAttachment { get; set; } = new OverlayAttachment() { Type = AttachmentType.Absolute, Position = Vector3.Zero, Rotation = Vector3.Zero };
+
+        [JsonProperty("flags")]
+        public List<VROverlayFlags> Flags { get; set; }
+
+        [JsonProperty("show_as_dashboard")]
+        public bool ShowAsDashboard { get; set; } = true;
+
+        [JsonProperty("show_as_floating")]
+        public bool ShowAsFloating { get; set; } = false;
 
         [JsonProperty("render_models")]
         public List<OverlayRenderModel> RenderModels { get; set; } = new List<OverlayRenderModel>();
@@ -120,16 +134,23 @@ namespace VRUB.Addons.Overlays
             BasePath = path;
             ParseManifest(path);
 
+            if(!ShowAsDashboard && !ShowAsFloating)
+            {
+                Logger.Fatal("[OVERLAY] Overlay must have show_as_dashboard and/or show_as_floating set to true, both as false is not permitted.");
+                return;
+            }
+
             if (!Environment.GetCommandLineArgs().Contains("-debug"))
                 DebugMode = false;
 
-            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + DerivedKey, Name, Type);
+            _wkOverlay = new WebKitOverlay(new Uri(EntryPoint), Width, Height, "vrub." + DerivedKey, Name, ShowAsDashboard ? (ShowAsFloating ? OverlayType.Both : OverlayType.Dashboard) : OverlayType.InGame);
             _wkOverlay.BrowserReady += _wkOverlay_BrowserReady;
             _wkOverlay.BrowserPreInit += _wkOverlay_BrowserPreInit;
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
 
+            Attach();
             SetupRenderModels();
 
             if(Thumbnail != null && _wkOverlay.DashboardOverlay != null)
@@ -144,7 +165,7 @@ namespace VRUB.Addons.Overlays
 
             SetOpacity(Opacity);
 
-            if (Type == OverlayType.InGame || Type == OverlayType.Both)
+            if (ShowAsFloating)
                 _wkOverlay.EnableNonDashboardInput = EnableMouseInput;
 
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
@@ -167,10 +188,24 @@ namespace VRUB.Addons.Overlays
 
             _wkOverlay.EnableKeyboard = EnableKeyboard;
 
-            if(Type == OverlayType.Dashboard || Type == OverlayType.Both)
+            UpdateWidths();
+        }
+
+        public void UpdateWidths()
+        {
+            if (ShowAsDashboard)
                 _wkOverlay.DashboardOverlay.Width = MeterWidth;
-            else
-                _wkOverlay.InGameOverlay.Width = MeterWidth;
+
+            if (ShowAsFloating)
+                _wkOverlay.InGameOverlay.Width = FloatingMeterWidth;
+        }
+
+        void Attach()
+        {
+            if(_wkOverlay.InGameOverlay != null)
+            {
+                _wkOverlay.InGameOverlay.SetAttachment(OverlayAttachment.Type, OverlayAttachment.Position, OverlayAttachment.Rotation, OverlayAttachment.AttachmentKey);
+            }
         }
 
         public void Start()

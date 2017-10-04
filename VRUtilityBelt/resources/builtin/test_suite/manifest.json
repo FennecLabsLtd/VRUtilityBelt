@@ -5,8 +5,10 @@
 	"overlays": [
 		"steam",
         "utilities",
+        "attachments_controller",
 	],
     "permissions": {
         "vrub.core.persistent_store": "To test Persistence features.",
     },
+    "default_to_disabled": true,
 }
