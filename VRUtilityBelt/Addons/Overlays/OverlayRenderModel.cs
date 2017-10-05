@@ -67,29 +67,7 @@ namespace VRUB.Addons.Overlays
 
         static void GenerateOnePixelTexture()
         {
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-            _glOnePixelTextureId = GL.GenTexture();
-            _onePixelTexture = new Texture_t();
-            _onePixelTexture.eColorSpace = EColorSpace.Linear;
-            _onePixelTexture.eType = ETextureType.OpenGL;
-            _onePixelTexture.handle = (IntPtr)_glOnePixelTextureId;
-
-            Bitmap bmp = new Bitmap(1, 1);
-            bmp.SetPixel(0, 0, Color.Transparent);
-
-            BitmapData bmpData = bmp.LockBits(
-                new Rectangle(0, 0, 1, 1),
-                ImageLockMode.ReadOnly,
-                System.Drawing.Imaging.PixelFormat.Format32bppArgb
-            );
-
-            GL.BindTexture(TextureTarget.Texture2D, _glOnePixelTextureId);
-            GL.TexImage2D(TextureTarget.Texture2D, 0, PixelInternalFormat.Rgba, 1, 1, 0, OpenTK.Graphics.OpenGL.PixelFormat.Bgra, PixelType.UnsignedByte, bmpData.Scan0);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMinFilter, (int)TextureMinFilter.Linear);
-            GL.TexParameter(TextureTarget.Texture2D, TextureParameterName.TextureMagFilter, (int)TextureMagFilter.Linear);
-            GL.BindTexture(TextureTarget.Texture2D, 0);
-
-            bmp.UnlockBits(bmpData);
+            OpenVRTools.OnePixelTexture(out _onePixelTexture, out _glOnePixelTextureId);
 
             _generatedOnePixelTexture = true;
         }

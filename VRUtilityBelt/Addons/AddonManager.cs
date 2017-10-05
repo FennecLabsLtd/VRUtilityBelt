@@ -15,6 +15,8 @@ using CefSharp.Internals;
 using CefSharp.OffScreen;
 using VRUB.Utility;
 using VRUB.Desktop;
+using InternalOverlay = SteamVR_WebKit.Overlay;
+using Valve.VR;
 
 namespace VRUB.Addons
 {
@@ -135,13 +137,18 @@ namespace VRUB.Addons
 
             RegisterCallbacks();
 
+            //SetupAnchorOverlays();
+
             PopulateAddons();
             GetWorkshopAddons();
             SetupPluginsAndStart();
             Permissions.PermissionManager.Load();
 
-            //_displayMirrorManager = new DesktopMirrorManager();
-            //_displayMirrorManager.SetupMirrors();
+            if (ConfigUtility.Get("desktop.enabled", "0") == "1")
+            {
+                _displayMirrorManager = new DesktopMirrorManager();
+                _displayMirrorManager.SetupMirrors();
+            }
 
             SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
@@ -266,6 +273,22 @@ namespace VRUB.Addons
             {
                 a.Draw();
             }
+        }
+
+        void SetupAnchorOverlays()
+        {
+            Texture_t tex;
+            int glId;
+
+            OpenVRTools.OnePixelTexture(out tex, out glId);
+
+            InternalOverlay dashboard = new InternalOverlay("vrub.anchor.dashboard", "VRUB Anchor - Dashboard", 1f, true);
+            dashboard.SetAttachment(SteamVR_WebKit.AttachmentType.Overlay, new OpenTK.Vector3(0f, 1.3f, 0.6f), new OpenTK.Vector3(0, 0, -35f), "system.vrdashboard");
+
+            dashboard.SetTexture(ref tex);
+
+            dashboard.ToggleInput(false);
+            dashboard.Show();
         }
     }
 }

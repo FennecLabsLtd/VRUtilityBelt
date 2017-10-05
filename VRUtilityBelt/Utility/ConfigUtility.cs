@@ -5,12 +5,15 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
+using System.Collections;
 
 namespace VRUB.Utility
 {
     class ConfigUtility
     {
         static Dictionary<string, Dictionary<string, string>> configValues = new Dictionary<string, Dictionary<string, string>>();
+
+        public delegate void UpdateHandler(string key, string value);
 
         public static void Load() {
             if (!Directory.Exists(PathUtilities.Constants.ConfigPath))
@@ -31,7 +34,7 @@ namespace VRUB.Utility
                 return null;
         }
 
-        public static string Get(string dotPath)
+        public static string Get(string dotPath, string defaultValue = null)
         {
             string[] splitPath = dotPath.Split( new char[] { '.' }, 2);
 
@@ -41,15 +44,26 @@ namespace VRUB.Utility
                     if (configValues[splitPath[0]].ContainsKey(splitPath[1]))
                         return configValues[splitPath[0]][splitPath[1]];
                     else
-                        throw new KeyNotFoundException("Invalid Config Key " + splitPath[1]);
+                    {
+                        if (defaultValue != null)
+                            return defaultValue;
+                        else
+                            throw new KeyNotFoundException("Invalid Config Key " + splitPath[1]);
+                    }
                 }
                 else
                 {
-                    throw new KeyNotFoundException("Invalid File Key " + splitPath[0]);
+                    if (defaultValue != null)
+                        return defaultValue;
+                    else
+                        throw new KeyNotFoundException("Invalid File Key " + splitPath[0]);
                 }
             } else
             {
-                throw new KeyNotFoundException("Please provide a full path to a config value.");
+                if (defaultValue != null)
+                    return defaultValue;
+                else
+                    throw new KeyNotFoundException("Please provide a full path to a config value.");
             }
         }
 
@@ -72,6 +86,8 @@ namespace VRUB.Utility
             {
                 throw new KeyNotFoundException("Please provide a full path to a config value.");
             }
+
+            Send(dotPath, dotPath, value);
         }
 
         static void Save()
@@ -97,5 +113,37 @@ namespace VRUB.Utility
 
             Save();
         }
+
+        public static void Listen(string message, UpdateHandler action)
+        {
+            var actions = listeners[message] as UpdateHandler;
+            if (actions != null)
+            {
+                listeners[message] = actions + action;
+            }
+            else
+            {
+                listeners[message] = action;
+            }
+        }
+
+        public static void Remove(string message, UpdateHandler action)
+        {
+            var actions = listeners[message] as UpdateHandler;
+            if (actions != null)
+            {
+                listeners[message] = actions - action;
+            }
+        }
+
+        public static void Send(string message, string key, string value)
+        {
+            if (listeners[message] is UpdateHandler actions)
+            {
+                actions(key, value);
+            }
+        }
+
+        private static Hashtable listeners = new Hashtable();
     }
 }

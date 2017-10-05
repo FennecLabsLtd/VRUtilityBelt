@@ -32,14 +32,25 @@ namespace VRUB.Desktop
         uint eventSize = (uint)Marshal.SizeOf(typeof(VREvent_t));
         uint cStateSize = (uint)Marshal.SizeOf(typeof(VRControllerState_t));
 
+        static bool useTouch = false;
+
         [DllImport("kernel32.dll")]
         public static extern uint GetLastError();
 
         PointerTouchInfo touch;
         bool isTouching = false;
 
+        float _width = 2.5f;
+        float _distance = 2f;
+
         public DesktopMirror(int screenIndex, Screen screenObject)
         {
+            _width = float.Parse(ConfigUtility.Get("desktop.width", "1.5"));
+            _distance = float.Parse(ConfigUtility.Get("desktop.distance", "2.0"));
+
+            ConfigUtility.Listen("desktop.width", DesktopWidthChanged);
+            ConfigUtility.Listen("desktop.distance", DesktopDistanceChanged);
+
             _screenIndex = screenIndex;
             _screenObject = screenObject;
 
@@ -48,16 +59,25 @@ namespace VRUB.Desktop
             Setup();
         }
 
+        void DesktopWidthChanged(string key, string value)
+        {
+            _width = float.Parse(value);
+            UpdateScreen();
+        }
+
+        void DesktopDistanceChanged(string key, string value)
+        {
+            _distance = float.Parse(value);
+            UpdateScreen();
+        }
+
         void Setup()
         {
-            InternalOverlay = new Overlay("vrub.desktop." + _screenIndex, "Desktop", 3.5f, _screenIndex != 0);
+            InternalOverlay = new Overlay("vrub.desktop." + _screenIndex, "Desktop " + _screenIndex, 2.5f, true, false);
             InternalOverlay.ToggleInput(true);
             InternalOverlay.SetTextureSize(_screenObject.WorkingArea.Width, _screenObject.WorkingArea.Height);
 
-            if(_screenIndex > 0)
-            {
-
-            }
+            UpdateScreen();
 
             _glTextureId = GL.GenTexture();
             _textureData = new Texture_t();
@@ -67,8 +87,53 @@ namespace VRUB.Desktop
 
             _desktopDuplicator = new DesktopDuplicator(_screenIndex);
 
+            InternalOverlay.Show();
+
             Logger.Debug("[DESKTOP] Display " + _screenIndex + " setup complete");
         }
+
+        void UpdateScreen()
+        {
+            if (_screenIndex == 0)
+            {
+                SetRootPosition();
+            }
+            else
+            {
+                SetPositionRelativeToPrimary();
+            }
+        }
+
+        void SetRootPosition()
+        {
+            /*double angleOfDashboard = 35f;
+            double distanceFromDashboard = _distance + 1f;
+
+            double yOpp = Math.Tan(angleOfDashboard) * distanceFromDashboard;
+            double zHyp = yOpp / Math.Sin(angleOfDashboard);*/
+
+            InternalOverlay.SetAttachment(AttachmentType.Absolute, new OpenTK.Vector3(0f, 1f, _distance), new OpenTK.Vector3(0, 180, 0));
+            InternalOverlay.Width = _width;
+            InternalOverlay.Alpha = 0.95f;
+        }
+
+        void SetPositionRelativeToPrimary()
+        {
+            float metersInAPixel = _width / DesktopMirrorManager.PrimaryDisplay._screenObject.Bounds.Width;
+
+            OpenTK.Vector2 scaler = new OpenTK.Vector2(_screenObject.Bounds.Width / DesktopMirrorManager.PrimaryDisplay._screenObject.Bounds.Width, _screenObject.Bounds.Height / DesktopMirrorManager.PrimaryDisplay._screenObject.Bounds.Height);
+            Logger.Debug("[DESKTOP] Meters in a Pixel: " + metersInAPixel);
+
+            OpenTK.Vector3 newPos = new OpenTK.Vector3(_screenObject.Bounds.X * metersInAPixel, -_screenObject.Bounds.Y * metersInAPixel, 0);
+            OpenTK.Vector3 rotation = new OpenTK.Vector3(0, 0, 0);
+
+            float scaledWidth = _width * scaler.X;
+
+            InternalOverlay.SetAttachment(AttachmentType.Overlay, newPos, rotation, "vrub.desktop.0");
+            InternalOverlay.Width = scaledWidth;
+        }
+
+
 
         public void Update()
         {
@@ -79,19 +144,31 @@ namespace VRUB.Desktop
                 switch(type)
                 {
                     case EVREventType.VREvent_MouseButtonDown:
-                        HandleMouseDown();
+                        if (useTouch)
+                            HandleTouchDown();
+                        else
+                            HandleTouchDown();
                         break;
 
                     case EVREventType.VREvent_InputFocusReleased:
-                        HandleInputLost();
+                        if (useTouch)
+                            HandleTouchLost();
+                        else
+                            HandleTouchLost();
                         break;
 
                     case EVREventType.VREvent_MouseButtonUp:
-                        HandleMouseUp();
+                        if (useTouch)
+                            HandleTouchUp();
+                        else
+                            HandleTouchUp();
                         break;
 
                     case EVREventType.VREvent_MouseMove:
-                        HandleMouseMove();
+                        if (useTouch)
+                            HandleTouchMove();
+                        else
+                            HandleTouchMove();
                         break;
                 }
             }
@@ -131,7 +208,11 @@ namespace VRUB.Desktop
                     _latestFrame.DesktopImage.UnlockBits(bmpData);
 
                     GL.BindTexture(TextureTarget.Texture2D, 0);
+
+                    _latestFrame.DesktopImage.Dispose();
                 }
+
+                
             }
         }
 
@@ -143,12 +224,39 @@ namespace VRUB.Desktop
             }
         }
 
-        void HandleInputLost()
+        public void Destroy()
+        {
+            InternalOverlay.Destroy();
+        }
+
+        void HandleMouseUp()
+        {
+
+        }
+
+        void HandleMouseDown()
+        {
+
+        }
+
+        void HandleMouseLost()
+        {
+
+        }
+
+        void HandleMouseMove()
+        {
+
+        }
+
+        #region Touch Handlers
+
+        void HandleTouchLost()
         {
             ReleaseTouch();
         }
 
-        void HandleMouseMove()
+        void HandleTouchMove()
         {
             if (!isTouching)
                 return;
@@ -166,7 +274,7 @@ namespace VRUB.Desktop
             }
         }
 
-        void HandleMouseDown()
+        void HandleTouchDown()
         {
             if(isTouching)
             {
@@ -204,7 +312,7 @@ namespace VRUB.Desktop
             }
         }
 
-        void HandleMouseUp()
+        void HandleTouchUp()
         {
             if (isTouching)
                 ReleaseTouch();
@@ -219,5 +327,6 @@ namespace VRUB.Desktop
             } else
                 isTouching = false;
         }
+        #endregion
     }
 }

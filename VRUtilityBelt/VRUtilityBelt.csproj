@@ -110,6 +110,7 @@
     </Compile>
     <Compile Include="Utility\ConfigUtility.cs" />
     <Compile Include="Utility\Logger.cs" />
+    <Compile Include="Utility\MathUtilities.cs" />
     <Compile Include="Utility\OpenVRTools.cs" />
     <Compile Include="Utility\PathUtilities.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
