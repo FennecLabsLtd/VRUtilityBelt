@@ -6,17 +6,20 @@
 </head>
 
 <body>
-    <div id="old">Loading Old...</div>
-    <div id="new">Loading New...</div>
+    <div id="new">Loading Value...</div>
     
     <script src="http://code.jquery.com/jquery-3.2.1.min.js" integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4=" crossorigin="anonymous"></script>
     
     <script type="text/javascript">
-        $("#old").text("Old: " + VRUB.Plugins.PersistentStore.Get("test-value"));
-        
-        var date = (new Date()).toString();
-        
-        $("#new").text("New: " + date);
-        VRUB.Plugins.PersistentStore.Set("test-value", date);
+        $(document).on('vrub:plugin_ready:VRUB_Core_PersistentStore', function() { // Always wait for the plugin to be ready, so that VRUB.js and the plugin's JS has loaded.
+            console.log("VRUB Core and Persistent Store are Ready");
+            VRUB.Plugins.PersistentStore.Set("foo", (new Date()).toString()).then(function() {
+                VRUB.Plugins.PersistentStore.Fetch("foo").then(function(result) {
+                    $("#new").text("Result: " + result);
+                });
+            }).reject(function(err) {
+                console.log("Failed to set foo to bar, error: " + err);
+            });
+        });
     </script>
 </body>

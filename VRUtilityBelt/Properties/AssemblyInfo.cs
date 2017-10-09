@@ -13,7 +13,7 @@
 [assembly: System.Reflection.AssemblyCopyright("© 2017 Fennec Labs Ltd")]
 [assembly: System.Runtime.InteropServices.ComVisible(false)]
 [assembly: System.CLSCompliant(true)]
-[assembly: System.Reflection.AssemblyInformationalVersion("0.1.6491#4135437")]
+[assembly: System.Reflection.AssemblyInformationalVersion("0.1.6491#173cd07")]
 [assembly: System.Reflection.AssemblyVersion("0.1.6491")]
 [assembly: System.Reflection.AssemblyFileVersion("0.1.6491")]
 

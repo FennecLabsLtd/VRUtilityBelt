@@ -1,10 +1,21 @@
-VRUB.Plugins.Keyboard = {
-    Show: function(value) {
-        return VRUB.Interop.Call("VRUB_Core_Keyboard", "Show", value ? value : "");
-    },
+var VRUB_Core_Keyboard_Init = function() {
+    VRUB.Plugins.Keyboard = {
+        Show: function(value) {
+            return VRUB.Interop.Call("VRUB_Core_Keyboard", "Show", value ? value : "");
+        },
+        
+        Hide: function() {
+            return VRUB.Interop.Call("VRUB_Core_Keyboard", "Hide");
+        },
+    }
     
-    Hide: function() {
-        return VRUB.Interop.Call("VRUB_Core_Keyboard", "Hide");
-    },
-   
+    delete VRUB_Core_Keyboard_Init;
+}
+
+if(VRUB) {
+    VRUB_Core_Keyboard_Init();
+} else {
+    document.addEventListener('vrub:ready', function() {
+        VRUB_Core_Keyboard_Init();
+    });
 }

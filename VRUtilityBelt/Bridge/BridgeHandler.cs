@@ -56,6 +56,7 @@ namespace VRUB.Bridge
 
         public bool CallSync(string objectName, string methodName, string promiseUUID, string arguments)
         {
+            Logger.Trace("[BRIDGE] Call to " + objectName + "." + methodName);
             object[] args = JsonConvert.DeserializeObject<object[]>(arguments);
 
             object link = null;

@@ -250,7 +250,9 @@ namespace VRUB.Addons.Overlays
 
         void InsertInjectableFiles()
         {
-            if(Inject != null)
+            InjectJsFile("vrub://VRUB.js");
+
+            if (Inject != null)
             {
                 if(Inject.CSS != null)
                 {
@@ -267,8 +269,6 @@ namespace VRUB.Addons.Overlays
                     }
                 }
             }
-
-            InjectJsFile("vrub://VRUB.js");
         }
 
         public void InjectCssFile(string CSSFile)

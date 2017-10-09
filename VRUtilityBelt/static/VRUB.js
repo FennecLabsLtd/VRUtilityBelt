@@ -95,7 +95,20 @@ function VRUBInstantiator() {
     
     this.Plugins = {};
     
+    this._fireReady = function() {
+        this._fireDocumentEvent('vrub:ready');
+    };
+    
+    this._fireDocumentEvent = function(ev, data) {
+        var eventObj = new CustomEvent(ev, data);
+        document.dispatchEvent(eventObj);
+    };
+    
+    delete VRUBInstantiator;
+    
     return this;
 };
 
 var VRUB = new VRUBInstantiator();
+
+VRUB._fireReady();
