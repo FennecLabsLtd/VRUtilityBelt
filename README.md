@@ -1,1 +1,1 @@
-# VRUtilityBelt <img src="https://api.travis-ci.org/FennecLabsLtd/VRUtilityBelt.svg?branch=master" />
+# VRUtilityBelt <img src="https://ci.appveyor.com/api/projects/status/32r7s2skrgm9ubva/branch/master" />
