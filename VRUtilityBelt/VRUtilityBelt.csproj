@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Version;Build">
   <Import Project="..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props" Condition="Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props')" />
   <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -177,6 +177,7 @@
     <Error Condition="!Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets'))" />
     <Error Condition="!Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props'))" />
     <Error Condition="!Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets'))" />
+    <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
   </Target>
   <Import Project="..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets" Condition="Exists('..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets')" />
   <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" />
@@ -188,4 +189,34 @@ xcopy "$(ProjectDir)resources" "$(TargetDir)addons" /S /Y
 if not exist "$(TargetDir)static" mkdir "$(TargetDir)static"
 xcopy "$(ProjectDir)static" "$(TargetDir)static" /S /Y</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets" Condition="Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" />
+  
+  <PropertyGroup>
+    <Major>0</Major>
+    <Minor>1</Minor>
+    <Build>*</Build>
+    <Revision>0</Revision>
+  </PropertyGroup>
+
+  <Target Name="Version">
+    <GitVersion LocalPath="$(MSBuildProjectDirectory)">
+      <Output TaskParameter="CommitHash" PropertyName="Revision" />
+    </GitVersion>
+    <Version BuildType="Automatic">
+        <Output TaskParameter="Build" PropertyName="Build" />
+    </Version>
+    <AssemblyInfo
+        CodeLanguage="CS"
+        OutputFile="Properties\AssemblyInfo.cs"
+        AssemblyTitle="VRUtilityBelt"
+        AssemblyDescription=""
+        AssemblyCompany="Fennec Labs Ltd"
+        AssemblyProduct=""
+        AssemblyCopyright="© 2017 Fennec Labs Ltd"
+        ComVisible="false"
+        CLSCompliant="true"
+        AssemblyInformationalVersion="$(Major).$(Minor).$(Build)#$(Revision)"
+        AssemblyVersion="$(Major).$(Minor).$(Build)"
+        AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+  </Target>
 </Project>

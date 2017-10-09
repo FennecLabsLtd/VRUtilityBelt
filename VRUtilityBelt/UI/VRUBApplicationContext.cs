@@ -35,7 +35,7 @@ namespace VRUB.UI
 
             _trayIcon = new NotifyIcon
             {
-                Text = "VR Utility Belt",
+                Text = "VR Utility Belt (" + Application.ProductVersion.ToString() + ")",
                 Icon = Resources.favicon,
                 ContextMenuStrip = contextMenuStrip,
                 Visible = true
