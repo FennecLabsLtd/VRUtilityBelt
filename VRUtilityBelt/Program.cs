@@ -33,6 +33,24 @@ namespace VRUB
             _addonManager = new AddonManager();
             _addonManager.StartAsync();
 
+#if SENTRY_KEY
+            if(!Environment.GetCommandLineArgs().Contains("-debug"))
+            {
+                SharpRaven.RavenClient ravenClient = new RavenClient("https://" + SENTRY_KEY + "@sentry.io/227668");
+                AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
+                {
+                    try
+                    {
+                        ravenClient.Capture(new SharpRaven.Data.SentryEvent((Exception)e.ExceptionObject));
+                    }
+                    finally
+                    {
+                        Application.Exit();
+                    }
+                };
+            }
+#endif
+
             VRUBApplicationContext context = new VRUBApplicationContext();
             Application.Run(context);
         }
