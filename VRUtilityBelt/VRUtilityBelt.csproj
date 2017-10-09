@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Version;Build">
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Version;SentryKey;Build;RemoveSentryKey">
   <Import Project="..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props" Condition="Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props')" />
   <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -218,5 +218,13 @@ xcopy "$(ProjectDir)static" "$(TargetDir)static" /S /Y</PostBuildEvent>
         AssemblyInformationalVersion="$(Major).$(Minor).$(Build)#$(Revision)"
         AssemblyVersion="$(Major).$(Minor).$(Build)"
         AssemblyFileVersion="$(Major).$(Minor).$(Build)" />
+  </Target>
+  
+  <Target Name="SentryKey" Condition="$(SentryKey) != ''">
+    <FileUpdate Files="Program.cs" Regex="STUB_KEY" ReplacementText="$(SentryKey)" />
+  </Target>
+  
+  <Target Name="RemoveSentryKey" Condition="$(SentryKey) != ''">
+    <FileUpdate Files="Program.cs" Regex="$(SentryKey)" ReplacementText="STUB_KEY" />
   </Target>
 </Project>

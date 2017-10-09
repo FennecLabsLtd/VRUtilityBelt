@@ -1,5 +1,7 @@
-﻿using System;
+﻿using SharpRaven;
+using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,6 +16,8 @@ namespace VRUB
 {
     static class Program
     {
+        const string SentryKey = "STUB_KEY";
+
         static AddonManager _addonManager;
         /// <summary>
         /// The main entry point for the application.
@@ -25,6 +29,9 @@ namespace VRUB
             Logger.Info("[DEBUG] Command Line Args: " + string.Join(" ", Environment.GetCommandLineArgs()));
             Application.ApplicationExit += Application_ApplicationExit;
 
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
             SteamManager.Init();
 
             Application.EnableVisualStyles();
@@ -33,10 +40,10 @@ namespace VRUB
             _addonManager = new AddonManager();
             _addonManager.StartAsync();
 
-#if SENTRY_KEY
-            if(!Environment.GetCommandLineArgs().Contains("-debug"))
+            if(!Environment.GetCommandLineArgs().Contains("-debug") && SentryKey != "STUB_KEY")
             {
-                SharpRaven.RavenClient ravenClient = new RavenClient("https://" + SENTRY_KEY + "@sentry.io/227668");
+                SharpRaven.RavenClient ravenClient = new RavenClient("https://" + SentryKey + "@sentry.io/227668");
+                ravenClient.Release = Application.ProductVersion.ToString();
                 AppDomain.CurrentDomain.UnhandledException += (sender, e) =>
                 {
                     try
@@ -49,7 +56,6 @@ namespace VRUB
                     }
                 };
             }
-#endif
 
             VRUBApplicationContext context = new VRUBApplicationContext();
             Application.Run(context);
