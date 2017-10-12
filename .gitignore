@@ -289,3 +289,5 @@ __pycache__/
 *.xsd.cs
 
 *.swp
+
+VRUtilityBelt/Properties/AssemblyInfo.cs
