@@ -40,13 +40,13 @@ namespace VRUB.Addons
         public List<string> OverlayKeys { get; set; } = new List<string>();
 
         [JsonIgnore]
-        public List<Overlay> Overlays { get; set; }
+        public List<Overlay> Overlays { get; set; } = new List<Overlay>();
 
         [JsonProperty("themes")]
         public List<string> ThemeKeys { get; set; } = new List<string>();
 
         [JsonIgnore]
-        public List<ITheme> Themes { get; set; }
+        public List<ITheme> Themes { get; set; } = new List<ITheme>();
 
         [JsonProperty("plugins")]
         public List<string> PluginKeys { get; set; } = new List<string>();
@@ -78,7 +78,7 @@ namespace VRUB.Addons
         public bool SudoAccess { get; set; } = false;
 
         [JsonIgnore]
-        public List<PluginContainer> Plugins { get; set; }
+        public List<PluginContainer> Plugins { get; set; } = new List<PluginContainer>();
 
         private String ManifestPath { get { return BasePath + "\\manifest.json"; } }
 
@@ -197,6 +197,9 @@ namespace VRUB.Addons
 
         public void Start()
         {
+            if (!Enabled || Overlays == null)
+                return;
+
             foreach(Overlay o in Overlays)
             {
                 o.Start();
@@ -205,6 +208,9 @@ namespace VRUB.Addons
 
         public void RegisterPlugins()
         {
+            if (!Enabled || Overlays == null)
+                return;
+
             foreach(Overlay o in Overlays)
             {
                 o.RegisterPlugins();

@@ -29,18 +29,7 @@ namespace VRUB
             Logger.Info("[DEBUG] Command Line Args: " + string.Join(" ", Environment.GetCommandLineArgs()));
             Application.ApplicationExit += Application_ApplicationExit;
 
-            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
-            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-
-            SteamManager.Init();
-
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-
-            _addonManager = new AddonManager();
-            _addonManager.StartAsync();
-
-            if(!Environment.GetCommandLineArgs().Contains("-debug") && SentryKey != "STUB_KEY")
+            if (!Environment.GetCommandLineArgs().Contains("-debug") && SentryKey.Length > 10)
             {
                 SharpRaven.RavenClient ravenClient = new RavenClient("https://" + SentryKey + "@sentry.io/227668");
                 ravenClient.Release = Application.ProductVersion.ToString();
@@ -55,7 +44,22 @@ namespace VRUB
                         Application.Exit();
                     }
                 };
+
+                Logger.Info("Sentry Reporting is Enabled");
             }
+
+            Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
+            Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
+
+            SteamManager.Init();
+
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+
+            _addonManager = new AddonManager();
+            _addonManager.StartAsync();
+
+            ConfigUtility.Load();
 
             VRUBApplicationContext context = new VRUBApplicationContext();
             Application.Run(context);

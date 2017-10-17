@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using VRUB.Properties;
+using VRUB.Utility;
 
 namespace VRUB.UI
 {
@@ -12,6 +14,7 @@ namespace VRUB.UI
     {
         private readonly ToolStripMenuItem _workshopSubmitterMenuItem;
         private readonly ToolStripMenuItem _quitMenuItem;
+        private readonly ToolStripMenuItem _openLogFileItem;
         private readonly NotifyIcon _trayIcon;
 
         private Workshop.WorkshopUploader _workshopUploader;
@@ -19,12 +22,14 @@ namespace VRUB.UI
         public VRUBApplicationContext() {
             _workshopSubmitterMenuItem = new ToolStripMenuItem("Submit Addon to Workshop", null, OnSubmitWorkshopClick);
             _quitMenuItem = new ToolStripMenuItem("Quit VR Utility Belt", null, OnQuitClick);
+            _openLogFileItem = new ToolStripMenuItem("View Log File", null, OnLogFileClick);
 
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip
             {
                 Items =
                 {
                     _workshopSubmitterMenuItem,
+                    _openLogFileItem,
                     new ToolStripSeparator(),
                     _quitMenuItem,
                 },
@@ -65,6 +70,11 @@ namespace VRUB.UI
         void OnQuitClick(object sender, EventArgs args)
         {
             Program.Quit();
+        }
+
+        void OnLogFileClick(object sender, EventArgs args)
+        {
+            Process.Start("notepad.exe", Logger.LogFilePath);
         }
     }
 }

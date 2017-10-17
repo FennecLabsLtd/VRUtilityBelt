@@ -211,8 +211,11 @@ namespace VRUB.Addons
         {
             foreach (Addon a in _addons.Values)
             {
-                a.RegisterPlugins();
-                a.Start();
+                if (a.Enabled)
+                {
+                    a.RegisterPlugins();
+                    a.Start();
+                }
             }
         }
 

@@ -20,9 +20,18 @@ namespace VRUB.Utility
                 Directory.CreateDirectory(PathUtilities.Constants.ConfigPath);
 
             foreach(string file in Directory.EnumerateFiles(PathUtilities.Constants.ConfigPath)) {
+                if (Path.GetFileName(file) == "permissions.json")
+                    continue;
+
                 string moduleKey = Path.GetFileNameWithoutExtension(file);
 
-                configValues.Add(moduleKey, JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file)));
+                try
+                {
+                    configValues.Add(moduleKey, JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file)));
+                } catch(JsonReaderException e)
+                {
+                    Logger.Error("[CONFIG] Failed to read " + file + ": " + e.Message);
+                }
             }
         }
 

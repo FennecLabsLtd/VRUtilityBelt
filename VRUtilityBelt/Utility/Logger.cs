@@ -17,6 +17,14 @@ namespace VRUB.Utility
         static StreamWriter _streamWriter;
         static TextWriter _oldOut = Console.Out;
 
+        public static string LogFilePath
+        {
+            get
+            {
+                return _fileStream.Name;
+            }
+        }
+
         public enum LogLevel
         {
             Trace,
@@ -72,7 +80,7 @@ namespace VRUB.Utility
             string path = folder + filename;
             try
             {
-                _fileStream = new FileStream(path, FileMode.Append, FileAccess.Write);
+                _fileStream = new FileStream(path, FileMode.Create, FileAccess.Write);
                 _streamWriter = new StreamWriter(_fileStream);
             } catch(Exception e)
             {
