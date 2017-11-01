@@ -175,10 +175,10 @@ namespace VRUB.Addons
             {
                 SetupPlugins();
                 SetupFileWatchers();
-            } else
-            {
-                Start(); // We do this here because a hard enable does it later on.
             }
+
+            if (AddonManager.HasInit)
+                Start();
         }
 
         void OnDisabled()

@@ -43,5 +43,19 @@ $(document).ready(function() {
         VRUB.Plugins.Keyboard.Hide();
     });
     
-
+    $("#btn-haptics-1").click(function() {
+        VRUB.Plugins.Haptics.Trigger();
+    });
+    
+    $("#btn-haptics-2").click(function() {
+        VRUB.Plugins.Haptics.TriggerOnPointingDevice(1, 700);
+    });
+    
+    $("#btn-haptics-3").click(function() {
+        VRUB.Plugins.Haptics.TriggerOnPointingDevice(2, 700);
+    });
+    
+    $("#btn-haptics-4").click(function() {
+        VRUB.Plugins.Haptics.TriggerOnPointingDevice(3, 700);
+    });
 });

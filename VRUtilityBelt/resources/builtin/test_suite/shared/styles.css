@@ -14,18 +14,18 @@
     border: 5px solid blue;
 }
 
-#button-list {
+.button-list {
     display: flex;
     flex-wrap: wrap;
     align-items: flex-start;
     justify-content: flex-start;
 }
 
-#button-list h1, #button-list h2, #button-list h3, #button-list h4, #button-list h5, #button-list h6 {
+.button-list h1, .button-list h2, .button-list h3, .button-list h4, .button-list h5, .button-list h6 {
     width: 100%;
 }
 
-#button-list a {
+.button-list a {
     display: block;
     margin: 10px;
     padding: 15px;

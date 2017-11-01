@@ -23,18 +23,20 @@ namespace Haptics
 
         public void Trigger()
         {
-            TriggerOnPointingDevice(1, 10);
+            TriggerOnPointingDevice(0, 200, 5, 100);
         }
 
         // We use long purely because C# reflection does implicitly cast...
-        public void TriggerOnPointingDevice(long axisId, long strength)
+        public void TriggerOnPointingDevice(long axisId, long strength, long msInterval, long msDuration)
         {
-            TriggerOnDevice((long)OpenVR.Overlay.GetPrimaryDashboardDevice(), axisId, strength);
+            TriggerOnDevice((long)OpenVR.Overlay.GetPrimaryDashboardDevice(), axisId, strength, msInterval, msDuration);
         }
 
-        public void TriggerOnDevice(long controllerIndex, long axisId, long strength)
+        public void TriggerOnDevice(long controllerIndex, long axisId, long strength, long msInterval, long msDuration)
         {
-            OpenVR.System.TriggerHapticPulse((uint)controllerIndex, (uint)axisId, (char)strength);
+            //OpenVR.System.TriggerHapticPulse((uint)controllerIndex, (uint)axisId, (char)strength);
+
+            Plugin.AddPulse(new HapticPulse((uint)controllerIndex, (uint)axisId, strength / 3999f, (uint)msInterval, (uint)msDuration));
         }
     }
 }

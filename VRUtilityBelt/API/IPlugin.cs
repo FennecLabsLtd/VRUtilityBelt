@@ -65,17 +65,22 @@ namespace VRUB.API
         }
 
         /// <summary>
-        /// Update is called every frame, use it sparingly - it won't block the browsers but will block rendering to OpenVR
+        /// Update is called every frame for every overlay, use it sparingly - it won't block the browsers but will block rendering to OpenVR
         /// </summary>
         /// <param name="parentAddon"></param>
         /// <param name="overlay"></param>
         public virtual void Update(Addon parentAddon, Overlay overlay) { }
 
         /// <summary>
-        /// Draw is called every frame, use it sparingly - it won't block the browser but will block rendering to OpenVR
+        /// Draw is called every frame for every overlay, use it sparingly - it won't block the browser but will block rendering to OpenVR
         /// </summary>
         /// <param name="parentAddon"></param>
         /// <param name="overlay"></param>
         public virtual void Draw(Addon parentAddon, Overlay overlay) { }
+
+        /// <summary>
+        /// Global update called once per frame, non-overlay specific.
+        /// </summary>
+        public virtual void GlobalUpdate() { }
     }
 }

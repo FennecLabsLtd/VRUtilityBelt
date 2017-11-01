@@ -17,6 +17,8 @@ using VRUB.Utility;
 using VRUB.Desktop;
 using InternalOverlay = SteamVR_WebKit.Overlay;
 using Valve.VR;
+using VRUB.Addons.Plugins;
+using VRUB.API;
 
 namespace VRUB.Addons
 {
@@ -29,6 +31,8 @@ namespace VRUB.Addons
         DesktopMirrorManager _displayMirrorManager;
 
         Dictionary<string, Addon> _addons = new Dictionary<string, Addon>();
+
+        public static bool HasInit { get; private set; } = false;
 
         public List<Addon> Addons { get { return _addons.Values.ToList(); } }
 
@@ -150,6 +154,8 @@ namespace VRUB.Addons
                 _displayMirrorManager.SetupMirrors();
             }
 
+            HasInit = true;
+
             SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
         private void SteamVR_WebKit_LogEvent(string line)
@@ -264,6 +270,11 @@ namespace VRUB.Addons
             foreach(Addon a in _addons.Values)
             {
                 a.Update();
+            }
+
+            foreach(PluginContainer plugin in PluginManager.Plugins.Values)
+            {
+                plugin.LoadedPlugin.GlobalUpdate();
             }
         }
 
