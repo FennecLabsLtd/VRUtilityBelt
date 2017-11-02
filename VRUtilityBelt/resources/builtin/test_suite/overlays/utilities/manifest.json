@@ -13,4 +13,5 @@
     "height": 768,
     "type": "dashboard", /* Dashboard, Independent (Floating) */
     "debug": true,
+    "disable_scrolling": true
 }

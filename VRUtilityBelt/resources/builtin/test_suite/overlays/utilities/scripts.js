@@ -59,3 +59,7 @@ $(document).ready(function() {
         VRUB.Plugins.Haptics.TriggerOnPointingDevice(3, 700);
     });
 });
+
+$(document).on('vrub:plugin_ready:VRUB_Core_Haptics', function() {
+    VRUB.Plugins.Haptics.AddBinding('#btn-haptics-manual');
+});

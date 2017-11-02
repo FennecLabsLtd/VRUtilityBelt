@@ -93,6 +93,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("render_models")]
         public List<OverlayRenderModel> RenderModels { get; set; } = new List<OverlayRenderModel>();
+
+        [JsonProperty("disable_scrolling")]
+        public bool DisableScrolling { get; set; } = false;
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -149,6 +152,10 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
+
+            _wkOverlay.AllowScrolling = !DisableScrolling;
+
+            _wkOverlay.UpdateInputSettings();
 
             Attach();
             SetupRenderModels();
