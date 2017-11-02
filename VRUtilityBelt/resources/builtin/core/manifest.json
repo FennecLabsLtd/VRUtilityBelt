@@ -14,7 +14,8 @@
         "SuperSimplePlugin",
         "Keyboard",
         "Haptics",
-        "AddonManagement",
+		"AddonManagement",
+		"TrackingData"
 	],
     "sudo": true,
 }

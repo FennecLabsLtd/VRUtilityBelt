@@ -8,6 +8,7 @@
         "vrub_core_PersistentStore",
         "vrub_core_Keyboard",
         "vrub_core_Haptics",
+        "vrub_core_TrackingData"
     ],
     "width": 1024,
     "height": 768,

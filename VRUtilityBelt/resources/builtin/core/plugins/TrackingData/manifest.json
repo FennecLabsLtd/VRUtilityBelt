@@ -1,0 +1,5 @@
+{
+    "name": "Tracking Data",
+    "description": "Provides tracking data for VR devices to overlays",
+    "dll": "TrackingData.dll",
+}

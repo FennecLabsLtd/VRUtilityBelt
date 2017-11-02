@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26430.6
+VisualStudioVersion = 15.0.27004.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "VRUtilityBelt", "VRUtilityBelt\VRUtilityBelt.csproj", "{4BC5FB6F-7C3A-43ED-830F-A1E697089225}"
 EndProject
@@ -20,6 +20,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Haptics", "Plugins\Haptics\Haptics.csproj", "{9F08AB31-6F59-41B2-A745-10FE606C2852}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AddonManagement", "Plugins\AddonManagement\AddonManagement.csproj", "{FD88128A-79FE-4A91-A115-7811D7330B68}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TrackingData", "Plugins\TrackingData\TrackingData.csproj", "{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -79,6 +81,12 @@ Global
 		{FD88128A-79FE-4A91-A115-7811D7330B68}.Release|Any CPU.ActiveCfg = Release|x64
 		{FD88128A-79FE-4A91-A115-7811D7330B68}.Release|x64.ActiveCfg = Release|x64
 		{FD88128A-79FE-4A91-A115-7811D7330B68}.Release|x64.Build.0 = Release|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Debug|x64.ActiveCfg = Debug|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Debug|x64.Build.0 = Debug|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Release|Any CPU.ActiveCfg = Release|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Release|x64.ActiveCfg = Release|x64
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -90,5 +98,9 @@ Global
 		{BD5200F9-AE38-42BC-BFA0-8057757760D4} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
 		{9F08AB31-6F59-41B2-A745-10FE606C2852} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
 		{FD88128A-79FE-4A91-A115-7811D7330B68} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
+		{C5675C18-CC0F-4D41-BCBB-01A07322A3DA} = {CA4C7642-4C84-4C22-8DB5-4CD61BBA806E}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {38CBB8D8-28EF-4A4C-84AB-A8BBB0664E75}
 	EndGlobalSection
 EndGlobal

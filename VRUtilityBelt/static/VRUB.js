@@ -52,6 +52,8 @@ function VRUBInstantiator() {
                    arr[i](payload, name);
                 }
             }
+
+            VRUB._fireDocumentEvent('vrub:event:' + name, payload);
         },
         
         Clear: function(event) {
@@ -100,7 +102,7 @@ function VRUBInstantiator() {
     };
     
     this._fireDocumentEvent = function(ev, data) {
-        var eventObj = new CustomEvent(ev, data);
+        var eventObj = new CustomEvent(ev, { detail: data });
         document.dispatchEvent(eventObj);
     };
     

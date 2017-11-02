@@ -58,8 +58,30 @@ $(document).ready(function() {
     $("#btn-haptics-4").click(function() {
         VRUB.Plugins.Haptics.TriggerOnPointingDevice(3, 700);
     });
+
+    var pos = $("#info-tracking-latestPosition");
+
+    var stop = false;
+
+    var devices = {};
+
+    $(document).on('vrub:event:new_pose', function(ev) {
+        devices['' + ev.detail.device_index] = ev.detail.device_index + " (" + ev.detail.device_class + "): " + ev.detail.position.X + ", " + ev.detail.position.Y + ", " + ev.detail.position.Z;
+
+        var str = "";
+
+        for(var dev in devices) {
+            str += devices[dev] + "<br>";
+        }
+
+        pos.html(str);
+    });
 });
 
-$(document).on('vrub:plugin_ready:VRUB_Core_Haptics', function() {
-    VRUB.Plugins.Haptics.AddBinding('#btn-haptics-manual');
-});
+if(!window.hasOwnProperty("VRUB") || VRUB.Plugins.Haptics) {
+    $(document).on('vrub:plugin_ready:VRUB_Core_Haptics', function() {
+        VRUB.Plugins.Haptics.AddBinding('#btn-haptics-manual');
+    });
+} else {
+    VRUB.Plugins.Haptics.AddBinding("#btn-haptics-manual");
+}

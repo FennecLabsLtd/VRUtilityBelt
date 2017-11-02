@@ -50,8 +50,12 @@ namespace VRUB.Bridge
 
         public void FireEvent(string eventName, object payload)
         {
-            if(_overlay != null && _overlay.InternalOverlay != null && _overlay.Addon.Enabled)
-                _overlay.InternalOverlay.TryExecAsyncJS("VRUB.Events.Fire('" + eventName + "', " + JsonConvert.SerializeObject(payload) + ")");
+            if (_overlay != null && _overlay.InternalOverlay != null && _overlay.Addon.Enabled)
+            {
+                string eventString = "VRUB.Events.Fire('" + eventName + "', " + JsonConvert.SerializeObject(payload) + ");";
+
+                _overlay.InternalOverlay.TryExecAsyncJS("if(window.hasOwnProperty('VRUB')) { " + eventString + " } else { document.addEventListener('vrub:ready', function() { " + eventString + " }); }");
+            }
         }
 
         public bool CallSync(string objectName, string methodName, string promiseUUID, string arguments)
