@@ -25,6 +25,7 @@ Welcome to VR Utility Belt's documentation!
    js/introduction
    js/bridge
    js/events
+   js/api/haptics
 
 Indices and tables
 ==================
