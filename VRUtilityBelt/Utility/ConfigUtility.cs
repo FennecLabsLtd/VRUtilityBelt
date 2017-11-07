@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 using System.IO;
 using Newtonsoft.Json;
 using System.Collections;
+using VRUB.Addons;
 
 namespace VRUB.Utility
 {
     class ConfigUtility
     {
-        static Dictionary<string, Dictionary<string, string>> configValues = new Dictionary<string, Dictionary<string, string>>();
+        static Dictionary<string, Dictionary<string, object>> configValues = new Dictionary<string, Dictionary<string, object>>();
+        static Dictionary<Addon, List<ConfigLayout>> addonConfigLayouts = new Dictionary<Addon, List<ConfigLayout>>();
 
-        public delegate void UpdateHandler(string key, string value);
+        public delegate void UpdateHandler(string key, object value);
 
         public static void Load() {
             if (!Directory.Exists(PathUtilities.Constants.ConfigPath))
@@ -27,7 +29,7 @@ namespace VRUB.Utility
 
                 try
                 {
-                    configValues.Add(moduleKey, JsonConvert.DeserializeObject<Dictionary<string, string>>(File.ReadAllText(file)));
+                    configValues.Add(moduleKey, JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(file)));
                 } catch(JsonReaderException e)
                 {
                     Logger.Error("[CONFIG] Failed to read " + file + ": " + e.Message);
@@ -35,7 +37,7 @@ namespace VRUB.Utility
             }
         }
 
-        public Dictionary<string, string> GetModuleConfig(string key)
+        public Dictionary<string, object> GetModuleConfig(string key)
         {
             if (configValues.ContainsKey(key))
                 return configValues[key];
@@ -43,7 +45,7 @@ namespace VRUB.Utility
                 return null;
         }
 
-        public static string Get(string dotPath, string defaultValue = null)
+        public static object GetObject(string dotPath, object defaultValue = null)
         {
             string[] splitPath = dotPath.Split( new char[] { '.' }, 2);
 
@@ -76,14 +78,66 @@ namespace VRUB.Utility
             }
         }
 
-        public static void Set(string dotPath, string value)
+        public static dynamic Get<T>(string dotPath, T defaultValue = default(T))
+        {
+            object value = GetObject(dotPath, defaultValue);
+
+            Type returnType = typeof(T);
+
+            if (returnType == typeof(float))
+            {
+                float output;
+                if (float.TryParse(value.ToString(), out output))
+                    return output;
+                else
+                    return defaultValue;
+            }
+            else if (returnType == typeof(double))
+            {
+                double output;
+                if (double.TryParse(value.ToString(), out output))
+                {
+                    return output;
+                }
+                else
+                {
+                    return defaultValue;
+                }
+            }
+            else if (returnType == typeof(int))
+            {
+                int output;
+                if (int.TryParse(value.ToString(), out output))
+                {
+                    return output;
+                }
+                else
+                {
+                    return defaultValue;
+                }
+            } else if(returnType == typeof(bool))
+            {
+                bool output;
+                if(bool.TryParse(value.ToString(), out output))
+                {
+                    return output;
+                } else
+                {
+                    return defaultValue;
+                }
+            }
+
+            return (T)value;
+        }
+
+        public static void Set(string dotPath, object value)
         {
             string[] splitPath = dotPath.Split(new char[] { '.' }, 2);
 
             if(splitPath.Length == 2)
             {
                 if (!configValues.ContainsKey(splitPath[0]))
-                    configValues.Add(splitPath[0], new Dictionary<string, string>());
+                    configValues.Add(splitPath[0], new Dictionary<string, object>());
 
                 if (configValues[splitPath[0]].ContainsKey(splitPath[1]))
                     configValues[splitPath[0]][splitPath[1]] = value;
@@ -101,12 +155,12 @@ namespace VRUB.Utility
 
         static void Save()
         {
-            foreach(KeyValuePair<string, Dictionary<string,string>> keyVal in configValues) {
+            foreach(KeyValuePair<string, Dictionary<string,object>> keyVal in configValues) {
                 File.WriteAllText(Path.Combine(PathUtilities.Constants.ConfigPath, keyVal.Key + ".json"), JsonConvert.SerializeObject(keyVal.Value));
             }
         }
 
-        public static void SetDefaults(string key, Dictionary<string,string> values)
+        public static void SetDefaults(string key, Dictionary<string,object> values)
         {
             if (!configValues.ContainsKey(key)) {
                 configValues.Add(key, values);
@@ -114,9 +168,9 @@ namespace VRUB.Utility
                 return;
             }
 
-            foreach(KeyValuePair<string,string> cfgVal in configValues[key])
+            foreach(KeyValuePair<string,object> cfgVal in configValues[key])
             {
-                if (!configValues.ContainsKey(cfgVal.Key))
+                if (!configValues[key].ContainsKey(cfgVal.Key))
                     configValues[key].Add(cfgVal.Key, cfgVal.Value);
             }
 
@@ -145,7 +199,7 @@ namespace VRUB.Utility
             }
         }
 
-        public static void Send(string message, string key, string value)
+        public static void Send(string message, string key, object value)
         {
             if (listeners[message] is UpdateHandler actions)
             {
@@ -153,6 +207,59 @@ namespace VRUB.Utility
             }
         }
 
+        public static void RegisterAddonConfig(Addon addon)
+        {
+            if (addonConfigLayouts.ContainsKey(addon))
+                addonConfigLayouts.Remove(addon);
+
+            if(File.Exists(Path.Combine(addon.BasePath, "config.json")))
+            {
+                List<ConfigLayout> configSettings = JsonConvert.DeserializeObject<List<ConfigLayout>>(File.ReadAllText(Path.Combine(addon.BasePath, "config.json")));
+
+                foreach(ConfigLayout layout in configSettings)
+                {
+                    layout.Addon = addon;
+                }
+
+                addonConfigLayouts.Add(addon, configSettings);
+
+                Dictionary<string, object> defaults = new Dictionary<string, object>();
+
+                foreach(ConfigLayout layout in configSettings)
+                {
+                    defaults[layout.Key] = layout.Default;
+                }
+
+                SetDefaults("addon." + addon.DerivedKey, defaults);
+            }
+        }
+
+        public static Dictionary<Addon, List<ConfigLayout>> GetLayouts()
+        {
+            return addonConfigLayouts;
+        }
+
         private static Hashtable listeners = new Hashtable();
+
+        public class ConfigLayout
+        {
+            public Addon Addon { get; set; }
+            public string Key { get; set; }
+            public string Title { get; set; }
+            public string Type { get; set; }
+            public object Default { get; set; }
+            public string Description { get; set; }
+            public string Category { get; set; }
+         
+            public object GetValue()
+            {
+                return GetObject("addon." + Addon.DerivedKey + "." + Key, Default);
+            }
+
+            public void SetValue(object value)
+            {
+                Set("addon." + Addon.DerivedKey + "." + Key, value);
+            }
+        }
     }
 }

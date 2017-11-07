@@ -161,6 +161,8 @@ namespace VRUB.Addons
                 newAddon.OnEnabled(false);
             }
 
+            ConfigUtility.RegisterAddonConfig(newAddon);
+
             return newAddon;
         }
 
@@ -286,10 +288,10 @@ namespace VRUB.Addons
         {
             try
             {
-                _enabled = ConfigUtility.Get("addons." + DerivedKey) == "1";
+                _enabled = ConfigUtility.Get<bool>("addons." + DerivedKey);
             } catch(KeyNotFoundException)
             {
-                ConfigUtility.Set("addons." + DerivedKey, DefaultToDisabled ? "0" : "1");
+                ConfigUtility.Set("addons." + DerivedKey, !DefaultToDisabled);
                 _enabled = true;
             }
         }

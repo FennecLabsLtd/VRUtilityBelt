@@ -45,8 +45,8 @@ namespace VRUB.Desktop
 
         public DesktopMirror(int screenIndex, Screen screenObject)
         {
-            _width = float.Parse(ConfigUtility.Get("desktop.width", "1.5"));
-            _distance = float.Parse(ConfigUtility.Get("desktop.distance", "2.0"));
+            _width = ConfigUtility.Get<float>("desktop.width");
+            _distance = ConfigUtility.Get<float>("desktop.distance", 2f);
 
             ConfigUtility.Listen("desktop.width", DesktopWidthChanged);
             ConfigUtility.Listen("desktop.distance", DesktopDistanceChanged);
@@ -59,15 +59,15 @@ namespace VRUB.Desktop
             Setup();
         }
 
-        void DesktopWidthChanged(string key, string value)
+        void DesktopWidthChanged(string key, object value)
         {
-            _width = float.Parse(value);
+            _width = float.Parse(value.ToString());
             UpdateScreen();
         }
 
-        void DesktopDistanceChanged(string key, string value)
+        void DesktopDistanceChanged(string key, object value)
         {
-            _distance = float.Parse(value);
+            _distance = float.Parse(value.ToString());
             UpdateScreen();
         }
 

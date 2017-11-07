@@ -21,7 +21,7 @@ namespace VRUB.Desktop
         {
             TouchInjector.InitializeTouchInjection();
 
-            ConfigUtility.SetDefaults("desktop", new Dictionary<string, string>()
+            ConfigUtility.SetDefaults("desktop", new Dictionary<string, object>()
             {
                 { "distance", "2" },
                 { "width", "1.5" },

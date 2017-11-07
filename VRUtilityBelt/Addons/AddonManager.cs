@@ -148,7 +148,7 @@ namespace VRUB.Addons
             SetupPluginsAndStart();
             Permissions.PermissionManager.Load();
 
-            if (ConfigUtility.Get("desktop.enabled", "0") == "1")
+            if (ConfigUtility.Get<bool>("desktop.enabled", false))
             {
                 _displayMirrorManager = new DesktopMirrorManager();
                 _displayMirrorManager.SetupMirrors();

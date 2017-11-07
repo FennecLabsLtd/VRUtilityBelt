@@ -1,0 +1,18 @@
+[
+    {
+        "key": "test_option_1",
+        "title": "Test Option 1",
+        "type": "string",
+        "default": "foo",
+        "description": "A Test Option",
+        "category": "Basic Settings"
+    },
+    {
+        "key": "hover_haptics",
+        "title": "Auto-bind haptics on button hover",
+        "type": "bool",
+        "default": true,
+        "description": "Enables or Disables the haptic feedback when you hover over a button on this overlay",
+        "category": "UI Settings"
+    }
+]

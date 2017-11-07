@@ -15,19 +15,25 @@ namespace VRUB.UI
         private readonly ToolStripMenuItem _workshopSubmitterMenuItem;
         private readonly ToolStripMenuItem _quitMenuItem;
         private readonly ToolStripMenuItem _openLogFileItem;
+        private readonly ToolStripMenuItem _settingsItem;
         private readonly NotifyIcon _trayIcon;
 
         private Workshop.WorkshopUploader _workshopUploader;
+
+        ConfigForm _configForm = null;
 
         public VRUBApplicationContext() {
             _workshopSubmitterMenuItem = new ToolStripMenuItem("Submit Addon to Workshop", null, OnSubmitWorkshopClick);
             _quitMenuItem = new ToolStripMenuItem("Quit VR Utility Belt", null, OnQuitClick);
             _openLogFileItem = new ToolStripMenuItem("View Log File", null, OnLogFileClick);
+            _settingsItem = new ToolStripMenuItem("Settings", null, OnSettingsClick);
 
             ContextMenuStrip contextMenuStrip = new ContextMenuStrip
             {
                 Items =
                 {
+                    _settingsItem,
+                    new ToolStripSeparator(),
                     _workshopSubmitterMenuItem,
                     _openLogFileItem,
                     new ToolStripSeparator(),
@@ -75,6 +81,16 @@ namespace VRUB.UI
         void OnLogFileClick(object sender, EventArgs args)
         {
             Process.Start("notepad.exe", Logger.LogFilePath);
+        }
+
+        void OnSettingsClick(object sender, EventArgs args)
+        {
+            if(_configForm == null)
+            {
+                _configForm = new ConfigForm();
+            }
+
+            _configForm.Show();
         }
     }
 }
