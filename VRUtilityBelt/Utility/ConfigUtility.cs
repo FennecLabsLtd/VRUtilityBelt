@@ -10,7 +10,7 @@ using VRUB.Addons;
 
 namespace VRUB.Utility
 {
-    class ConfigUtility
+    public class ConfigUtility
     {
         static Dictionary<string, Dictionary<string, object>> configValues = new Dictionary<string, Dictionary<string, object>>();
         static Dictionary<Addon, List<ConfigLayout>> addonConfigLayouts = new Dictionary<Addon, List<ConfigLayout>>();
@@ -21,7 +21,7 @@ namespace VRUB.Utility
             if (!Directory.Exists(PathUtilities.Constants.ConfigPath))
                 Directory.CreateDirectory(PathUtilities.Constants.ConfigPath);
 
-            foreach(string file in Directory.EnumerateFiles(PathUtilities.Constants.ConfigPath)) {
+            foreach (string file in Directory.EnumerateFiles(PathUtilities.Constants.ConfigPath)) {
                 if (Path.GetFileName(file) == "permissions.json")
                     continue;
 
@@ -30,14 +30,14 @@ namespace VRUB.Utility
                 try
                 {
                     configValues.Add(moduleKey, JsonConvert.DeserializeObject<Dictionary<string, object>>(File.ReadAllText(file)));
-                } catch(JsonReaderException e)
+                } catch (JsonReaderException e)
                 {
                     Logger.Error("[CONFIG] Failed to read " + file + ": " + e.Message);
                 }
             }
         }
 
-        public Dictionary<string, object> GetModuleConfig(string key)
+        public static Dictionary<string, object> GetModuleConfig(string key)
         {
             if (configValues.ContainsKey(key))
                 return configValues[key];
@@ -47,9 +47,9 @@ namespace VRUB.Utility
 
         public static object GetObject(string dotPath, object defaultValue = null)
         {
-            string[] splitPath = dotPath.Split( new char[] { '.' }, 2);
+            string[] splitPath = dotPath.Split(new char[] { '.' }, 2);
 
-            if(splitPath.Length == 2)
+            if (splitPath.Length == 2)
             {
                 if (configValues.ContainsKey(splitPath[0])) {
                     if (configValues[splitPath[0]].ContainsKey(splitPath[1]))
@@ -115,10 +115,14 @@ namespace VRUB.Utility
                 {
                     return defaultValue;
                 }
-            } else if(returnType == typeof(bool))
+            } else if (returnType == typeof(bool))
             {
                 bool output;
-                if(bool.TryParse(value.ToString(), out output))
+                if (value.ToString() == "1")
+                    return true;
+                else if (value.ToString() == "0")
+                    return false;
+                else if (bool.TryParse(value.ToString(), out output))
                 {
                     return output;
                 } else
@@ -134,7 +138,7 @@ namespace VRUB.Utility
         {
             string[] splitPath = dotPath.Split(new char[] { '.' }, 2);
 
-            if(splitPath.Length == 2)
+            if (splitPath.Length == 2)
             {
                 if (!configValues.ContainsKey(splitPath[0]))
                     configValues.Add(splitPath[0], new Dictionary<string, object>());
@@ -155,12 +159,12 @@ namespace VRUB.Utility
 
         static void Save()
         {
-            foreach(KeyValuePair<string, Dictionary<string,object>> keyVal in configValues) {
+            foreach (KeyValuePair<string, Dictionary<string, object>> keyVal in configValues) {
                 File.WriteAllText(Path.Combine(PathUtilities.Constants.ConfigPath, keyVal.Key + ".json"), JsonConvert.SerializeObject(keyVal.Value));
             }
         }
 
-        public static void SetDefaults(string key, Dictionary<string,object> values)
+        public static void SetDefaults(string key, Dictionary<string, object> values)
         {
             if (!configValues.ContainsKey(key)) {
                 configValues.Add(key, values);
@@ -168,7 +172,7 @@ namespace VRUB.Utility
                 return;
             }
 
-            foreach(KeyValuePair<string,object> cfgVal in configValues[key])
+            foreach (KeyValuePair<string, object> cfgVal in configValues[key])
             {
                 if (!configValues[key].ContainsKey(cfgVal.Key))
                     configValues[key].Add(cfgVal.Key, cfgVal.Value);
@@ -212,11 +216,13 @@ namespace VRUB.Utility
             if (addonConfigLayouts.ContainsKey(addon))
                 addonConfigLayouts.Remove(addon);
 
-            if(File.Exists(Path.Combine(addon.BasePath, "config.json")))
+            if (File.Exists(Path.Combine(addon.BasePath, "config.json")))
             {
-                List<ConfigLayout> configSettings = JsonConvert.DeserializeObject<List<ConfigLayout>>(File.ReadAllText(Path.Combine(addon.BasePath, "config.json")));
+                List<ConfigLayout> configSettings = JsonConvert.DeserializeObject<List<ConfigLayout>>(File.ReadAllText(Path.Combine(addon.BasePath, "config.json"))).Where(l => l.Key != "enabled").ToList();
 
-                foreach(ConfigLayout layout in configSettings)
+                configSettings.Add(new ConfigLayout() { Key = "enabled", Title = "Enabled", Type = "bool", Category = "Addon Settings", Description = "Enable this addon?", Addon = addon });
+
+                foreach (ConfigLayout layout in configSettings)
                 {
                     layout.Addon = addon;
                 }
@@ -225,12 +231,21 @@ namespace VRUB.Utility
 
                 Dictionary<string, object> defaults = new Dictionary<string, object>();
 
-                foreach(ConfigLayout layout in configSettings)
+                foreach (ConfigLayout layout in configSettings)
                 {
+                    if (layout.Key == "enabled")
+                        continue;
+
                     defaults[layout.Key] = layout.Default;
                 }
 
-                SetDefaults("addon." + addon.DerivedKey, defaults);
+                SetDefaults("addon_" + addon.DerivedKey, defaults);
+            }
+            else
+            {
+                List<ConfigLayout> configSettings = new List<ConfigLayout>() { new ConfigLayout() { Key = "enabled", Title = "Enabled", Type = "bool", Category = "Addon Settings", Description = "Enable this addon?", Addon = addon } };
+
+                addonConfigLayouts.Add(addon, configSettings);
             }
         }
 
@@ -244,21 +259,64 @@ namespace VRUB.Utility
         public class ConfigLayout
         {
             public Addon Addon { get; set; }
+
+            /// <summary>
+            /// Used for config layouts that don't have an addon key (desktop, main settings, etc)
+            /// </summary>
+            public string NonAddonFileKey { get; set; }
+
             public string Key { get; set; }
             public string Title { get; set; }
             public string Type { get; set; }
             public object Default { get; set; }
             public string Description { get; set; }
             public string Category { get; set; }
-         
+
+            public object[] Options { get; set; }
+
+            public string DerivedModuleKey {
+                get {
+                    if (Addon != null)
+                        return "addon_" + Addon.DerivedKey;
+                    else
+                        return NonAddonFileKey;
+                }
+            }
+
             public object GetValue()
             {
-                return GetObject("addon." + Addon.DerivedKey + "." + Key, Default);
+                if (Key == "enabled")
+                    return Addon.Enabled;
+                else
+                    return CastValue(GetObject(DerivedModuleKey + "." + Key, Default));
             }
 
             public void SetValue(object value)
             {
-                Set("addon." + Addon.DerivedKey + "." + Key, value);
+                if (Key == "enabled")
+                    Addon.Enabled = bool.Parse(value.ToString());
+                else
+                    Set(DerivedModuleKey + "." + Key, CastValue(value));
+            }
+
+            public object CastValue(object value)
+            {
+                switch(Type.ToLower())
+                {
+                    case "string":
+                        return value.ToString();
+
+                    case "double":
+                    case "float":
+                        return double.Parse(value.ToString());
+
+                    case "int":
+                    case "integer":
+                    case "number":
+                        return int.Parse(value.ToString());
+                }
+
+                return value;
             }
         }
     }

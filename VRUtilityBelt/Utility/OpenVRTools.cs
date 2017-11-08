@@ -28,7 +28,7 @@ namespace VRUB.Utility
             texture.handle = (IntPtr)glTextureId;
 
             Bitmap bmp = new Bitmap(1, 1);
-            bmp.SetPixel(0, 0, Color.Magenta);
+            bmp.SetPixel(0, 0, Color.Transparent);
 
             BitmapData bmpData = bmp.LockBits(
                 new Rectangle(0, 0, 1, 1),

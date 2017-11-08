@@ -12,7 +12,7 @@ var VRUB_Core_Keyboard_Init = function() {
     delete VRUB_Core_Keyboard_Init;
 }
 
-if(VRUB) {
+if(window.hasOwnProperty("VRUB")) {
     VRUB_Core_Keyboard_Init();
 } else {
     document.addEventListener('vrub:ready', function() {

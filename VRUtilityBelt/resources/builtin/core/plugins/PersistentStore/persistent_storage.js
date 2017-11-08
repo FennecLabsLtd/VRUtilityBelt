@@ -26,7 +26,7 @@ var VRUB_Core_PersistentStore_Init = function() {
     delete VRUB_Core_PersistentStore_Init;
 }
 
-if(VRUB) {
+if(window.hasOwnProperty("VRUB")) {
     VRUB_Core_PersistentStore_Init();
 } else {
     document.addEventListener('vrub:ready', function() {

@@ -18,22 +18,40 @@
     
     "render_models": [
         {
-            "key": "hat",
-            "model": "models/SantaHat.obj",
-            "width": 1024,
-            "height": 1024,
-            "meters": 0.5,
+            "key": "vive",
+            "model": "models/v/vive.obj",
+            "width": 1,
+            "height": 1,
+            "meters": 1,
             "position": {
                 "X": 0,
                 "Y": 0,
-                "Z": 0,
+                "Z": 1.5
             },
             "rotation": {
                 "X": 0,
-                "Y": 85,
-                "Z": 0,
+                "Y": 0,
+                "Z": 0
             },
-            "opacity": 1,
+            "opacity": 1
+        },
+        {
+            "key": "hat",
+            "model": "models/santa.obj",
+            "width": 1,
+            "height": 1,
+            "meters": 1,
+            "position": {
+                "X": 0,
+                "Y": 0.2,
+                "Z": 1.5
+            },
+            "rotation": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "opacity": 1
         }
     ],
 }

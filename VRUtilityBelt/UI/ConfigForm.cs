@@ -86,6 +86,13 @@ namespace VRUB.UI
             foreach(ConfigLayout configOption in layout)
             {
                 configGrid.Item.Add(configOption.Title, configOption.GetValue(), false, configOption.Category, configOption.Description, true);
+
+                if(configOption.Options != null)
+                    configGrid.Item[configGrid.Item.Count - 1].Choices = new PropertyGridEx.CustomChoices(configOption.Options);
+
+                if(configOption.Type == "bool")
+                    configGrid.Item[configGrid.Item.Count - 1].CustomTypeConverter = new ConfigTypeConverters.YesNoConverter();
+
                 configGrid.Item[configGrid.Item.Count - 1].Tag = configOption;
             }
 
@@ -99,6 +106,8 @@ namespace VRUB.UI
                 ConfigLayout layout = (ConfigLayout)prop.Tag;
                 layout.SetValue(prop.Value);
             }
+
+            ShowSelectedModule();
         }
 
         private void btnReset_Click(object sender, EventArgs e)

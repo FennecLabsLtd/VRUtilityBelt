@@ -21,5 +21,11 @@
                 console.log("Failed to set foo to bar, error: " + err);
             });
         });
+
+        $(document).on('vrub:plugin_ready:VRUB_Core_Config', function() {
+            VRUB.Plugins.Config.FetchConfig().then(function(result) {
+                console.log(result);
+            });
+        });
     </script>
 </body>

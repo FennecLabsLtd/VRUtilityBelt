@@ -82,6 +82,9 @@ namespace VRUB.Addons
 
         private String ManifestPath { get { return BasePath + "\\manifest.json"; } }
 
+        bool _queueEnable = false;
+        bool _queueDisable = false;
+
         public bool Enabled
         {
             get
@@ -104,11 +107,14 @@ namespace VRUB.Addons
                 ConfigUtility.Set("addons." + DerivedKey, value ? "1" : "0");
 
                 if (!_enabled && value)
-                    OnEnabled(_hasBeenEnabledAtSomePoint);
+                {
+                    _queueEnable = true;
+                }
 
                 if (!value && _enabled)
                 {
-                    OnDisabled();
+                    _queueEnable = false;
+                    _queueDisable = true;
                 }
 
                 _enabled = value;
@@ -168,6 +174,8 @@ namespace VRUB.Addons
 
         void OnEnabled(bool softEnable)
         {
+            _queueEnable = false;
+
             SetupOverlays();
             SetupThemes();
 
@@ -185,6 +193,8 @@ namespace VRUB.Addons
 
         void OnDisabled()
         {
+            _queueDisable = false;
+
             FireAtOverlays("Disabled", null);
 
             foreach(Overlay o in Overlays)
@@ -332,6 +342,11 @@ namespace VRUB.Addons
 
         public void Update()
         {
+            if (_queueEnable)
+                OnEnabled(_hasBeenEnabledAtSomePoint);
+            else if (_queueDisable)
+                OnDisabled();
+
             if (!_enabled && !_pendingDestructionTick)
                 return;
 

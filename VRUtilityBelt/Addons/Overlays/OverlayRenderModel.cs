@@ -31,7 +31,7 @@ namespace VRUB.Addons.Overlays
         public int Height { get; set; } = 1;
 
         [JsonProperty("meters")]
-        public float Meters { get; set; } = 2f;
+        public float Meters { get; set; } = 1f;
 
         [JsonProperty("position")]
         public Vector3 Position { get; set; } = Vector3.Zero;
@@ -57,6 +57,7 @@ namespace VRUB.Addons.Overlays
             _internalOverlay = new InternalOverlay("vrub." + _parent.DerivedKey + ".models." + Key, "", Meters, true);
             _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, "vrub." + _parent.DerivedKey);
             _internalOverlay.SetTextureSize(Width, Height);
+            _internalOverlay.ToggleInput(false);
 
             if (!_generatedOnePixelTexture)
                 GenerateOnePixelTexture();
@@ -96,6 +97,17 @@ namespace VRUB.Addons.Overlays
                 else
                     Logger.Info("[RENDERMODEL] Set render model " + ModelFilePath + " and stub texture for " + _parent.DerivedKey + ".models." + Key);
             }
+
+            /*for(uint i = 0; i < OpenVR.RenderModels.GetRenderModelCount(); i++)
+            {
+                StringBuilder renderModelName = new StringBuilder(255);
+                StringBuilder renderModelPath = new StringBuilder(1024);
+                OpenVR.RenderModels.GetRenderModelName(i, renderModelName, 255);
+                EVRRenderModelError rerr = EVRRenderModelError.None;
+                OpenVR.RenderModels.GetRenderModelOriginalPath(renderModelName.ToString().Trim(), renderModelPath, 1024, ref rerr);
+
+                Logger.Trace("Render Model: " + renderModelName.ToString().Trim() + ", path: " + renderModelPath.ToString().Trim() + ", Error: " + rerr.ToString());
+            }*/
         }
 
         public void Destroy()

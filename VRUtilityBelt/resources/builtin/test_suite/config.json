@@ -1,18 +1,50 @@
 [
     {
-        "key": "test_option_1",
-        "title": "Test Option 1",
+        "key": "test_string",
+        "title": "String Type",
         "type": "string",
         "default": "foo",
-        "description": "A Test Option",
-        "category": "Basic Settings"
+        "category": "Basic Types"
     },
     {
-        "key": "hover_haptics",
-        "title": "Auto-bind haptics on button hover",
-        "type": "bool",
-        "default": true,
-        "description": "Enables or Disables the haptic feedback when you hover over a button on this overlay",
-        "category": "UI Settings"
+        "key": "test_int",
+        "title": "Integer Type",
+        "type": "int",
+        "default": 1,
+        "category": "Basic Types"
+    },
+    {
+        "key": "test_double",
+        "title": "Double Type",
+        "type": "double",
+        "default": 1.5,
+        "category": "Basic Types"
+    },
+    {
+        "key": "dropdown_string_test",
+        "title": "Multiple choice string test",
+        "type": "string",
+        "default": "a",
+        "category": "Special Types",
+        "options": [
+            "a",
+            "b",
+            "c",
+            "d"
+        ]
+    },
+    {
+        "key": "dropdown_int_test",
+        "title": "Multiple choice integer test",
+        "type": "int",
+        "default": 1,
+        "category": "Special Types",
+        "options": [
+            1,
+            10,
+            20,
+            30,
+            50
+        ]
     }
 ]

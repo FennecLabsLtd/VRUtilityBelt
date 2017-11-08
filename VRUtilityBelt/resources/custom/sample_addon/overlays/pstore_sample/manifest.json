@@ -5,6 +5,7 @@
     "entrypoint": "addon://overlays/pstore_sample/index.html",
     "plugins": [
         "vrub_core_PersistentStore",
+        "vrub_core_Config"
     ],
     "width": 1024,
     "height": 768,

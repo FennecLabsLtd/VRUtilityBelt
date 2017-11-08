@@ -229,7 +229,13 @@ namespace VRUB.Addons.Overlays
         {
             foreach(OverlayRenderModel rm in RenderModels)
             {
-                rm.Setup(this);
+                try
+                {
+                    rm.Setup(this);
+                } catch(Exception e)
+                {
+                    Logger.Error("[RENDERMODEL] Failed to produce render model overlay for " + rm.Key + ": " + e.Message);
+                }
             }
         }
 

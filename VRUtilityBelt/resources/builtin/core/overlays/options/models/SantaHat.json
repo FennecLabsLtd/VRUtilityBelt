@@ -1,19 +1,11 @@
 {
   "thumbnail": "SantaHat.png",
-  "shapes": {
+  "components": {
     "base": {
-      "filename": "./SantaHat.obj",
+      "filename": "SantaHat.obj",
       "component_local": {
-        "origin": [
-          0.0,
-          2.0,
-          0.0
-        ],
-        "rotate_xyz": [
-          0.5,
-          0.0,
-          0.0
-        ]
+        "origin": [0.0,2.0,0.0],
+        "rotate_xyz": [0.5,0.0,0.0]
       }
     }
   }

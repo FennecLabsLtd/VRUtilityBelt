@@ -75,7 +75,7 @@ var VRUB_Core_Haptics_Init = function() {
     delete VRUB_Core_Haptics_Init;
 }
 
-if(VRUB) {
+if(window.hasOwnProperty("VRUB")) {
     VRUB_Core_Haptics_Init();
 } else {
     document.addEventListener('vrub:ready', function() {

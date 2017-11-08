@@ -28,7 +28,7 @@ namespace PersistentStore
 
                 parentAddon.Disabled += (o, e) =>
                 {
-                    _containers.Remove(_owner);
+                    _containers.Remove(parentAddon);
                 };
             }
 

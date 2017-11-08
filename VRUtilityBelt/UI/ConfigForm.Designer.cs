@@ -30,9 +30,9 @@
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ConfigForm));
-            System.Windows.Forms.ListViewItem listViewItem1 = new System.Windows.Forms.ListViewItem("VRUB Settings");
-            System.Windows.Forms.ListViewItem listViewItem2 = new System.Windows.Forms.ListViewItem("Addon: Test Suite");
-            System.Windows.Forms.ListViewItem listViewItem3 = new System.Windows.Forms.ListViewItem("Desktop View Settings");
+            System.Windows.Forms.ListViewItem listViewItem4 = new System.Windows.Forms.ListViewItem("VRUB Settings");
+            System.Windows.Forms.ListViewItem listViewItem5 = new System.Windows.Forms.ListViewItem("Addon: Test Suite");
+            System.Windows.Forms.ListViewItem listViewItem6 = new System.Windows.Forms.ListViewItem("Desktop View Settings");
             this.configGrid = new PropertyGridEx.PropertyGridEx();
             this.configSplitContainer = new System.Windows.Forms.SplitContainer();
             this.configList = new System.Windows.Forms.ListView();
@@ -114,9 +114,9 @@
             this.configList.FullRowSelect = true;
             this.configList.HeaderStyle = System.Windows.Forms.ColumnHeaderStyle.None;
             this.configList.Items.AddRange(new System.Windows.Forms.ListViewItem[] {
-            listViewItem1,
-            listViewItem2,
-            listViewItem3});
+            listViewItem4,
+            listViewItem5,
+            listViewItem6});
             this.configList.LabelWrap = false;
             this.configList.Location = new System.Drawing.Point(3, 3);
             this.configList.MultiSelect = false;
@@ -161,7 +161,7 @@
             this.Controls.Add(this.btnReset);
             this.Controls.Add(this.configSplitContainer);
             this.Name = "ConfigForm";
-            this.Text = "ConfigForm";
+            this.Text = "VRUB Settings";
             this.configSplitContainer.Panel1.ResumeLayout(false);
             this.configSplitContainer.Panel2.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.configSplitContainer)).EndInit();

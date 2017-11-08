@@ -112,6 +112,7 @@
     <Compile Include="UI\ConfigForm.Designer.cs">
       <DependentUpon>ConfigForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="UI\ConfigTypeConverters\YesNoConverter.cs" />
     <Compile Include="UI\VRUBApplicationContext.cs" />
     <Compile Include="UI\Workshop\WorkshoppableAddon.cs" />
     <Compile Include="UI\Workshop\WorkshopUploader.cs">

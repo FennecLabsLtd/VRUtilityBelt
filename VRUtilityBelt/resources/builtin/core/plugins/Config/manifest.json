@@ -1,0 +1,5 @@
+{
+    "name": "Config API",
+    "description": "Provides access to the configuration API, which allows access and modification of addon settings (set via the config pane on the desktop)",
+    "dll": "Config.dll",
+}
