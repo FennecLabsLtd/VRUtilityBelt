@@ -74,6 +74,14 @@ namespace VRUB.Addons.Overlays
             _internalOverlay.Show();
         }
 
+        public void SetTransform(AttachmentType type, Vector3 position, Vector3 rotation, string attachmentKey = null)
+        {
+            _internalOverlay.SetAttachment(type, position, rotation, attachmentKey);
+            Position = position;
+            Rotation = rotation;
+            Absolute = type == AttachmentType.Absolute;
+        }
+
         static void GenerateOnePixelTexture()
         {
             OpenVRTools.OnePixelTexture(out _onePixelTexture, out _glOnePixelTextureId);
