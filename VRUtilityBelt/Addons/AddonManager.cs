@@ -86,9 +86,11 @@ namespace VRUB.Addons
             SteamVR_WebKit.SteamVR_WebKit.PostUpdateCallback += PostUpdate;
             SteamVR_WebKit.SteamVR_WebKit.PostDrawCallback += PostDraw;
 
+
             CefSettings cefSettings = new CefSettings()
             {
                 CachePath = PathUtilities.Constants.GlobalCachePath,
+                FocusedNodeChangedEnabled = true,
             };
 
             cefSettings.RegisterScheme(new CefCustomScheme()

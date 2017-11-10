@@ -1,0 +1,8 @@
+{
+    "title": "Sample - Netflix",
+    "description": "This is a sample overlay for Netflix/Render Model stuff",
+    "type": [ "overlay" ],
+    "tags": [ "utility" ],
+    "ignore": [ ".git", ".scss", "gulpfile.json" ],
+    "preview_image": "preview_image.png"
+}

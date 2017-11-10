@@ -1,0 +1,9 @@
+[
+    {
+        "key": "plex_url",
+        "title": "Plex URL",
+        "type": "string",
+        "default": "",
+        "category": "Plex Settings"
+    }
+]

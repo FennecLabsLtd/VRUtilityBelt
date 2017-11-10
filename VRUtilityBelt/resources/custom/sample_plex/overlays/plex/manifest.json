@@ -1,0 +1,33 @@
+{
+    "name": "Plex",
+    "description": "Plex on a TV!",
+    "key": "vrub_example_plex", /* Use something that won't collide with other overlays. */
+    "entrypoint": "addon://overlays/plex/index.html",
+    "width": 1920,
+    "height": 1080,
+    "show_as_floating": false,
+    "show_as_dashboard": true,
+    "mouse": true,
+    "keyboard": true,
+    "floating_meters": 0.75,
+    "debug": true,
+    "icon": "icon.png",
+
+    "plugins": [
+        "vrub_core_Config"
+    ] ,
+
+    "attachment": {
+        "type": "Absolute",
+        "position": {
+            "X": 1,
+            "Y": 0.25,
+            "Z": -0.5
+        },
+        "rotation": {
+            "X": 0,
+            "Y": 45,
+            "Z": 0
+        }
+    }
+}

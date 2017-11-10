@@ -15,7 +15,8 @@
         "Keyboard",
         "Haptics",
 		"AddonManagement",
-		"TrackingData"
+		"TrackingData",
+		"Config"
 	],
     "sudo": true,
 }

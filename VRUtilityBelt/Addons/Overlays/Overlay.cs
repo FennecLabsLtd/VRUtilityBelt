@@ -68,7 +68,7 @@ namespace VRUB.Addons.Overlays
         public List<string> Plugins { get; set; } = new List<string>();
 
         [JsonProperty("persist_session_cookies")]
-        public bool PersistSessionCookies { get; set; } = true;
+        public bool PersistSessionCookies { get; set; } = false;
 
         [JsonProperty("mouse_delta_tolerance")]
         public int MouseDeltaTolerance { get; set; } = 20;
@@ -81,9 +81,6 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("attachment")]
         public OverlayAttachment OverlayAttachment { get; set; } = new OverlayAttachment() { Type = AttachmentType.Absolute, Position = Vector3.Zero, Rotation = Vector3.Zero };
-
-        [JsonProperty("flags")]
-        public List<VROverlayFlags> Flags { get; set; }
 
         [JsonProperty("show_as_dashboard")]
         public bool ShowAsDashboard { get; set; } = true;
@@ -100,7 +97,7 @@ namespace VRUB.Addons.Overlays
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
 
-        public IBinder Binder { get { return new DefaultBinder(new DefaultFieldNameConverter()); } }
+        public IBinder Binder => new DefaultBinder(new DefaultFieldNameConverter());
 
         public class AssetsContainer
         {
@@ -109,7 +106,7 @@ namespace VRUB.Addons.Overlays
 
         public AssetsContainer Assets { get; set; }
 
-        public WebKitOverlay InternalOverlay { get { return _wkOverlay; } }
+        public WebKitOverlay InternalOverlay => _wkOverlay;
 
         public BridgeHandler Bridge { get; set; }
 
@@ -152,6 +149,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.CachePath = Path.Combine(GetLocalStoragePath(), "Cache");
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
+            _wkOverlay.MessageHandler.DebugMode = DebugMode;
 
             _wkOverlay.AllowScrolling = !DisableScrolling;
 

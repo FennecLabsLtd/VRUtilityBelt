@@ -8,6 +8,6 @@
     ],
     "width": 1024,
     "height": 768,
-    "type": "dashboard", /* Dashboard, Independent (Floating) */
+    "show_as_dashboard": true,
     "debug": false,
 }

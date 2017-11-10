@@ -24,7 +24,7 @@
     "floating_meters": 0.5,
     "show_as_floating": true,
     "show_as_dashboard": true,
-    "debug": true,
+    "debug": false,
     "mouse": true,
     "keyboard": true,
 }

@@ -23,7 +23,13 @@ namespace Config
 
         public object FetchValue(string key, object defaultValue)
         {
-            return VRUB.Utility.ConfigUtility.GetObject("addon_" + _addon.DerivedKey + "." + key, defaultValue);
+            try
+            {
+                return VRUB.Utility.ConfigUtility.GetObject("addon_" + _addon.DerivedKey + "." + key, defaultValue);
+            } catch(KeyNotFoundException e)
+            {
+                return null;
+            }
         }
 
         public void Set(string key, object value)

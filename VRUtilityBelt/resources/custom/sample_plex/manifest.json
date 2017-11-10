@@ -1,0 +1,11 @@
+{
+	"name": "Sample - Plex",
+    "key": "sample_plex",
+    "description": "A sample overlay to watch Plex on a TV",
+	"overlays": [
+        "plex"
+	],
+	"plugins": [
+	],
+    "default_to_disabled": true,
+}

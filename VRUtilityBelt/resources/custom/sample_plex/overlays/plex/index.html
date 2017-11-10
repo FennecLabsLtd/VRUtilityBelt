@@ -1,0 +1,20 @@
+<html>
+    <head></head>
+    <body>
+        <p>Loading Plex...</p>
+    </body>
+
+    <script src="vrub://libs/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript">
+        $(document).on('vrub:plugin_ready:VRUB_Core_Config', function() {
+            var plexUrl;
+            VRUB.Plugins.Config.FetchValue("plex_url", undefined).then(function(result) {
+                if(!result) {
+                    $("p").text("Please enter a Plex URL in settings");
+                } else {
+                    window.location.href = result;
+                }
+            });
+        });
+    </script>
+</html>
