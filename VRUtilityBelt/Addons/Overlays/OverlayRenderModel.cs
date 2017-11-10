@@ -42,6 +42,9 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("opacity")]
         public float Opacity { get; set; } = 1;
 
+        [JsonProperty("absolute")]
+        public bool Absolute { get; set; } = false;
+
         Overlay _parent;
         public Overlay Parent { get { return _parent; } }
 
@@ -55,7 +58,12 @@ namespace VRUB.Addons.Overlays
         {
             _parent = parent;
             _internalOverlay = new InternalOverlay("vrub." + _parent.DerivedKey + ".models." + Key, "", Meters, true);
-            _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, "vrub." + _parent.DerivedKey);
+
+            if(Absolute)
+                _internalOverlay.SetAttachment(AttachmentType.Absolute, Position, Rotation);
+            else
+                _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, "vrub." + _parent.DerivedKey);
+
             _internalOverlay.SetTextureSize(Width, Height);
             _internalOverlay.ToggleInput(false);
 
