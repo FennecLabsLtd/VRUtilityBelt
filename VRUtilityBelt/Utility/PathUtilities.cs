@@ -17,7 +17,9 @@ namespace VRUB.Utility
 
             public static readonly string ConfigPath = Path.Combine(BaseRoamingPath, "Config");
 
-            public static readonly string GlobalResourcesPath = Path.Combine(Environment.CurrentDirectory, "static");
+            public static readonly string GlobalStaticResourcesPath = Path.Combine(Environment.CurrentDirectory, "static");
+
+            public static readonly string GlobalShadersPath = Path.Combine(Environment.CurrentDirectory, "shaders");
 
             public static readonly string AddonPath = Path.Combine(Environment.CurrentDirectory, "addons");
         };

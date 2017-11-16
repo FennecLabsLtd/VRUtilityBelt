@@ -17,6 +17,7 @@ using VRUB.Bridge;
 using VRUB.Addons.Overlays;
 using Valve.VR;
 using OpenTK;
+using System.Drawing;
 
 namespace VRUB.Addons.Overlays
 {
@@ -93,6 +94,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("disable_scrolling")]
         public bool DisableScrolling { get; set; } = false;
+
+        [JsonProperty("alphamask")]
+        public string AlphaMask { get; set; }
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -151,6 +155,9 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
             _wkOverlay.MessageHandler.DebugMode = DebugMode;
 
+            if (AlphaMask != null)
+                SetAlphaMask(AlphaMask);
+
             _wkOverlay.AllowScrolling = !DisableScrolling;
 
             _wkOverlay.UpdateInputSettings();
@@ -182,7 +189,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
             {
                 SchemeName = "vrub",
-                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalStaticResourcesPath),
             });
 
             _wkOverlay.SchemeHandlers.Add(new CefCustomScheme()
@@ -194,6 +201,23 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.EnableKeyboard = EnableKeyboard;
 
             UpdateWidths();
+        }
+
+        public void SetAlphaMask(string path)
+        {
+            path = PathUtilities.GetTruePath(BasePath, path);
+
+            if(File.Exists(path))
+            {
+                try
+                {
+                    Bitmap bmp = new Bitmap(path);
+                    _wkOverlay.AlphaMask = bmp;
+                } catch(Exception e)
+                {
+                    Logger.Error("[OVERLAY] Failed to set Alpha Mask BMP: " + e.Message);
+                }
+            }
         }
 
         public void UpdateWidths()

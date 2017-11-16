@@ -12,26 +12,5 @@
     ],
     "show_as_dashboard": true,
     "debug": false,
-    "thumbnail": "icon.jpg",
-    
-    "render_models": [
-        {
-            "key": "hat",
-            "model": "models/santa.obj",
-            "width": 1,
-            "height": 1,
-            "meters": 1,
-            "position": {
-                "X": 1.3,
-                "Y": 0.8,
-                "Z": 0
-            },
-            "rotation": {
-                "X": 0,
-                "Y": 0,
-                "Z": 35
-            },
-            "opacity": 1
-        }
-    ]
+    "thumbnail": "icon.jpg"
 }

@@ -298,7 +298,7 @@ namespace VRUB.Addons
         {
             try
             {
-                _enabled = ConfigUtility.Get<bool>("addons." + DerivedKey);
+                _enabled = ConfigUtility.Get<bool>("addons." + DerivedKey, !DefaultToDisabled);
             } catch(KeyNotFoundException)
             {
                 ConfigUtility.Set("addons." + DerivedKey, !DefaultToDisabled);

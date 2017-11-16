@@ -76,6 +76,8 @@ namespace VRUB.Addons
         public void Init()
         {
             Instance = this;
+            SteamVR_WebKit.SteamVR_WebKit.UseExperimentalOGL = true;
+            SteamVR_WebKit.SteamVR_WebKit.DefaultFragmentShaderPath = Path.Combine(PathUtilities.Constants.GlobalShadersPath, "fragShader.frag");
             SteamVR_WebKit.SteamVR_WebKit.PrefixOverlayType = false;
             SteamVR_WebKit.SteamVR_WebKit.FPS = 30;
             SteamVR_WebKit.SteamVR_WebKit.LogEvent += SteamVR_WebKit_LogEvent;
@@ -107,7 +109,7 @@ namespace VRUB.Addons
             cefSettings.RegisterScheme(new CefCustomScheme()
             {
                 SchemeName = "vrub",
-                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalResourcesPath),
+                SchemeHandlerFactory = new RestrictedPathSchemeHandler("vrub", PathUtilities.Constants.GlobalStaticResourcesPath),
                 IsSecure = true,
                 IsLocal = false,
                 IsStandard = false,

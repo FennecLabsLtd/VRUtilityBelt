@@ -45,6 +45,9 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("absolute")]
         public bool Absolute { get; set; } = false;
 
+        [JsonProperty("parent")]
+        public string ParentKey { get; set; }
+
         Overlay _parent;
         public Overlay Parent { get { return _parent; } }
 
@@ -62,7 +65,7 @@ namespace VRUB.Addons.Overlays
             if(Absolute)
                 _internalOverlay.SetAttachment(AttachmentType.Absolute, Position, Rotation);
             else
-                _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, "vrub." + _parent.DerivedKey);
+                _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, ParentKey == null ? "vrub." + _parent.DerivedKey : ParentKey);
 
             _internalOverlay.SetTextureSize(Width, Height);
             _internalOverlay.ToggleInput(false);
