@@ -31,6 +31,8 @@ Ensure your model is to the correct scale. If you need a guide, import the ``vr_
 
 You must also ensure your model is central, so select it and select "Geometry to Origin" on the left toolbar to set it to 0,0,0.
 
+**Note**: You must ensure you only have one "shape" in Blender, so select all the pieces and Ctrl+J to merge them if you have more than one.
+
 **3. Exporting**
 
 1.) Select just the model you want to export, if you didn't delete everything else in the scene 
