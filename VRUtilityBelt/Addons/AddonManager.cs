@@ -128,6 +128,8 @@ namespace VRUB.Addons
                 IsDisplayIsolated = false,
             });
 
+            cefSettings.CefCommandLineArgs.Add("enable-widevine-cdm", "1");
+
             // Will experiment with this at some point.
             //cefSettings.CefCommandLineArgs.Add("touch-events", "1");
 

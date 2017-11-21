@@ -1,0 +1,51 @@
+{
+    "name": "Model Manager",
+    "description": "Model Manager",
+    "key": "vrub_model_manager", /* Use something that won't collide with other overlays. */
+    "entrypoint": "addon://overlays/model_manager/stub.html",
+    "width": 1,
+    "height": 1,
+    "show_as_floating": true,
+    "show_as_dashboard": true,
+    "mouse": false,
+    "keyboard": false,
+    "floating_meters": 0,
+    "debug": false,
+    "icon": "icon.png",
+
+    "attachment": {
+        "type": "Absolute",
+        "position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+        },
+        "rotation": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+        }
+    },
+
+    "render_models": [
+        {
+            "key": "hat",
+            "parent": "valve.steam.bigpicture",
+            "model": "models/santa.obj",
+            "width": 1,
+            "height": 1,
+            "meters": 1,
+            "position": {
+                "X": 1.6,
+                "Y": 0.78,
+                "Z": 0
+            },
+            "rotation": {
+                "X": 65,
+                "Y": 180,
+                "Z": -10
+            },
+            "opacity": 1
+        }
+    ]
+}

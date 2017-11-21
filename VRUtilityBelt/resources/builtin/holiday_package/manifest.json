@@ -1,0 +1,9 @@
+﻿{
+	"name": "VRUB Holiday Package",
+    "key": "vrub_holiday",
+    "description": "",
+    "author": "VR Utility Belt Team",
+	"overlays": [
+		"model_manager"
+	]
+}
