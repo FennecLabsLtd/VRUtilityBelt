@@ -97,6 +97,9 @@ namespace VRUB.Addons.Overlays
 
         [JsonProperty("alphamask")]
         public string AlphaMask { get; set; }
+
+        [JsonProperty("fragment_shader")]
+        public string FragmentShader { get; set; }
         
         [JsonIgnore]
         public List<PluginContainer> RegisteredPlugins { get; set; } = new List<PluginContainer>();
@@ -154,6 +157,7 @@ namespace VRUB.Addons.Overlays
             _wkOverlay.RequestContextHandler = new OverlayRequestContextHandler(this);
             _wkOverlay.MouseDeltaTolerance = MouseDeltaTolerance;
             _wkOverlay.MessageHandler.DebugMode = DebugMode;
+            _wkOverlay.FragmentShaderPath = FragmentShader;
 
             if (AlphaMask != null)
                 SetAlphaMask(AlphaMask);
