@@ -17,6 +17,8 @@ Welcome to VR Utility Belt's documentation!
    addons/getting_started
    addons/overlays
    addons/plugins
+   addons/workshop
+   addons/render_models
    
 .. toctree::
    :maxdepth: 3

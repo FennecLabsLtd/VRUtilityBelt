@@ -181,3 +181,27 @@ Overlay manifest.json files are similar to Addon manifest.json files, but are mu
 .. attribute:: string fragment_shader
 
     Use a custom fragment (pixel) GLSL shader path for this overlay instead of the default. You can copy the default shader from the ``static`` directory and modify it as you see fit. Please note this is still quite experimental and may be prone to breaking.
+
+Example manifest
+~~~~~~~~~~~~~~~~
+
+This is the manifest.json for the core options overlay
+
+.. code-block:: javascript
+
+    {
+        "name": "VRUB Optons",
+        "description": "Options Overlay for VR Utility Belt",
+        "key": "vrub_core_options", /* Use something that won't collide with other overlays. */
+        "entrypoint": "addon://overlays/options/index.html",
+        "width": 1200,
+        "height": 800,
+        "meters": 2.5,
+        "keyboard": true,
+        "plugins": [
+            "vrub_core_AddonManagement"
+        ],
+        "show_as_dashboard": true,
+        "debug": false,
+        "thumbnail": "icon.jpg"
+    }

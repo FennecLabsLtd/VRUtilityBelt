@@ -71,3 +71,26 @@ The following keys are read from a manifest file:
 .. attribute:: bool: sudo
 
     Gives an addon "sudo" privileges, which means it will bypass all permission checks. Only available to addons in the ``builtin`` folder as this is exclusively used for configuring and managing VRUB.
+
+.. attribute:: bool: default_to_disabled
+
+    Defaults the addon to be disabled by default, usually addons are enabled when first installed. Defaults to false.
+
+Example Manifest
+~~~~~~~~~~~~~~~~
+
+This is the manifest.json for the sample addon
+
+.. code-block:: javascript
+
+    {
+        "name": "Sample Addon",
+        "key": "sample_addon",
+        "description": "A sample addon",
+        "overlays": [
+            "sample"
+        ],
+        "plugins": [
+        ],
+        "default_to_disabled": true,
+    }

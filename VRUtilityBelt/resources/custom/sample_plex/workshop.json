@@ -1,6 +1,6 @@
 {
-    "title": "Sample - Netflix",
-    "description": "This is a sample overlay for Netflix/Render Model stuff",
+    "title": "Sample Addon",
+    "description": "This is a sample overlay",
     "type": [ "overlay" ],
     "tags": [ "utility" ],
     "ignore": [ ".git", ".scss", "gulpfile.json" ],
