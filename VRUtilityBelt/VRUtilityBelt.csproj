@@ -74,6 +74,9 @@
     <Reference Include="TCD.System.TouchInjection, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\packages\TCD.System.TouchInjection.1.0.0\lib\net45\TCD.System.TouchInjection.dll</HintPath>
     </Reference>
+    <Reference Include="WindowsInput, Version=1.0.4.0, Culture=neutral, PublicKeyToken=9b287f7dc5073cad, processorArchitecture=MSIL">
+      <HintPath>..\packages\InputSimulator.1.0.4.0\lib\net20\WindowsInput.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Addons\Addon.cs" />

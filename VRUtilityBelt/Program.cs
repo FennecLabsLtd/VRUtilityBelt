@@ -56,10 +56,10 @@ namespace VRUB
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
 
+            ConfigUtility.Load();
+
             _addonManager = new AddonManager();
             _addonManager.StartAsync();
-
-            ConfigUtility.Load();
 
             VRUBApplicationContext context = new VRUBApplicationContext();
             Application.Run(context);

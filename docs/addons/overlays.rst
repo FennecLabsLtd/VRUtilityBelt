@@ -138,7 +138,7 @@ Overlay manifest.json files are similar to Addon manifest.json files, but are mu
     .. code-block:: json
 
         {
-            "type": "absolute", // Must be one of type: "hmd", "leftcontroller", "rightcontroller", "absolute", "overlay" or "deviceindex"
+            "type": "absolute", // Must be one of type: "hmd", "leftcontroller", "rightcontroller", "absolute", "overlay", "absoluterelative"* or "deviceindex"
             "position": { // Measured in meters
                 "x": 0,
                 "y": 1.2,
@@ -151,6 +151,8 @@ Overlay manifest.json files are similar to Addon manifest.json files, but are mu
             },
             "key": "", // When attached to an overlay, this is the overlay key to attach to. When attached to a deviceindex, this is the device index.
         }
+
+* AbsoluteRelative is used to position an overlay relative to another, but without using OpenVR's built in hierarchy system as it only goes one deep. You'll want to use this if you want to position overlays relative to other relatively positioned overlays. **Note**: It only positions it when called, after that it will not move until repositioned via setting the position again. This is a relatively intensive method and should be used sparingly.
 
 .. attribute:: bool: show_as_dashboard
 

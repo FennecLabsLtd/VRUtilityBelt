@@ -15,7 +15,7 @@ namespace VRUB.UI
 {
     public partial class ConfigForm : Form
     {
-        Dictionary<Addon, List<ConfigLayout>> _layouts;
+        Dictionary<string, List<ConfigLayout>> _layouts;
 
         public ConfigForm()
         {
@@ -47,14 +47,14 @@ namespace VRUB.UI
 
             _layouts = ConfigUtility.GetLayouts();
 
-            foreach (KeyValuePair<Addon, List<ConfigLayout>> layout in _layouts)
+            foreach (KeyValuePair<string, List<ConfigLayout>> layout in _layouts)
             {
                 configList.Items.Add(new ListViewItem()
                 {
-                    Text = "Addon: " + layout.Key.Name,
+                    Text = layout.Value.Count > 0 && layout.Value[0].Addon != null ? "Addon: " + layout.Value[0].Addon.Name : layout.Key, // TODO: Titles for custom layouts.
                     Tag = layout.Key,
                     /*Group = layout.Key.Enabled ? configList.Groups[1] : configList.Groups[2],*/
-                    ForeColor = layout.Key.Enabled ? SystemColors.WindowText : SystemColors.ScrollBar,
+                    ForeColor = layout.Value.Count > 0 && layout.Value[0].Addon != null && !layout.Value[0].Addon.Enabled ? SystemColors.ScrollBar : SystemColors.WindowText,
                 });
             }
 
@@ -73,13 +73,13 @@ namespace VRUB.UI
 
             ListViewItem item = configList.SelectedItems[0];
 
-            if (item.Tag is Addon)
+            if (item.Tag is string)
             {
-                UpdatePropertyGrid((Addon)item.Tag, _layouts[(Addon)item.Tag]);
+                UpdatePropertyGrid(item.Tag.ToString(), _layouts[item.Tag.ToString()]);
             }
         }
 
-        void UpdatePropertyGrid(Addon addon, List<ConfigLayout> layout)
+        void UpdatePropertyGrid(string layoutKey, List<ConfigLayout> layout)
         {
             configGrid.Item.Clear();
 

@@ -146,17 +146,18 @@ namespace VRUB.Addons
             CefSharp.Cef.GetGlobalCookieManager().SetStoragePath(PathUtilities.Constants.GlobalCookiePath, false);
 
             RegisterCallbacks();
-
-            //SetupAnchorOverlays();
+            RegisterGlobalEventListeners();
+            SetupAnchorOverlays();
 
             PopulateAddons();
             GetWorkshopAddons();
             SetupPluginsAndStart();
             Permissions.PermissionManager.Load();
 
+            _displayMirrorManager = new DesktopMirrorManager();
+
             if (ConfigUtility.Get<bool>("desktop.enabled", false))
             {
-                _displayMirrorManager = new DesktopMirrorManager();
                 _displayMirrorManager.SetupMirrors();
             }
 
@@ -164,6 +165,28 @@ namespace VRUB.Addons
 
             SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
         }
+
+        void RegisterGlobalEventListeners()
+        {
+            string[] events = {
+                "DashboardActivated",
+                "DashboardDeactivated",
+                "PrimaryDashboardDeviceChanged",
+                "IpdChanged",
+            };
+
+            foreach(string ev in events)
+                SteamVR_Event.Listen(ev, (args) => { GlobalEventHandler(ev, args); });
+        }
+
+        void GlobalEventHandler(string eventName, params object[] args)
+        {
+            foreach(Addon a in _addons.Values)
+            {
+                a.FireAtOverlays(eventName, args);
+            }
+        }
+
         private void SteamVR_WebKit_LogEvent(string line)
         {
             Logger.Info(line);
@@ -270,8 +293,7 @@ namespace VRUB.Addons
 
         private void PostUpdate(object sender, EventArgs e)
         {
-            if(_displayMirrorManager != null)
-                _displayMirrorManager.Update();
+            _displayMirrorManager.Update();
 
             foreach(Addon a in _addons.Values)
             {

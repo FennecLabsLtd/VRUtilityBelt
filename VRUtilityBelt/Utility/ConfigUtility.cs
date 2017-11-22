@@ -13,7 +13,7 @@ namespace VRUB.Utility
     public class ConfigUtility
     {
         static Dictionary<string, Dictionary<string, object>> configValues = new Dictionary<string, Dictionary<string, object>>();
-        static Dictionary<Addon, List<ConfigLayout>> addonConfigLayouts = new Dictionary<Addon, List<ConfigLayout>>();
+        static Dictionary<string, List<ConfigLayout>> addonConfigLayouts = new Dictionary<string, List<ConfigLayout>>();
 
         public delegate void UpdateHandler(string key, object value);
 
@@ -172,7 +172,7 @@ namespace VRUB.Utility
                 return;
             }
 
-            foreach (KeyValuePair<string, object> cfgVal in configValues[key])
+            foreach (KeyValuePair<string, object> cfgVal in values)
             {
                 if (!configValues[key].ContainsKey(cfgVal.Key))
                     configValues[key].Add(cfgVal.Key, cfgVal.Value);
@@ -213,8 +213,8 @@ namespace VRUB.Utility
 
         public static void RegisterAddonConfig(Addon addon)
         {
-            if (addonConfigLayouts.ContainsKey(addon))
-                addonConfigLayouts.Remove(addon);
+            if (addonConfigLayouts.ContainsKey("addon_" + addon.DerivedKey))
+                addonConfigLayouts.Remove("addon_" + addon.DerivedKey);
 
             if (File.Exists(Path.Combine(addon.BasePath, "config.json")))
             {
@@ -227,7 +227,7 @@ namespace VRUB.Utility
                     layout.Addon = addon;
                 }
 
-                addonConfigLayouts.Add(addon, configSettings);
+                addonConfigLayouts.Add("addon_" + addon.DerivedKey, configSettings);
 
                 Dictionary<string, object> defaults = new Dictionary<string, object>();
 
@@ -245,11 +245,28 @@ namespace VRUB.Utility
             {
                 List<ConfigLayout> configSettings = new List<ConfigLayout>() { new ConfigLayout() { Key = "enabled", Title = "Enabled", Type = "bool", Category = "Addon Settings", Description = "Enable this addon?", Addon = addon } };
 
-                addonConfigLayouts.Add(addon, configSettings);
+                addonConfigLayouts.Add("addon_" + addon.DerivedKey, configSettings);
             }
         }
 
-        public static Dictionary<Addon, List<ConfigLayout>> GetLayouts()
+        public static void RegisterCustomConfigLayout(string key, List<ConfigLayout> layouts)
+        {
+            addonConfigLayouts.Add(key, layouts);
+
+            Dictionary<string, object> defaults = new Dictionary<string, object>();
+
+            foreach (ConfigLayout layout in layouts)
+            {
+                if (layout.Key == "enabled")
+                    continue;
+
+                defaults[layout.Key] = layout.Default;
+            }
+
+            SetDefaults(key, defaults);
+        }
+
+        public static Dictionary<string, List<ConfigLayout>> GetLayouts()
         {
             return addonConfigLayouts;
         }
@@ -285,7 +302,7 @@ namespace VRUB.Utility
 
             public object GetValue()
             {
-                if (Key == "enabled")
+                if (Addon != null && Key == "enabled")
                     return Addon.Enabled;
                 else
                     return CastValue(GetObject(DerivedModuleKey + "." + Key, Default));
@@ -293,7 +310,7 @@ namespace VRUB.Utility
 
             public void SetValue(object value)
             {
-                if (Key == "enabled")
+                if (Addon != null && Key == "enabled")
                     Addon.Enabled = bool.Parse(value.ToString());
                 else
                     Set(DerivedModuleKey + "." + Key, CastValue(value));
