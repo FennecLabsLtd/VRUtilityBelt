@@ -191,6 +191,7 @@
     <Error Condition="!Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.props'))" />
     <Error Condition="!Exists('..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\CefSharp.OffScreen.57.0.0\build\CefSharp.OffScreen.targets'))" />
     <Error Condition="!Exists('..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\MSBuildTasks.1.5.0.235\build\MSBuildTasks.targets'))" />
+    <Error Condition="!Exists('..\packages\cef.redist.x64.3.2987.1601-prop\build\cef.redist.x64.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\cef.redist.x64.3.2987.1601-prop\build\cef.redist.x64.targets'))" />
   </Target>
   <Import Project="..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets" Condition="Exists('..\packages\cef.redist.x86.3.2987.1601\build\cef.redist.x86.targets')" />
   <Import Project="..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets" Condition="Exists('..\packages\CefSharp.Common.57.0.0\build\CefSharp.Common.targets')" />
@@ -224,4 +225,5 @@ xcopy "$(ProjectDir)static" "$(TargetDir)static" /S /Y</PostBuildEvent>
   <Target Name="RemoveSentryKey" Condition="$(SentryKey) != ''">
     <FileUpdate Files="Program.cs" Regex="$(SentryKey)" ReplacementText="STUB_KEY" />
   </Target>
+  <Import Project="..\packages\cef.redist.x64.3.2987.1601-prop\build\cef.redist.x64.targets" Condition="Exists('..\packages\cef.redist.x64.3.2987.1601-prop\build\cef.redist.x64.targets')" />
 </Project>
