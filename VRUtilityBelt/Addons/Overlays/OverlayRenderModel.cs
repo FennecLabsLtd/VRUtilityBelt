@@ -81,11 +81,11 @@ namespace VRUB.Addons.Overlays
             else
                 _internalOverlay.SetAttachment(AttachmentType.Overlay, Position, Rotation, ParentKey == null ? "vrub." + _parent.DerivedKey : ParentKey);
 
-            _internalOverlay.SetTextureSize(Width, Height);
+            _internalOverlay.SetTextureSize(1, 1);
             _internalOverlay.ToggleInput(false);
 
             if (!_generatedOnePixelTexture)
-                GenerateOnePixelTexture();
+                GenerateOnePixelTexture(Width, Height);
 
             if(Animations != null && Animations.Count > 0)
             {
@@ -131,9 +131,9 @@ namespace VRUB.Addons.Overlays
             Absolute = type == AttachmentType.Absolute;
         }
 
-        static void GenerateOnePixelTexture()
+        static void GenerateOnePixelTexture(int width, int height)
         {
-            OpenVRTools.OnePixelTexture(out _onePixelTexture, out _glOnePixelTextureId);
+            OpenVRTools.OnePixelTexture(out _onePixelTexture, out _glOnePixelTextureId, width, height);
 
             _generatedOnePixelTexture = true;
         }

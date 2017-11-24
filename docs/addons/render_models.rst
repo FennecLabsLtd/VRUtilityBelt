@@ -51,6 +51,8 @@ Everything else can be left at the defaults.
 
 You'll need to open up your texture PNG in Photoshop or a similar application and ensure it uses 8-bits or less per channel. In Photoshop, this is found under ``Image > Mode``. Also ensure it is RGB and not Indexed as I haven't tested Indexed so let's play it safe.
 
+SteamVR also only supports one diffuse texture material per model, so you will need to ensure your models have all textures baked into one material.
+
 **5. Done**
 
 Hopefully, your OBJ will contain vertex normals (``vn``) and a reference to a material file. And hopefully your material file will reference a PNG diffuse map (your texture). I'm not sure if you can use normal maps or anything like that unfortunately, so it's just the diffuse map available until further testing has been done.
@@ -75,11 +77,10 @@ The ``render_models`` key in the manifest.json should look like this:
             "parent": "valve.steam.bigpicture",
             "model": "models/example.obj",
 
-            // Keep your overlays square or the model scale goes weird.
+            // Don't mess with the following 3 unless you want your model to break aspect ratio. Models only scale on two axis, so expect strange results.
             "width": 1,
             "height": 1,
-
-            "meters": 1, // This will scale the size of the model as well.
+            "meters": 1,
 
             // These values are in meters, if the overlay is not absolute they are relative to the parent overlay
             "position": {

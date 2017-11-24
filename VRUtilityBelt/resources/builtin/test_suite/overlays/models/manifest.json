@@ -31,9 +31,6 @@
         {
             "key": "sphere",
             "model": "m/sphere_01.obj",
-            "width": 1,
-            "height": 1,
-            "meters": 1,
             "position": {
                 "X": 0,
                 "Y": 1,
@@ -57,6 +54,34 @@
                     "pingpong": true
                 }
             ]
+        },
+        {
+            "key": "lion",
+            "model": "l/Lion_0.obj",
+            "position": {
+                "X": 0,
+                "Y": 10,
+                "Z": -60
+            },
+            "rotation": {
+                "X": 0,
+                "Y": 60,
+                "Z": 0
+            },
+            "opacity": 1,
+            "starting_animation": "idle",
+            "animations": [
+                {
+                    "name": "idle",
+                    "path": "l/",
+                    "frame_pattern": "Lion_{0:D2}.obj", // Uses the String.Format syntax
+                    "start": 0,
+                    "end": 59,
+                    "frametime": 16, // milliseconds between frames
+                    "pingpong": false
+                }
+            ]
         }
+
     ]
 }

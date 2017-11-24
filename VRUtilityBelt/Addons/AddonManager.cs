@@ -332,7 +332,7 @@ namespace VRUB.Addons
             Texture_t tex;
             int glId;
 
-            OpenVRTools.OnePixelTexture(out tex, out glId);
+            OpenVRTools.OnePixelTexture(out tex, out glId, 1, 1);
 
             InternalOverlay dashboard = new InternalOverlay("vrub.anchor.dashboard", "VRUB Anchor - Dashboard", 1f, true);
             dashboard.SetAttachment(SteamVR_WebKit.AttachmentType.Overlay, new OpenTK.Vector3(0f, 1.3f, 0.6f), new OpenTK.Vector3(0, 0, -35f), "system.vrdashboard");
