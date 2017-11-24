@@ -83,11 +83,13 @@
     <Compile Include="Addons\AddonManager.cs" />
     <Compile Include="Addons\Data\AddonSource.cs" />
     <Compile Include="Addons\Data\OverlayAttachment.cs" />
+    <Compile Include="Addons\DRM\WidevineCallback.cs" />
     <Compile Include="Addons\Overlays\OverlayDragHandler.cs" />
     <Compile Include="Addons\Overlays\OverlayRenderModel.cs" />
     <Compile Include="Addons\Overlays\OverlayRequestContextHandler.cs" />
     <Compile Include="Addons\Overlays\PassThroughRequestHandler.cs" />
     <Compile Include="Addons\Overlays\PluginSchemeHandler.cs" />
+    <Compile Include="Addons\Overlays\RenderModelAnimation.cs" />
     <Compile Include="Addons\Permissions\PermissionException.cs" />
     <Compile Include="Addons\Permissions\PermissionInterop.cs" />
     <Compile Include="Addons\Permissions\RequiresPermissionAttribute.cs" />

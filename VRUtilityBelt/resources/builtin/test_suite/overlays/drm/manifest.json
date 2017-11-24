@@ -1,0 +1,16 @@
+{
+    "name": "DRM",
+    "description": "Testing DRM Support via Netflix",
+    "key": "vrub_test_drm",
+    //"entrypoint": "https://shaka-player-demo.appspot.com/demo/",
+    "entrypoint": "https://netflix.com",
+    "width": 1920,
+    "height": 1080,
+    "show_as_floating": false,
+    "show_as_dashboard": true,
+    "mouse": true,
+    "keyboard": true,
+    "floating_meters": 0.75,
+    "debug": true,
+    "icon": "icon.png"
+}

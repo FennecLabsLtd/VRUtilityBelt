@@ -1,0 +1,13 @@
+# Blender MTL File: 'circle.blend'
+# Material Count: 1
+
+newmtl circle
+Ns 80.392157
+Ka 0.777000 0.777000 0.777000
+Kd 1.000000 1.000000 1.000000
+Ks 0.000000 0.000000 0.000000
+Ke 1.990000 1.990000 1.990000
+Ni 1.000000
+d 1.000000
+illum 2
+map_Kd Stripes.png

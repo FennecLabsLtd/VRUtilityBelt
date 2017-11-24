@@ -3,9 +3,11 @@
     "key": "vrub_test",
     "description": "Suite of tests for different VRUB features.",
 	"overlays": [
-		"steam",
-        "utilities",
-        "attachments_controller",
+		//"steam",
+        //"utilities",
+        //"attachments_controller",
+        "models"
+        //"drm"
 	],
     "permissions": {
         "vrub.core.persistent_store": "To test Persistence features.",

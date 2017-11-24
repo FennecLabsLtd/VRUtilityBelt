@@ -452,6 +452,11 @@ namespace VRUB.Addons.Overlays
             {
                 p.LoadedPlugin.Draw(_addon, this);
             }
+
+            foreach (OverlayRenderModel model in RenderModels)
+            {
+                model.Draw();
+            }
         }
 
         public void Update()
@@ -459,6 +464,11 @@ namespace VRUB.Addons.Overlays
             foreach (PluginContainer p in RegisteredPlugins)
             {
                 p.LoadedPlugin.Update(_addon, this);
+            }
+
+            foreach(OverlayRenderModel model in RenderModels)
+            {
+                model.Update();
             }
 
             if (_doDestroy)

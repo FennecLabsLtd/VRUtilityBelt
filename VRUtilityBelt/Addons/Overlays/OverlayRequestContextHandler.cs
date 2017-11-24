@@ -13,6 +13,8 @@ namespace VRUB.Addons.Overlays
     {
         public Overlay Overlay;
 
+        CookieManager _cookieManager;
+
         public OverlayRequestContextHandler(Overlay overlay)
         {
             Overlay = overlay;
@@ -20,7 +22,7 @@ namespace VRUB.Addons.Overlays
 
         public ICookieManager GetCookieManager()
         {
-            return new CookieManager(Overlay.GetCloudStoragePath() + "\\Cookies", Overlay.PersistSessionCookies, null);
+            return _cookieManager != null ? _cookieManager : _cookieManager = new CookieManager(Overlay.GetCloudStoragePath() + "\\Cookies", Overlay.PersistSessionCookies, null);
         }
 
         public bool OnBeforePluginLoad(string mimeType, string url, bool isMainFrame, string topOriginUrl, WebPluginInfo pluginInfo, ref PluginPolicy pluginPolicy)

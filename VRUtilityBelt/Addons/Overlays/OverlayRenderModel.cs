@@ -13,6 +13,7 @@ using InternalOverlay = SteamVR_WebKit.Overlay;
 using OpenTK.Graphics.OpenGL;
 using System.Drawing;
 using System.Drawing.Imaging;
+using System.Diagnostics;
 
 namespace VRUB.Addons.Overlays
 {
@@ -48,6 +49,14 @@ namespace VRUB.Addons.Overlays
         [JsonProperty("parent")]
         public string ParentKey { get; set; }
 
+        [JsonProperty("animations")]
+        public List<RenderModelAnimation> Animations { get; set; }
+
+        [JsonProperty("starting_animation")]
+        public string StartingAnimation { get; set; }
+
+        public RenderModelAnimation CurrentAnimation { get; private set; }
+
         Overlay _parent;
         public Overlay Parent { get { return _parent; } }
 
@@ -56,6 +65,11 @@ namespace VRUB.Addons.Overlays
         static bool _generatedOnePixelTexture = false;
         static Texture_t _onePixelTexture;
         static int _glOnePixelTextureId;
+
+        Stopwatch _animationStopwatch = new Stopwatch();
+        int _animationFrame = 0;
+        bool _doReverse = false;
+
 
         public void Setup(Overlay parent)
         {
@@ -73,8 +87,40 @@ namespace VRUB.Addons.Overlays
             if (!_generatedOnePixelTexture)
                 GenerateOnePixelTexture();
 
-            UpdateModel();
+            if(Animations != null && Animations.Count > 0)
+            {
+                foreach(RenderModelAnimation anim in Animations)
+                {
+                    anim.GetFrames(parent.BasePath);
+                }
+            }
+
+            if (StartingAnimation != null)
+                SetAnimation(StartingAnimation);
+            else
+                UpdateModel(ModelFile);
+
             _internalOverlay.Show();
+        }
+
+        public void SetAnimation(string animName)
+        {
+            if (Animations == null)
+                return;
+
+            _doReverse = false;
+
+            foreach(RenderModelAnimation anim in Animations)
+            {
+                if (anim.Name == animName)
+                {
+                    CurrentAnimation = anim;
+                    _animationStopwatch.Reset();
+                    _animationFrame = 0;
+                    UpdateAnimationFrame();
+                    return;
+                }
+            }
         }
 
         public void SetTransform(AttachmentType type, Vector3 position, Vector3 rotation, string attachmentKey = null)
@@ -92,7 +138,12 @@ namespace VRUB.Addons.Overlays
             _generatedOnePixelTexture = true;
         }
 
-        void UpdateModel()
+        void UpdateAnimationFrame()
+        {
+            UpdateModel(CurrentAnimation.Frames[_animationFrame]);
+        }
+
+        void UpdateModel(string filePath)
         {
             HmdColor_t col = new HmdColor_t();
             col.a = Opacity;
@@ -100,7 +151,7 @@ namespace VRUB.Addons.Overlays
             col.g = 1;
             col.b = 1;
 
-            string ModelFilePath = Path.IsPathRooted(ModelFile) ? ModelFile : PathUtilities.GetTruePath(_parent.BasePath, ModelFile);
+            string ModelFilePath = Path.IsPathRooted(filePath) ? filePath : PathUtilities.GetTruePath(_parent.BasePath, filePath);
 
             EVROverlayError err = OpenVR.Overlay.SetOverlayRenderModel(_internalOverlay.Handle, ModelFilePath, ref col);
 
@@ -113,8 +164,10 @@ namespace VRUB.Addons.Overlays
 
                 if (err != EVROverlayError.None)
                     Logger.Error("[RENDERMODEL] Failed to set overlay render model stub texture: " + err.ToString());
-                else
+                else if(CurrentAnimation == null) // Don't log if we're animating.
+                {
                     Logger.Info("[RENDERMODEL] Set render model " + ModelFilePath + " and stub texture for " + _parent.DerivedKey + ".models." + Key);
+                }
             }
 
             /*for(uint i = 0; i < OpenVR.RenderModels.GetRenderModelCount(); i++)
@@ -127,6 +180,42 @@ namespace VRUB.Addons.Overlays
 
                 Logger.Trace("Render Model: " + renderModelName.ToString().Trim() + ", path: " + renderModelPath.ToString().Trim() + ", Error: " + rerr.ToString());
             }*/
+        }
+
+        public void Update()
+        {
+            if(CurrentAnimation != null)
+            {
+                if(_animationStopwatch.ElapsedMilliseconds > CurrentAnimation.FrameTime)
+                {
+                    _animationFrame += _doReverse ? -1 : 1;
+                    if (_animationFrame >= CurrentAnimation.Frames.Count)
+                    {
+                        _animationFrame = CurrentAnimation.PingPong ? CurrentAnimation.Frames.Count - 2 : 0;
+
+                        if (CurrentAnimation.PingPong)
+                            _doReverse = true;
+                    } else if(_animationFrame < 0)
+                    {
+                        if (CurrentAnimation.PingPong)
+                            _doReverse = false;
+
+                        _animationFrame = CurrentAnimation.PingPong ? 1 : 0;
+                    }
+
+                    UpdateAnimationFrame();
+
+                    _animationStopwatch.Restart();
+                }
+
+                if (!_animationStopwatch.IsRunning)
+                    _animationStopwatch.Start();
+            }
+        }
+
+        public void Draw()
+        {
+
         }
 
         public void Destroy()

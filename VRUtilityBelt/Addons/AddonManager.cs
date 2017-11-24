@@ -106,6 +106,8 @@ namespace VRUB.Addons
                 IsDisplayIsolated = false,
             });
 
+            
+
             cefSettings.RegisterScheme(new CefCustomScheme()
             {
                 SchemeName = "vrub",
@@ -131,9 +133,12 @@ namespace VRUB.Addons
             cefSettings.CefCommandLineArgs.Add("enable-widevine-cdm", "1");
 
             // Will experiment with this at some point.
-            //cefSettings.CefCommandLineArgs.Add("touch-events", "1");
+            //cefSettings.CefCommandLineArgs.Add("touch-events", "1"); 
 
             SteamVR_WebKit.SteamVR_WebKit.Init(cefSettings);
+
+            if(Directory.Exists(Path.Combine(Environment.CurrentDirectory, "WidevineCdm")))
+                Cef.RegisterWidevineCdm(@".\WidevineCdm", new DRM.WidevineCallback());
 
             if(!Cef.IsInitialized)
             {
@@ -164,6 +169,11 @@ namespace VRUB.Addons
             HasInit = true;
 
             SteamVR_WebKit.SteamVR_WebKit.RunOverlays();
+        }
+
+        void WidevineCallback()
+        {
+
         }
 
         void RegisterGlobalEventListeners()

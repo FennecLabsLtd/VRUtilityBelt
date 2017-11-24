@@ -1,0 +1,62 @@
+{
+    "name": "Model Test",
+    "description": "Model Test",
+    "key": "vrub_test_model",
+    "entrypoint": "addon://overlays/models/stub.html",
+    "width": 1,
+    "height": 1,
+    "show_as_floating": true,
+    "show_as_dashboard": false,
+    "mouse": false,
+    "keyboard": false,
+    "floating_meters": 1,
+    "debug": false,
+    "icon": "icon.png",
+
+    "attachment": {
+        "type": "Absolute",
+        "position": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+        },
+        "rotation": {
+            "X": 0,
+            "Y": 0,
+            "Z": 0
+        }
+    },
+
+    "render_models": [
+        {
+            "key": "sphere",
+            "model": "m/sphere_01.obj",
+            "width": 1,
+            "height": 1,
+            "meters": 1,
+            "position": {
+                "X": 0,
+                "Y": 1,
+                "Z": 2
+            },
+            "rotation": {
+                "X": 0,
+                "Y": 0,
+                "Z": 0
+            },
+            "opacity": 1,
+            "starting_animation": "scale",
+            "animations": [
+                {
+                    "name": "scale",
+                    "path": "m/",
+                    "frame_pattern": "sphere_{0:D2}.obj", // Uses the String.Format syntax
+                    "start": 1,
+                    "end": 15,
+                    "frametime": 50, // milliseconds between frames
+                    "pingpong": true
+                }
+            ]
+        }
+    ]
+}
