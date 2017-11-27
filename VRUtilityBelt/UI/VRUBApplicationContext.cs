@@ -85,7 +85,7 @@ namespace VRUB.UI
 
         void OnSettingsClick(object sender, EventArgs args)
         {
-            if(_configForm == null)
+            if(_configForm == null || _configForm.IsDisposed || _configForm.Disposing)
             {
                 _configForm = new ConfigForm();
             }
